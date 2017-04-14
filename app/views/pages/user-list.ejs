@@ -1,0 +1,30 @@
+<%- include('../comments/header')%>
+<%- include('../comments/navigation')%>
+<div class="container">
+	<h2><%= title %></h2>
+	<table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>用户名</th>
+          <th>等级</th>
+          <th>注册时间</th>
+          <th>最近登录时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users && users.length > 0) { %>
+            <% users.forEach(function (item,index) { %>
+                <tr>
+                  <td><%= item.name %></td>
+                  <td><%= item.role %></td>
+                  <td><%= moment(item.meta.createAt).format('YYYY/MM/DD h/mm/ss') %></td>
+                  <td>@mdo</td>
+                  <td><button class="deleteUser btn btn-danger">删除</button></td>
+                </tr>
+            <% }); %>
+        <% } %>
+      </tbody>
+    </table>
+</div>
+<%- include('../comments/footer')%>

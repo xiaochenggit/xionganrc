@@ -1,0 +1,29 @@
+{
+  "name": "xionganrc",
+  "version": "1.0.0",
+  "description": "one only ourself project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaochenggit/xionganrc.git"
+  },
+  "author": "xiaocheng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiaochenggit/xionganrc/issues"
+  },
+  "homepage": "https://github.com/xiaochenggit/xionganrc#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "express-session": "^1.15.1",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.2",
+    "morgan": "^1.8.1"
+  }
+}
