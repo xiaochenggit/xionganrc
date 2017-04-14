@@ -28,11 +28,12 @@ var UserSchema = new User({
 
 UserSchema.pre('save', (next) => {
   let user = this;
-  if (this.isNew) {
-    this.meta.createAt = this.meta.updateAt = Date.now();
+  if (user.isNew) {
+    user.meta.createAt = user.meta.updateAt = Date.now();
+    next();
   } else {
-    this.meta.updateAt = Date.now();
+    user.meta.updateAt = Date.now();
+    next();
   }
-  next();
 });
 module.exports = UserSchema;

@@ -59,11 +59,25 @@ exports.userList = function (request, response) {
 		if (error) {
 			console.log(error);
 		} else {
-			console.log(users);
 			response.render('user-list',{
 				title : '用户列表',
 				users : users
 			})
 		}
 	})
+}
+// 删除用户
+exports.delete = function (request, response) {
+	var id = request.query.id;
+	if (id) {
+		User.remove({_id: id},(error) => {
+			if (error) {
+				console.log(error);
+			} else {
+				response.json({
+					success : 1
+				})
+			}
+		})
+	}
 }
