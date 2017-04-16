@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const UserComment = require('../models/userComment');
 exports.getSignup = function (request,response) {
 	response.render('user-signup',{
 		title : '用户注册页面'
@@ -46,8 +47,12 @@ exports.postSignin = function (request, response) {
 			console.log(error);
 		} else {
 			if (user.password = _user.password) {
-				request.session.user = user;
-				response.redirect('/admin/user/list')
+				// 然后改变登陆时间
+				user.loadTime = Date.now();
+				user.save((error,user)=>{
+					request.session.user = user;
+					response.redirect('/admin/user/list');
+				});
 			} else {
 				response.redirect('/user/signin')
 			}
@@ -65,6 +70,30 @@ exports.userList = function (request, response) {
 			})
 		}
 	})
+}
+
+// 用户详情
+exports.details = function (request, response) {
+	var id = request.query.id;
+	if (id) {
+		User.findOne({_id: id}, (error, user) => {
+			if (error) {
+				console.log(error)
+			} else {
+				UserComment
+				.find({user: user._id})
+				.populate('from', 'name')
+				.populate('reply.from reply.to', 'name')
+				.exec((error, comments)=>{
+					response.render('user-details',{
+						title : '用户详情',
+						seeUser : user,
+						comments : comments
+					});
+				});
+			}
+		})
+	}
 }
 // 删除用户
 exports.delete = function (request, response) {

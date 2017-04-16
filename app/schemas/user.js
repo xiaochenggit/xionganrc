@@ -5,11 +5,18 @@ var UserSchema = new User({
     type : String,
     unique : true
   },
+  password : '',
+  email : String,
+  question : String,
+  key : String,
   role : {
     type : Number,
     default : 0
   },
-  password : '',
+  loadTime: {
+      type : Date,
+      default : Date.now()
+  },
   meta: {
     createAt: {
       type : Date,
@@ -18,22 +25,19 @@ var UserSchema = new User({
     updateAt: {
       type : Date,
       default : Date.now()
-    },
-    loadTime: {
-      type : Date,
-      default : Date.now()
     }
   }
 });
 
 UserSchema.pre('save', (next) => {
-  let user = this;
-  if (user.isNew) {
-    user.meta.createAt = user.meta.updateAt = Date.now();
-    next();
-  } else {
-    user.meta.updateAt = Date.now();
-    next();
-  }
+  // let user = this;
+  // if (!user.isNew) {
+  //   user.meta.createAt = user.meta.updateAt = Date.now();
+  //   next();
+  // } else {
+  //   user.meta.updateAt = Date.now();
+  //   next();
+  // }
+  next();
 });
 module.exports = UserSchema;

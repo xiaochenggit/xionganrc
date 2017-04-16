@@ -1,0 +1,82 @@
+<%- include('../comments/header')%>
+ <%- include('../comments/navigation')%>
+ <div class="container">
+   <div class="panel panel-default">
+     <div class="panel-heading">用户名</div>
+     <div class="panel-body"><%= seeUser.name %></div>
+   </div>
+   <div class="panel panel-default">
+     <div class="panel-heading">邮箱</div>
+     <div class="panel-body"><%= seeUser.email %></div>
+   </div>
+   <div class="panel panel-default">
+     <div class="panel-heading">注册时间</div>
+     <div class="panel-body"><%=moment(seeUser.meta.createAt).format('YYYY/MM/DD HH:mm:ss') %>
+     </div>
+   </div>
+   <div class="panel panel-default">
+     <div class="panel-heading">上次登录</div>
+     <div class="panel-body">
+      <%= moment(seeUser.loadTime, "YYYYMMDDHHmmss").fromNow()  %>
+     </div>
+   </div>
+   <div class="panel panel-default">
+     <div class="panel-heading">留言板</div>
+     <div class="panel-body">
+      <% comments.forEach(function (comment,index) { %>
+      <div class="media">
+        <div class="media-left">
+          <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=comment.from._id %>'>
+            <img class="media-object" data-src="holder.js/64x64" alt="64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNWI3NTMyMTQzMSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1Yjc1MzIxNDMxIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;"></a>
+        </div>
+        <div class="media-body">
+          <h4 class="media-heading">
+            <a href="/user/details?id=<%=comment.from._id %>"><%= comment.from.name %></a> 说 :
+            <p class="pull-right"><%= moment(comment.meta.createAt, "YYYYMMDDHHmmss").fromNow()  %></p>
+          </h4>
+          <%= comment.content %>
+          <% if (comment.reply && comment.reply.length > 0) { %>
+            <% comment.reply.forEach( function (item) { %>
+              <div class="media">
+                <div class="media-left">
+                  <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=item.from._id %>'>
+                    <img class="media-object" data-src="holder.js/64x64" alt="64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNWI3NTMyMTQzMSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1Yjc1MzIxNDMxIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;"></a>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">
+                    <a href="/user/details?id=<%=item.from._id %>"><%= item.from.name %></a> 回复：
+                    <a href="/user/details?id=<%=item.to._id %>"><%= item.to.name %></a>
+                    <p class="pull-right"><%= moment(item.meta.createAt, "YYYYMMDDHHmmss").fromNow()  %></p>
+                  </h4>
+                  <%= item.content %>
+                </div>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+      <% }) %>
+
+     </div>
+   </div>
+   <div>
+     <form method="post" action="/userComment" id="userCommentForm">
+       <div class="form-group">
+         <input type="hidden" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
+       </div>
+       <div class="form-group">
+         <input type="hidden" name='userComment[from]' value="<%=user._id%>" class="form-control">
+       </div>
+       <div class="form-group">
+          <label for="content">为用户留言</label>
+          <textarea class="form-control" rows="3" id="content" name="userComment[content]"></textarea>
+       </div>
+       <% if (user) { %>
+        <button type="submit" class="btn btn-info">Submit</button>
+       <% } else { %>
+        <a href="/user/signin" class="btn btn-info">请先登录</a>
+       <% } %>
+     </form>
+   </div>
+ </div>
+ <%- include('../comments/footer')%>

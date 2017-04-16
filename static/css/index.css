@@ -1,0 +1,5 @@
+.media-left,.media-body{
+	display: table-cell;
+    vertical-align: top;
+    padding-right: 10px;
+}
