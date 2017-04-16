@@ -24,5 +24,6 @@ let router = function (app) {
 	app.get('/user/details' , User.details);
 	app.post('/userComment', UserComment.comment);
 	app.delete('/admin/user/delete', User.delete);
+	app.delete('/usercomment/delete', UserComment.delete);
 }
 module.exports = router;

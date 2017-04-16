@@ -13,6 +13,26 @@ $(function (){
 			}
 		})
 	});
+	// 用户留言删除
+	$('.deleteUserComment').click(function(event) {
+		var id = $(this).attr('data-id');
+		var index = $(this).attr('data-index');
+		var url = '';
+		if (index) {
+			url = '/usercomment/delete?id=' + id + '&index=' + index;
+		} else {
+			url = '/usercomment/delete?id=' + id;
+		}
+		var $this = $(this);
+		$.ajax({
+			type : 'delete',
+			url : url
+		}).done(function (result){
+			if (result.success == 1) {
+				$this.parents('.media').eq(0).remove();
+			}
+		});
+	});
 	// 用户浏览版回复
 	$('.addComment').click(function(event) {
 		var tic = $(this).attr('data-tid');
