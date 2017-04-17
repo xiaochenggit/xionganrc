@@ -34,8 +34,7 @@ var UserSchema = new User({
 UserSchema.pre('save', (next) => {
   // let user = this;
   if (this.isNew) {
-    this.createAt = Date.now();
-    this.updateAt = Date.now();
+    this.createAt = this.updateAt = this.loadTime = Date.now();
   } else {
     this.updateAt = Date.now();
   }

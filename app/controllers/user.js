@@ -10,6 +10,7 @@ exports.getSignup = function (request,response) {
 }
 exports.postSignup = function (request,response) {
 	var _user = request.body.user;
+	_user.createAt = _user.updateAt = _user.loadTime = Date.now();
 	// 如果有这个 user 就返回登录页面
 	User.findOne({name : _user.name}, (error, user) => {
 		if (error) {
@@ -43,7 +44,6 @@ exports.logout = function (request , response) {
 }
 exports.postSignin = function (request, response) {
 	var _user = request.body.user;
-	console.log(_user.name)
 	User.findOne({name: _user.name}, (error,user) => {
 		if (error) {
 			console.log(error);
@@ -101,20 +101,18 @@ exports.saveImg = function (request, response, next){
 	var saveImg = request.files.userImg;
 	if (saveImg.originalFilename) {
 		var oldPath = saveImg.path;
-		console.log(saveImg.type.split('/'));
 		var type = saveImg.type.split('/')[1];
 		var imgName = Date.now() + '.' + type;
 		var newPath = path.join(__dirname,'../../','/static/userImg/' + imgName);
 		fs.readFile(oldPath,(error, data) => {
 			fs.writeFile(newPath, data, () => {
 			   request.body.user.userImg = imgName;	
-			   next();	
+			   next();
 			})
 		})
 	} else {
 		next();
 	}
-	
 }
 // 删除用户
 exports.delete = function (request, response) {

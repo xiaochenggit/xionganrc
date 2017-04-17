@@ -17,7 +17,12 @@
         <% if (users && users.length > 0) { %>
             <% users.forEach(function (item,index) { %>
                 <tr>
-                  <td><%= item.name %></td>
+                  <td>
+                    <a href="/user/details?id=<%=item._id %>">
+                     <img src="/userImg/<%= item.userImg %>" alt="<%= item.name %>" style="width: 24px;height: 24px;border-radius: 50%">
+                     <%= item.name %>
+                    </a>
+                  </td>
                   <td><%= item.role %></td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td><%= moment(item.loadTime, "YYYYMMDDHHmmss").fromNow()  %></td>
