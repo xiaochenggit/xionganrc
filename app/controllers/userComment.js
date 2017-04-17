@@ -43,29 +43,41 @@ exports.delete = function (request, response) {
 	if (index) {
 		if (id) {
 			UserComent.findOne({_id: id}, (error, comment) => {
-				comment.reply.splice(index, 1);
-				comment.save((error) => {
-					if (error) {
-						console.log(error)
-					} else {
-						response.json({
-							success : 1
-						})
-					}
-				})
+				// 判断是不是此用户的留言
+				if (request.session.user._id == comment.reply[index].from || 
+					request.session.user._id == comment.user
+					) {
+					comment.reply.splice(index, 1);
+					comment.save((error) => {
+						if (error) {
+							console.log(error)
+						} else {
+							response.json({
+								success : 1
+							})
+						}
+					});
+				}
 			})
 		}
 	} else {
 		if (id) {
-			UserComent.remove({_id: id},(error) => {
-				if (error) {
-					console.log(error);
-				} else {
-					response.json({
-						success : 1
-					})
+			UserComent.findOne({_id: id}, (error, comment) => {
+				// 判断是不是此用户的留言
+				if (request.session.user._id == comment.from || 
+					request.session.user._id == comment.user 
+					) {
+					UserComent.remove({_id: id},(error) => {
+						if (error) {
+							console.log(error);
+						} else {
+							response.json({
+								success : 1
+							})
+						}
+					});
 				}
-			})
+			});
 		}
 	}
 }
