@@ -3,3 +3,7 @@
     vertical-align: top;
     padding-right: 10px;
 }
+#userSignup .required label span {
+	color: red;
+	margin-left: 2px;
+}

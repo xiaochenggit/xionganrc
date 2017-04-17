@@ -1,6 +1,10 @@
 var mongoose = require('mongoose');
 var User = mongoose.Schema;
 var UserSchema = new User({
+  userImg : {
+    type : String,
+    default : 'userImg.jpg'
+  },
   name : {
     type : String,
     unique : true
@@ -17,27 +21,24 @@ var UserSchema = new User({
       type : Date,
       default : Date.now()
   },
-  meta: {
-    createAt: {
-      type : Date,
-      default : Date.now()
-    },
-    updateAt: {
-      type : Date,
-      default : Date.now()
-    }
+  createAt: {
+    type : Date,
+    default : Date.now()
+  },
+  updateAt: {
+    type : Date,
+    default : Date.now()
   }
 });
 
 UserSchema.pre('save', (next) => {
   // let user = this;
-  // if (!user.isNew) {
-  //   user.meta.createAt = user.meta.updateAt = Date.now();
-  //   next();
-  // } else {
-  //   user.meta.updateAt = Date.now();
-  //   next();
-  // }
+  if (this.isNew) {
+    this.createAt = Date.now();
+    this.updateAt = Date.now();
+  } else {
+    this.updateAt = Date.now();
+  }
   next();
 });
 module.exports = UserSchema;

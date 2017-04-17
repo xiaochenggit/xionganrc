@@ -1,5 +1,8 @@
 const User = require('../models/user');
 const UserComment = require('../models/userComment');
+
+const path = require('path');
+const fs = require('fs');
 exports.getSignup = function (request,response) {
 	response.render('user-signup',{
 		title : '用户注册页面'
@@ -7,7 +10,6 @@ exports.getSignup = function (request,response) {
 }
 exports.postSignup = function (request,response) {
 	var _user = request.body.user;
-	console.log(_user);
 	// 如果有这个 user 就返回登录页面
 	User.findOne({name : _user.name}, (error, user) => {
 		if (error) {
@@ -82,8 +84,8 @@ exports.details = function (request, response) {
 			} else {
 				UserComment
 				.find({user: user._id})
-				.populate('from', 'name')
-				.populate('reply.from reply.to', 'name')
+				.populate('from', 'name userImg')
+				.populate('reply.from reply.to', 'name userImg')
 				.exec((error, comments)=>{
 					response.render('user-details',{
 						title : '用户详情',
@@ -94,6 +96,25 @@ exports.details = function (request, response) {
 			}
 		})
 	}
+}
+exports.saveImg = function (request, response, next){
+	var saveImg = request.files.userImg;
+	if (saveImg.originalFilename) {
+		var oldPath = saveImg.path;
+		console.log(saveImg.type.split('/'));
+		var type = saveImg.type.split('/')[1];
+		var imgName = Date.now() + '.' + type;
+		var newPath = path.join(__dirname,'../../','/static/userImg/' + imgName);
+		fs.readFile(oldPath,(error, data) => {
+			fs.writeFile(newPath, data, () => {
+			   request.body.user.userImg = imgName;	
+			   next();	
+			})
+		})
+	} else {
+		next();
+	}
+	
 }
 // 删除用户
 exports.delete = function (request, response) {

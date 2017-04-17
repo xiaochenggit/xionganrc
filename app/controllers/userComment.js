@@ -10,7 +10,9 @@ exports.comment = function (request, response) {
 			comment.reply.push({
 				from : userComment.from,
 				to : userComment.tid,
-				content : userComment.content
+				content : userComment.content,
+				createAt : Date.now(),
+				updateAt : Date.now()
 			});
 			comment.save((error, comment) => {
 				if (error) {

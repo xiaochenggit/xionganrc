@@ -21,7 +21,6 @@ var userCommentSchema = new Schema({
 			ref : 'User',
 		},
 		content : String,
-		meta: {
 	    createAt: {
 	      type : Date,
 	      default : Date.now()
@@ -30,10 +29,8 @@ var userCommentSchema = new Schema({
 	      type : Date,
 	      default : Date.now()
 	    }
-	  }
 	}],
 	content : String,
-	meta: {
     createAt: {
       type : Date,
       default : Date.now()
@@ -42,7 +39,14 @@ var userCommentSchema = new Schema({
       type : Date,
       default : Date.now()
     }
-  }
 });
-
+userCommentSchema.pre('save', (next) => {
+  // let user = this;
+  if (this.isNew) {
+    this.createAt = this.updateAt = Date.now();
+  } else {
+    this.updateAt = Date.now();
+  }
+  next();
+});
 module.exports = userCommentSchema;

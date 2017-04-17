@@ -16,7 +16,7 @@ let router = function (app) {
 	})
 	app.get('/', Index.index);
 	app.get('/user/signup', User.getSignup);
-	app.post('/user/signup', User.postSignup)
+	app.post('/user/signup', User.saveImg, User.postSignup)
 	app.get('/user/signin', User.getSignin);
 	app.get('/user/logout', User.logout);
 	app.post('/user/signin', User.postSignin);

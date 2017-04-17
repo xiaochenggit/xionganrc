@@ -34,6 +34,8 @@ app.use(session({
 		collection: 'session'
 	})
 }));
+// file 表单提交
+app.use(require('connect-multiparty')());
 
 // 启动路由
 const router = require('./app/config/router');
