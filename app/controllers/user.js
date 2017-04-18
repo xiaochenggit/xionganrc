@@ -82,17 +82,45 @@ exports.details = function (request, response) {
 			if (error) {
 				console.log(error)
 			} else {
-				UserComment
-				.find({user: user._id})
-				.populate('from', 'name userImg')
-				.populate('reply.from reply.to', 'name userImg')
-				.exec((error, comments)=>{
-					response.render('user-details',{
-						title : '用户详情',
-						seeUser : user,
-						comments : comments
+				// 浏览过来添加 用户浏览统计 只有登录的时候才添加
+				if (request.session.user && request.session.user._id != user._id) {
+					// user.browseUsers.forEach( function(element, index) {
+					// 	if (element.user == request.session.user._id) {
+					// 		user.browseUsers.splice(index, 1);
+					// 	}
+					// });
+					for (var i = 0 ; i < user.browseUsers.length;) {
+						if (user.browseUsers[i].user == request.session.user._id) {
+							user.browseUsers.splice(i, 1);
+						} else {
+							i ++ ;
+						}
+					}
+					user.browseUsers.unshift({
+						user : request.session.user._id,
+						time : Date.now()
 					});
-				});
+					user.save((error) => {
+						if (error) {
+							console.log(error);
+						}
+					});
+				}
+				User.findOne({_id: id})
+				.populate('browseUsers.user ', 'name userImg')
+				.exec((error, user) => {
+					UserComment
+					.find({user: user._id})
+					.populate('from', 'name userImg')
+					.populate('reply.from reply.to', 'name userImg')
+					.exec((error, comments)=>{
+						response.render('user-details',{
+							title : '用户详情',
+							seeUser : user,
+							comments : comments
+						});
+					});
+				})
 			}
 		})
 	}

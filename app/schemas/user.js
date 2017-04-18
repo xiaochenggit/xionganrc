@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
-var User = mongoose.Schema;
-var UserSchema = new User({
+
+var Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
+var UserSchema = new Schema({
   // 用户性别
   sex : {
     type : String,
@@ -41,6 +43,16 @@ var UserSchema = new User({
     type : String,
     default : 'userImg.jpg'
   },
+  browseUsers: [{
+    user : {
+      type : ObjectId,
+      ref : 'User'
+    },
+    time : {
+      type : Date,
+      default : Date.now()
+    }
+  }],
   // 用户名字 , 必须唯一
   name : {
     type : String,

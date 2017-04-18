@@ -54,6 +54,23 @@
    </div>
   </div>
   <div class="panel panel-primary">
+   <div class="panel-heading">最近浏览</div>
+   <div class="panel-body">
+    <div class="row">
+      <% if (seeUser.browseUsers && seeUser.browseUsers.length > 0) { %>
+         <% seeUser.browseUsers.forEach(function (item) { %>
+          <div class="col-md-2">
+             <a href="#" class="thumbnail" style="border-radius:50%">
+              <img class="img-circle" src="/userImg/<%=item.user.userImg %>" alt="<%= item.user.name %> ">
+             </a>
+             <p class="text-center"><%= moment(item.time, "YYYYMMDDHHmmss").fromNow()  %></p>
+          </div>
+         <% }) %>
+      <% } %>
+    </div>
+   </div>
+  </div>
+  <div class="panel panel-primary">
    <div class="panel-heading">留言板</div>
    <div class="panel-body">
     <% if (comments && comments.length > 0) { %>

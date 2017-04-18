@@ -2,7 +2,8 @@
 const Index = require('../controllers/index');
 const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
-const Moment = require('moment')
+const Moment = require('moment');
+Moment.lang('zh-cn');
 let router = function (app) {
 	app.use((request, response, next) => {
 		var user = request.session.user;
