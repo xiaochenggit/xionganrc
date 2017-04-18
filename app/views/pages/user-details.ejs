@@ -1,91 +1,131 @@
 <%- include('../comments/header')%>
- <%- include('../comments/navigation')%>
- <div class="container">
-   <div class="panel panel-default">
-     <div class="panel-heading">用户名</div>
-     <div class="panel-body"><%= seeUser.name %></div>
-   </div>
-   <div class="panel panel-default">
-     <div class="panel-heading">邮箱</div>
-     <div class="panel-body"><%= seeUser.email %></div>
-   </div>
-   <div class="panel panel-default">
-     <div class="panel-heading">注册时间</div>
-     <div class="panel-body"><%=moment(seeUser.createAt).format('YYYY/MM/DD HH:mm:ss') %>
-     </div>
-   </div>
-   <div class="panel panel-default">
-     <div class="panel-heading">上次登录</div>
-     <div class="panel-body">
-      <%= moment(seeUser.loadTime, "YYYYMMDDHHmmss").fromNow()  %>
-     </div>
-   </div>
-   <div class="panel panel-default">
-     <div class="panel-heading">留言板</div>
-     <div class="panel-body">
-      <% comments.forEach(function (comment,index) { %>
-      <div class="media userCommentOne">
-        <div class="media-left">
-          <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=comment.from._id %>'>
-            <img class="media-object" src="/userImg/<%= comment.from.userImg %>" data-holder-rendered="true" style="width: 64px; height: 64px; border-radius:50%"></a>
+<%- include('../comments/navigation')%>
+<div class="container">
+  <div class="row">
+  <!-- 右侧信息 -->
+  <div class="col-md-5 col-md-push-7">
+    <div class="list-group">
+      <a href="#" class="list-group-item" style="overflow:hidden">
+        <div class="pull-left" style = 'margin-right : 10px'>
+          <img src="/userImg/<%= seeUser.userImg %>" alt="<%= seeUser.name %>" style = 'with : 128px ; height : 128px ; border-radius : 10px'>
         </div>
-        <div class="media-body">
-          <h4 class="media-heading">
-            <a href="/user/details?id=<%=comment.from._id %>"><%= comment.from.name %></a> 说 :
-            <p class="pull-right"><%= moment(comment.createAt, "YYYYMMDDHHmmss").fromNow()  %></p>
-          </h4>
-          <%= comment.content %>
-          <% if (seeUser._id == user._id || comment.from._id == user._id) { %>
-          <p><a class='deleteUserComment' data-id='<%= comment._id %>'>删除</a></p>
-          <% } %>
-          <% if (comment.reply && comment.reply.length > 0) { %>
-            <% comment.reply.forEach( function (item,index) { %>
-              <div class="media userCommentTwo">
-                <div class="media-left">
-                  <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=item.from._id %>'>
-                    <img class="media-object" src="/userImg/<%= item.from.userImg %>" data-holder-rendered="true" style="width: 64px; height: 64px; border-radius:50%">
-                  </a>
-                </div>
-                <div class="media-body">
-                  <h4 class="media-heading">
-                    <a href="/user/details?id=<%=item.from._id %>"><%= item.from.name %></a> 回复：
-                    <a href="/user/details?id=<%=item.to._id %>"><%= item.to.name %></a>
-                    <p class="pull-right">
-                      <%= moment(item.createAt, "YYYYMMDDHHmmss").fromNow()  %>
-                    </p>
-                  </h4>
-                  <%= item.content %>
-                  <% if (seeUser._id == user._id || item.from._id == user._id) { %>
-                  <p><a class='deleteUserComment' data-id='<%= comment._id %>' data-index='<%= index %>'>删除</a></p>
-                  <% } %>
-                </div>
+        <div>
+          <p>性别 : <%= sex[seeUser.sex] %></p>
+          <p>专业 ：<%= seeUser.major %></p>
+          <p>学校 ：<%= seeUser.school %></p>
+          <p>爱好 : 
+            <% if (seeUser.hobby && seeUser.hobby.length > 0) { %>
+            <% seeUser.hobby.forEach(function (item,index){ %>
+                <%= hobby[item] %>
+            <%  }) %>
+            <% } %>
+          </p>
+        </div>
+      </a>
+      <a href="#" class="list-group-item">用户名 : <%= seeUser.name %></a>
+      <a href="#" class="list-group-item">邮箱 : <%= seeUser.email %></a>
+      <a href="#" class="list-group-item">
+        注册时间 : <%=moment(seeUser.createAt).format('YYYY/MM/DD HH:mm:ss') %>
+      </a>
+      <a href="#" class="list-group-item">
+        上次登录时间 : <%= moment(seeUser.loadTime, "YYYYMMDDHHmmss").fromNow()  %>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-7 col-md-pull-5">
+   <div class="panel panel-info">
+     <div class="panel-heading">个人介绍</div>
+     <div class="panel-body">
+      <%= seeUser.des %>
+     </div>
+   </div>
+   <div class="panel panel-info">
+     <div class="panel-heading">座右铭</div>
+     <div class="panel-body">
+      <%= seeUser.motto %>
+     </div>
+   </div>
+  </div>
+  </div>
+  <div class="panel panel-primary">
+   <div class="panel-heading">主人寄语</div>
+   <div class="panel-body">
+    <%= seeUser.message %>
+   </div>
+  </div>
+  <div class="panel panel-primary">
+   <div class="panel-heading">留言板</div>
+   <div class="panel-body">
+    <% if (comments && comments.length > 0) { %>
+        <% comments.forEach(function (comment,index) { %>
+          <div class="media userCommentOne">
+            <div class="media-left">
+              <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=comment.from._id %>'>
+                <img class="media-object" src="/userImg/<%= comment.from.userImg %>" data-holder-rendered="true" style="width: 64px; height: 64px; border-radius:50%"></a>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">
+                <p>
+                  <a href="/user/details?id=<%=comment.from._id %>"><%= comment.from.name %>
+                  </a> 
+                  说 : 
+                  <span class="pull-right"><%= moment(comment.createAt, "YYYYMMDDHHmmss").fromNow()  %></span>
+                </p>
+              </h4>
+              <p><%= comment.content %></p>
+              <% if (seeUser._id == user._id || comment.from._id == user._id) { %>
+              <p><a class='deleteUserComment' data-id='<%= comment._id %>'>删除</a></p>
+              <% } %>
+              <% if (comment.reply && comment.reply.length > 0) { %>
+                <% comment.reply.forEach( function (item,index) { %>
+                  <div class="media userCommentTwo">
+                    <div class="media-left">
+                      <a href="#content" class="addComment" data-pid='<%=comment._id %>' data-tid='<%=item.from._id %>'>
+                        <img class="media-object" src="/userImg/<%= item.from.userImg %>" data-holder-rendered="true" style="width: 64px; height: 64px; border-radius:50%">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">
+                        <a href="/user/details?id=<%=item.from._id %>"><%= item.from.name %></a> 回复：
+                        <a href="/user/details?id=<%=item.to._id %>"><%= item.to.name %></a>
+                        <p class="pull-right">
+                          <%= moment(item.createAt, "YYYYMMDDHHmmss").fromNow()  %>
+                        </p>
+                      </h4>
+                <p><%= item.content %></p>
+                <% if (seeUser._id == user._id || item.from._id == user._id) { %>
+                <p><a class='deleteUserComment' data-id='<%= comment._id %>' data-index='<%= index %>'>删除</a></p>
+                <% } %>
               </div>
-            <% }) %>
-          <% } %>
-        </div>
+            </div>
+          <% }) %>
+        <% } %>
       </div>
-      <% }) %>
-
-     </div>
-   </div>
-   <div>
-     <form method="post" action="/userComment" id="userCommentForm">
-       <div class="form-group">
-         <input type="hidden" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
-       </div>
-       <div class="form-group">
-         <input type="hidden" name='userComment[from]' value="<%=user._id%>" class="form-control">
-       </div>
-       <div class="form-group">
-          <label for="content">为用户留言</label>
-          <textarea class="form-control" rows="3" id="content" name="userComment[content]"></textarea>
-       </div>
-       <% if (user) { %>
-        <button type="submit" class="btn btn-info">Submit</button>
-       <% } else { %>
-        <a href="/user/signin" class="btn btn-info">请先登录</a>
-       <% } %>
-     </form>
+    </div>
+    <% }) %>
+    <% } else { %>
+      还没有人留言快点为此用户增加人气吧
+    <% } %>
    </div>
  </div>
+  <div>
+   <form method="post" action="/userComment" id="userCommentForm">
+     <div class="form-group">
+       <input type="hidden" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
+     </div>
+     <div class="form-group">
+       <input type="hidden" name='userComment[from]' value="<%=user._id%>" class="form-control">
+     </div>
+     <div class="form-group">
+        <label for="content">为用户留言</label>
+        <textarea class="form-control" rows="3" id="content" name="userComment[content]"></textarea>
+     </div>
+     <% if (user) { %>
+      <button type="submit" class="btn btn-info">Submit</button>
+     <% } else { %>
+      <a href="/user/signin" class="btn btn-info">请先登录</a>
+     <% } %>
+   </form>
+  </div>
+</div>
  <%- include('../comments/footer')%>

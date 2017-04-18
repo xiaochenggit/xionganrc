@@ -25,7 +25,7 @@ exports.postSignup = function (request,response) {
 						console.log(error)
 					} else {
 						request.session.user = user;
-						response.redirect('/admin/user/list');
+						response.redirect('/user/details?id=' + user._id);
 					}
 				})
 			}
@@ -97,6 +97,7 @@ exports.details = function (request, response) {
 		})
 	}
 }
+// 储存头像
 exports.saveImg = function (request, response, next){
 	var saveImg = request.files.userImg;
 	if (saveImg.originalFilename) {
@@ -112,6 +113,32 @@ exports.saveImg = function (request, response, next){
 		})
 	} else {
 		next();
+	}
+}
+// 改变资料
+exports.change = function (request , response) {
+	var _user = request.body.user;
+	var _id = _user._id;
+	if (_id == request.session.user._id) {
+		User.findOne({_id: _id}, (error, user) => {
+			user.sex = _user.sex;
+			user.major = _user.major;
+			user.school = _user.school;
+			user.hobby = _user.hobby;
+			user.des = _user.des;
+			user.motto = _user.motto;
+			user.message = _user.message;
+			user.hobby = _user.hobby;
+			user.userImg = _user.userImg;
+			user.save((error,user) => {
+				if (error) {
+					console.log(error);
+				} else {
+					request.session.user = user;
+					response.redirect('/user/details?id=' + user._id);
+				}
+			})
+		})
 	}
 }
 // 删除用户

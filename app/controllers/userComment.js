@@ -23,7 +23,7 @@ exports.comment = function (request, response) {
 		})
 	} else {
 		if (userComment.user) {
-			// userComment.createAt = userComment.updateAt = Date.now();
+			userComment.createAt = userComment.updateAt = Date.now();
 			_UserComent = new UserComent(userComment);
 			_UserComent.save((error, comment) => {
 				if (error) {
