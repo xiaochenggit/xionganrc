@@ -3,7 +3,7 @@ const Index = require('../controllers/index');
 const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
 const Moment = require('moment');
-Moment.lang('zh-cn');
+// Moment.lang('zh-cn');
 let router = function (app) {
 	app.use((request, response, next) => {
 		var user = request.session.user;
@@ -39,6 +39,7 @@ let router = function (app) {
 	app.get('/admin/user/list', User.userList);
 	app.get('/user/details' , User.details);
 	app.post('/userComment', UserComment.comment);
+	app.post('/user/follows', User.follows);
 	app.delete('/admin/user/delete', User.delete);
 	app.delete('/usercomment/delete', UserComment.delete);
 }

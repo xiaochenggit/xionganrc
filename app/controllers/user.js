@@ -84,11 +84,6 @@ exports.details = function (request, response) {
 			} else {
 				// 浏览过来添加 用户浏览统计 只有登录的时候才添加
 				if (request.session.user && request.session.user._id != user._id) {
-					// user.browseUsers.forEach( function(element, index) {
-					// 	if (element.user == request.session.user._id) {
-					// 		user.browseUsers.splice(index, 1);
-					// 	}
-					// });
 					for (var i = 0 ; i < user.browseUsers.length;) {
 						if (user.browseUsers[i].user == request.session.user._id) {
 							user.browseUsers.splice(i, 1);
@@ -107,7 +102,7 @@ exports.details = function (request, response) {
 					});
 				}
 				User.findOne({_id: id})
-				.populate('browseUsers.user ', 'name userImg')
+				.populate('browseUsers.user follows.user', 'name userImg')
 				.exec((error, user) => {
 					UserComment
 					.find({user: user._id})
@@ -166,6 +161,42 @@ exports.change = function (request , response) {
 					response.redirect('/user/details?id=' + user._id);
 				}
 			})
+		})
+	}
+}
+// 添加关注、取消关注
+exports.follows = function (request, response) {
+	var id = request.query.id;
+	var de = request.query.delete;
+	if (id) {
+		User.findOne({_id: id},(error, user) => {
+			if (error) {
+				console.log(error);
+			} else {
+				for (var i = 0 ; i < user.follows.length;) {
+					if (user.follows[i].user == request.session.user._id) {
+						user.follows.splice(i, 1);
+					} else {
+						i ++ ;
+					}
+				}
+				if (!de) {
+					user.follows.unshift({
+						user : request.session.user._id,
+						time : Date.now()
+					});
+				}
+				user.save((error) => {
+					if (error) {
+						console.log(error);
+					} else {
+						console.log('2');
+						response.json({
+							success : 1
+						});
+					}
+				});
+			}
 		})
 	}
 }

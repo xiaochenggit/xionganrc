@@ -33,6 +33,32 @@ $(function (){
 			}
 		});
 	});
+	// 关注用户
+	$("#userfollow .glyphicon-heart").click(function(event) {
+		var id = $(this).attr('data-id');
+		var url = '';
+		var isActive = $(this).hasClass('active');
+		if (isActive) {
+			url = '/user/follows?id=' + id + '&delete=true';
+		} else {
+			url = '/user/follows?id=' + id;
+		}
+		var $this = $(this);
+		console.log('1');
+		$.ajax({
+			url: url,
+			type: 'post'
+		})
+		.done(function(result) {
+			if (result.success == 1) {
+				if (isActive) {
+					$this.removeClass('active');
+				} else {
+					$this.addClass('active');
+				}
+			}
+		})
+	});
 	// 用户浏览版回复
 	$('.addComment').click(function(event) {
 		var tic = $(this).attr('data-tid');

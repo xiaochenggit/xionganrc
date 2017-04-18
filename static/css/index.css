@@ -7,3 +7,19 @@
 	color: red;
 	margin-left: 2px;
 }
+.userRightDes{
+	overflow: hidden;
+	position: relative;
+}
+.userRightDes .btn-group{
+	position: absolute;
+	right: 0px;
+}
+.userRightDes #userfollow{
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+.userRightDes #userfollow .active{
+	color: red;
+}

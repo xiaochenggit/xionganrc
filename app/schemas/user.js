@@ -43,7 +43,19 @@ var UserSchema = new Schema({
     type : String,
     default : 'userImg.jpg'
   },
+  // 最近浏览
   browseUsers: [{
+    user : {
+      type : ObjectId,
+      ref : 'User'
+    },
+    time : {
+      type : Date,
+      default : Date.now()
+    }
+  }],
+  // 关注
+  follows: [{
     user : {
       type : ObjectId,
       ref : 'User'
