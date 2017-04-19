@@ -7,7 +7,7 @@
     <div class="list-group">
       <a href="javascript:;" class="list-group-item" style="overflow:hidden">
         <div class="pull-left" style = 'margin-right : 10px'>
-          <img src="/userImg/<%= seeUser.userImg %>" alt="<%= seeUser.name %>" style = 'with : 128px ; height : 128px ; border-radius : 10px'>
+          <img src="/userImg/<%= seeUser.userImg %>" alt="<%= seeUser.name %>" class='userImg'>
         </div>
         <div class="userRightDes">
           <% if (user._id == seeUser._id ) { %>
@@ -16,7 +16,7 @@
               </div>
           <% } %>
           <div id="userfollow">
-            <span class='number'><%= seeUser.follows.length %></span>
+            <span class='number' data-toggle="modal" data-target="#userFollowsModal"><%= seeUser.follows.length %></span>
             <% if (user._id != seeUser._id) { %>
               <% if (seeUser.follows.join('').indexOf(user._id) > -1) { %>
                 <span class="glyphicon glyphicon-heart active" aria-hidden="true" data-id='<%= seeUser._id %>'></span>
@@ -70,15 +70,15 @@
   </div>
   <div class="panel panel-info">
    <div class="panel-heading">最近浏览</div>
-   <div class="panel-body">
+   <div class="panel-body userBrowse">
     <div class="row">
       <% if (seeUser.browseUsers && seeUser.browseUsers.length > 0) { %>
          <% seeUser.browseUsers.forEach(function (item) { %>
-          <div class="col-md-2 col-xs-4 col-sm-4">
-             <a href="#" class="thumbnail" style="border-radius:50%" title="<%= item.user.name %>">
+          <div class="col-md-2 col-xs-3 col-sm-2">
+             <a href="/user/details?id=<%= item.user._id %>" style="border-radius:50%" title="<%= item.user.name %>">
               <img class="img-circle" src="/userImg/<%=item.user.userImg %>" alt="<%= item.user.name %> ">
              </a>
-             <p class="text-center"><%= moment(item.time, "YYYYMMDDHHmmss").fromNow()  %></p>
+             <!-- <p class="text-center"><%= moment(item.time, "YYYYMMDDHHmmss").fromNow()  %></p> -->
           </div>
          <% }) %>
       <% } %>
@@ -160,4 +160,33 @@
    </form>
   </div>
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" id='userFollowsModal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">他的粉丝</h4>
+      </div>
+      <div class="modal-body userFollowsBody">
+        <div class="row">
+          <% if (seeUser.follows && seeUser.follows.length > 0) { %>
+             <% seeUser.follows.forEach(function (item) { %>
+              <div class="col-md-2 col-xs-3 col-sm-2">
+                 <a href="/user/details?id=<%= item.user._id %>" class="" style="border-radius:50%" title="<%= item.user.name %>">
+                  <img class="img-circle" src="/userImg/<%=item.user.userImg %>" alt="<%= item.user.name %> ">
+                 </a>
+                <!--  <p class="text-center"><%= moment(item.time, "YYYYMMDDHHmmss").fromNow()  %></p> -->
+              </div>
+             <% }) %>
+          <% } else { %>
+             <p>暂无粉丝,快成为他的第一个粉丝吧</p>
+          <% } %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
  <%- include('../comments/footer')%>
