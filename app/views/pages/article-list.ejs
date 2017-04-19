@@ -1,0 +1,41 @@
+<%- include('../comments/header')%>
+<%- include('../comments/navigation')%>
+<div class="container">
+	<h2><%= title %></h2>
+	<table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>标题</th>
+          <th>作者</th>
+          <th>注册时间</th>
+          <th>发布时间</th>
+          <th>查看信息</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (articles && articles.length > 0) { %>
+            <% articles.forEach(function (item,index) { %>
+                <tr>
+                  <td>
+                    <a href="/article?id=<%=item._id %>">
+                     <%= item.title %>
+                    </a>
+                  </td>
+                  <td><%= item.author.name %></td>
+                  <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
+                  <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
+                  <td>
+                    <a href="/article?id=<%=item._id %>" class='btn btn-info'>
+                    查看</a>
+                  </td>
+                  <td>
+                  <button class="deleteActicle btn btn-danger" data-id='<%=item._id %>'>删除</button>
+                  </td>
+                </tr>
+            <% }); %>
+        <% } %>
+      </tbody>
+    </table>
+</div>
+<%- include('../comments/footer')%>

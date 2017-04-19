@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= article.title %></title>
+	<meta name="keywords" content="<%= article.keyword.join(' ') %>">
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/index.css">
+	<script type="text/javascript" src='/js/jquery-2.1.4.min.js'></script>
+	<script type="text/javascript" src='/js/bootstrap.min.js'></script>
+	<script type="text/javascript" src='/js/index.js'></script>
+</head>
+<body>
+<%- include('../comments/navigation')%>
+<div class="container">
+	<h1><%= article.title %></h1>
+	<p><%= article.author.name %></p>
+	<p>发布: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></p>
+	<p>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></p>
+	<div class="content">
+		<%= article.content %>
+	</div>
+</div>
+<%- include('../comments/footer')%>

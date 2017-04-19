@@ -13,6 +13,19 @@ $(function (){
 			}
 		})
 	});
+	// 用户删除的代码
+	$(".deleteActicle").click(function (){
+		var id = $(this).attr('data-id');
+		var $this = $(this);
+		$.ajax({
+			type : 'delete',
+			url : '/admin/article/delete?id=' + id
+		}).done(function (result) {
+			if (result.success == 1) {
+				$this.parents('tr').remove();
+			}
+		})
+	});
 	// 用户留言删除
 	$('.deleteUserComment').click(function(event) {
 		var id = $(this).attr('data-id');

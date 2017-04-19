@@ -2,6 +2,7 @@
 const Index = require('../controllers/index');
 const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
+const Article = require('../controllers/article');
 const Moment = require('moment');
 // Moment.lang('zh-cn');
 let router = function (app) {
@@ -42,5 +43,12 @@ let router = function (app) {
 	app.post('/user/follows', User.follows);
 	app.delete('/admin/user/delete', User.delete);
 	app.delete('/usercomment/delete', UserComment.delete);
+
+	// 文章发布页面
+	app.get('/admin/article', Article.admin);
+	app.post('/admin/article', Article.save);
+	app.get('/article', Article.article)
+	app.get('/admin/article/list', Article.articleList)
+	app.delete('/admin/article/delete', Article.delete);
 }
 module.exports = router;
