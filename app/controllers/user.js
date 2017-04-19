@@ -190,7 +190,6 @@ exports.follows = function (request, response) {
 					if (error) {
 						console.log(error);
 					} else {
-						console.log('2');
 						response.json({
 							success : 1
 						});

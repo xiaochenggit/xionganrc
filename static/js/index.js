@@ -44,7 +44,7 @@ $(function (){
 			url = '/user/follows?id=' + id;
 		}
 		var $this = $(this);
-		console.log('1');
+		var number = $this.siblings('.number');
 		$.ajax({
 			url: url,
 			type: 'post'
@@ -53,8 +53,10 @@ $(function (){
 			if (result.success == 1) {
 				if (isActive) {
 					$this.removeClass('active');
+					number.text(parseInt(number.text())-1);
 				} else {
 					$this.addClass('active');
+					number.text(parseInt(number.text())+1);
 				}
 			}
 		})
