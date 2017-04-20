@@ -1,0 +1,14 @@
+<%- include('../comments/header')%>
+<div class="container">
+	<h2><%= title %></h2>
+	<div class="row">
+		<form action="/admin/articlecategory" method="post">
+			<div class="form-group required">
+				<!-- artcleCategory简称 artCate -->
+				<label for="artCateName">分类的名字<span>*</span></label>
+				<input type="text" class="form-control" id="artCateName" placeholder="请输入分类名字" name="artCate[name]" value="">
+			</div>
+		</form>
+	</div>
+</div>
+<%- include('../comments/footer')%>

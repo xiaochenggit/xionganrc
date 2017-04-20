@@ -5,9 +5,18 @@
 	<div class="row">
 		<form action="/admin/article" method="post" id="articleForm">
 		  <input type="hidden" name='article[author]' value="<%= user._id %>">
-			<div class="form-group required">
+			<div class="form-group">
 			  <label for="title">标题<span>*</span></label>
 			  <input type="text" class="form-control" id="title" placeholder="请输入文章标题" name="article[title]" value="">
+			</div>
+			<div class="form-group">
+			 <%	if (artcates && artcates.length > 0) { %>
+			 	<%	artcates.forEach(function(item,index){ %>
+				<label class="checkbox-inline">		
+					<input type="checkbox"  value="<%=index%>" name='article[categories]'> <%= item.name %>
+				</label>
+				 <% }) %>
+				 <% } %>
 			</div>
 			<div class="form-group required">
 			  <label for="keyword">关键词, 请用英文下单的;隔开<span>*</span></label>

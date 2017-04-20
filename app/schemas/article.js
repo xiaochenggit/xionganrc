@@ -1,3 +1,4 @@
+// 文章模型
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
@@ -20,10 +21,12 @@ var ArticleSchema = new Schema({
   },
   content : String,
   // 分类
-  // category : {
-  //   type: Array,
-  //   default: []
-  // },
+  categories: [{
+    articlecategory: {
+      type: ObjectId,
+      ref : 'articleCategory'
+    }
+  }],
   // 浏览的人
   browseUsers: [{
     user : {

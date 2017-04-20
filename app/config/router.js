@@ -3,6 +3,7 @@ const Index = require('../controllers/index');
 const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
+const ArticleCategory = require('../controllers/articleCategory');
 const Moment = require('moment');
 // Moment.lang('zh-cn');
 let router = function (app) {
@@ -50,5 +51,10 @@ let router = function (app) {
 	app.get('/article', Article.article)
 	app.get('/admin/article/list', Article.articleList)
 	app.delete('/admin/article/delete', Article.delete);
+
+	// 文章分类页面
+	app.get('/admin/articlecategory', ArticleCategory.admin);
+	app.post('/admin/articlecategory', ArticleCategory.save);
+	app.get('/admin/articlecategory/list', ArticleCategory.list)
 }
 module.exports = router;
