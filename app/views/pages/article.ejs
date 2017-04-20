@@ -13,10 +13,14 @@
 <body>
 <%- include('../comments/navigation')%>
 <div class="container">
-	<h1><%= article.title %></h1>
-	<p><%= article.author.name %></p>
-	<p>发布: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></p>
-	<p>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></p>
+	<div class="head">
+		<h1 class="title text-center"><%= article.title %></h1>
+		<div class="des text-center">
+			<span>作者：<%= article.author.name %></span>
+			<span>发布时间: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span>
+			<!-- <span>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span> -->
+		</div>
+	</div>
 	<div class="content">
 		<%= article.content %>
 	</div>
