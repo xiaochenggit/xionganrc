@@ -1,0 +1,15 @@
+<%- include('../comments/header')%>
+<%- include('../comments/navigation')%>
+<div class="container">
+	<h1><%= artcate.name %></h1>
+  <div class="list-group">
+  <%  if (artcate.articles && artcate.articles.length > 0) { %>
+    <%    artcate.articles.forEach(function (item,index){ %>
+          
+    <a href="/article?id=<%=item.article._id %>" class="list-group-item">更新時間:<%=moment(item.article.updateAt).format('YYYY/MM/DD') %><p class="pull-right"><%=item.article.title %></p></a>
+      <%  }) %>
+   <% } %>
+  </div>
+</div> 
+</div>
+<%- include('../comments/footer')%>

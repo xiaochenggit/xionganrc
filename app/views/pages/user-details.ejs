@@ -65,7 +65,7 @@
      <div class="panel-body">
       <% if (seeUser.articles && seeUser.articles.length > 0 ) { %>
       <%  seeUser.articles.forEach(function (item,index) { %>
-            <p><%= item.article.title %> 更新时间: <%=moment(item.article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
+            <p><a href="/article?id=<%=item.article._id%>"><%= item.article.title %></a> 更新时间: <%=moment(item.article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
       <%  }) %>
       <% } %>
      </div>

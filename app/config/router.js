@@ -56,5 +56,6 @@ let router = function (app) {
 	app.get('/admin/articlecategory', ArticleCategory.admin);
 	app.post('/admin/articlecategory', ArticleCategory.save);
 	app.get('/admin/articlecategory/list', ArticleCategory.list)
+	app.get('/articlecategory', ArticleCategory.articlecategory)
 }
 module.exports = router;

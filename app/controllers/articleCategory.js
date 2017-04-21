@@ -30,3 +30,22 @@ exports.list = function (request, response) {
 		}
 	})
 }
+exports.articlecategory = function (request, response) {
+	var id = request.query.id ;
+	console.log(id);
+	if (id) {
+		artCate.findOne({_id:id})
+		.populate('articles.article','author createAt updateAt title')
+		.exec((error,artcate)=>{
+			if (error) {
+				console.log(error);
+			} else {
+				console.log(artcate);
+				response.render('articlecategory',{
+					title : '文章分類',
+					artcate : artcate
+				})
+			}
+		})
+	}
+}
