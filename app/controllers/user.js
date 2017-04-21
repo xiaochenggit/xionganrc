@@ -103,6 +103,7 @@ exports.details = function (request, response) {
 				}
 				User.findOne({_id: id})
 				.populate('browseUsers.user follows.user', 'name userImg')
+				.populate('articles.article','title updateAt')
 				.exec((error, user) => {
 					UserComment
 					.find({user: user._id})

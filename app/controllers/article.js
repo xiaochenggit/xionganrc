@@ -17,8 +17,14 @@ exports.save = function (request, response) {
 	var _article = request.body.article;
 	// 关键词
 	_article.keyword = _article.keyword.split(';');
+	
+	if( typeof(_article.categories) == "string" ) {
+		var _artCates = [];
+		_artCates.push(_article.categories);
+	} else {
+		var _artCates = _article.categories;
+	}
 	// 找出对应的分类
-	_artCates = _article.categories;
 	_article.categories = [];
 	ArtCate.find({},(error,artcates) => {
 		_artCates.forEach( function(element, index) {
@@ -55,12 +61,10 @@ exports.save = function (request, response) {
 // 文章内容页面
 exports.article = function (request, response) {
 	var id = request.query.id;
-	console.log(id);
 	if (id) {
 		Article.findOne({_id: id})
 		.populate('author', 'name')
 		.exec((error,article) => {
-			console.log(article);
 			if (error) {
 				console.log(error);
 			} else {

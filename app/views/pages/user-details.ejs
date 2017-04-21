@@ -60,6 +60,16 @@
       <%= seeUser.motto %>
      </div>
    </div>
+   <div class="panel panel-info">
+     <div class="panel-heading">他的文章</div>
+     <div class="panel-body">
+      <% if (seeUser.articles && seeUser.articles.length > 0 ) { %>
+      <%  seeUser.articles.forEach(function (item,index) { %>
+            <p><%= item.article.title %> 更新时间: <%=moment(item.article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
+      <%  }) %>
+      <% } %>
+     </div>
+   </div>
   </div>
   </div>
   <div class="panel panel-info">

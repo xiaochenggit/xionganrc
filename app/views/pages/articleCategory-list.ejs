@@ -8,6 +8,7 @@
           <th>分类名字</th>
           <th>创建时间</th>
           <th>更新时间</th>
+          <th>查看</th>
           <th>操作</th>
         </tr>
       </thead>
@@ -20,6 +21,10 @@
                   </td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
+                  <td>
+                    <a href="/articlecategory?id=<%=item._id %>" class='btn btn-info'>
+                    查看</a>
+                  </td>
                   <td>
                   <button class="deleteActicle btn btn-danger" data-id='<%=item._id %>'>删除</button>
                   </td>
