@@ -6,7 +6,7 @@
   <%  if (artcate.articles && artcate.articles.length > 0) { %>
     <%    artcate.articles.forEach(function (item,index){ %>
           
-    <a href="/article?id=<%=item.article._id %>" class="list-group-item">更新時間:<%=moment(item.article.updateAt).format('YYYY/MM/DD') %><p class="pull-right"><%=item.article.title %></p></a>
+    <a href="/article?id=<%=item.article._id %>" class="list-group-item">更新時間:<%=moment(item.article.updateAt).format('YYYY/MM/DD') %><p class="pull-right"><%=item.article.title %></p><%=item.article.author.name%></a>
       <%  }) %>
    <% } %>
   </div>

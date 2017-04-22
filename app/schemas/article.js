@@ -11,8 +11,8 @@ var ArticleSchema = new Schema({
   },
   // 作者
   author : {
-    type : ObjectId,
-    ref : 'User'
+    name : String,
+    _id : '',
   },
   // 关键词
   keyword : {

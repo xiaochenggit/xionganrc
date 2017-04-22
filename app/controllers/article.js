@@ -15,6 +15,8 @@ exports.admin = function (request, response) {
 // 文章保存
 exports.save = function (request, response) {
 	var _article = request.body.article;
+	var editorValue = request.body.editorValue;
+	console.log(editorValue);
 	// 关键词
 	_article.keyword = _article.keyword.split(';');
 	
@@ -63,7 +65,7 @@ exports.article = function (request, response) {
 	var id = request.query.id;
 	if (id) {
 		Article.findOne({_id: id})
-		.populate('author', 'name')
+		// .populate('author', 'name')
 		.exec((error,article) => {
 			if (error) {
 				console.log(error);
