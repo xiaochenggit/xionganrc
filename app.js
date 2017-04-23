@@ -35,9 +35,9 @@ app.use(session({
 		collection: 'session'
 	})
 }));
-app.use("/ueditor/ue", ueditor(path.join(__dirname, 'static'), function(req, res, next) {  
-// ueditor 客户发起上传图片请求  
-    var imgDir = '/images/ueditor/'
+app.use("/ueditor/ue", ueditor(path.join(__dirname, 'static'), function (req, res, next) {
+    //客户端上传文件设置
+    var imgDir = '/imgage/ueditor/'
      var ActionType = req.query.action;
     if (ActionType === 'uploadimage' || ActionType === 'uploadfile' || ActionType === 'uploadvideo') {
         var file_url = imgDir;//默认图片上传地址
@@ -56,12 +56,13 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'static'), function(req, res
         var dir_url = imgDir;
         res.ue_list(dir_url); // 客户端会列出 dir_url 目录下的所有图片
     }
-	// 客户端发起其它请求  
-    else {  
-        res.setHeader('Content-Type', 'application/json');  
-        res.redirect('/ueditor/ueditor.config.json')  
+    // 客户端发起其它请求
+    else {
+        // console.log('config.json')
+        res.setHeader('Content-Type', 'application/json');
+        res.redirect('/ueditor/nodejs/config.json');
     }
-}));   
+}));
 // file 表单提交
 app.use(require('connect-multiparty')());
 

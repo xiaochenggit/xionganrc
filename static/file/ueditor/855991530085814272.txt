@@ -1,0 +1,3 @@
+mongod --dbpath D:\Program Files\MongoDbData 
+
+supervisor --harmony
