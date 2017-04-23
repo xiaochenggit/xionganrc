@@ -16,6 +16,7 @@ exports.admin = function (request, response) {
 exports.save = function (request, response) {
 	var _article = request.body.article;
 	var editorValue = request.body.editorValue;
+	_article.content = editorValue;
 	console.log(editorValue);
 	// 关键词
 	_article.keyword = _article.keyword.split(';');
