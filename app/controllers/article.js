@@ -17,7 +17,6 @@ exports.save = function (request, response) {
 	var _article = request.body.article;
 	var editorValue = request.body.editorValue;
 	_article.content = editorValue;
-	console.log(editorValue);
 	// 关键词
 	_article.keyword = _article.keyword.split(';');
 	
@@ -72,14 +71,13 @@ exports.article = function (request, response) {
 				console.log(error);
 			} else {
 				User.findOne({_id:request.session.user._id},(error,user) => {
-					// for (var i = 0 ; i < article.browseUsers.length;) {
-					// 	console.log(article.browseUsers[i].user);
-					// 	if (article.browseUsers[i].user._id == article.session.user._id) {
-					// 		article.browseUsers.splice(i, 1);
-					// 	} else {
-					// 		i ++ ;
-					// 	}
-					// }
+					for (var i = 0 ; i< article.browseUsers.length; ) {
+						if (article.browseUsers[i].user._id == request.session.user._id) {
+							article.browseUsers.splice(i, 1);
+						} else {
+							i ++;
+						}
+					}
 					article.browseUsers.unshift({
 						user: {
 							name : user.name,
@@ -99,15 +97,21 @@ exports.article = function (request, response) {
 }
 // 文章列表
 exports.articleList = function (request, response) {
+	const pageArts = 10;
+	const page = 3;
 	Article.find({})
-	.populate('author', 'name')
 	.exec((error,articles) => {
 		if (error) {
 			console.log(error);
 		} else {
+			console.log(articles.length);
+			var Maxpage = Math.ceil(articles.length/pageArts)
+			var articles = articles.splice(page*pageArts,pageArts);
 			response.render('article-list',{
 				title : '文章列表',
-				articles : articles
+				articles : articles,
+				Maxpage : Maxpage,
+				page:page
 			})
 		}
 	})
