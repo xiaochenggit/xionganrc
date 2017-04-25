@@ -22,12 +22,13 @@
 		</div>
 	</div>
 	<div>浏览人数:<%= article.browseUsers.length %></div>
-	<% if (article.browseUsers && article.browseUsers.length > 0) { %>
+	<!-- <% if (article.browseUsers && article.browseUsers.length > 0) { %>
 	  <% article.browseUsers.forEach(function(item,index){ %>
-		 <p>用户名:<%= item.user.name %>  id : <%= item.user._id %> </p> 
+		   <p>用户名:<%= item.user.name %>   </p>
+		   <p>id : <%= item.user._id %></p> 
 		   <p>time :<%= item.time %>   </p> 
 	  <% }) %>
-	<% } %>
+	<% } %> -->
 	<div class="content" id="content" style="display: none;">
 		<%= article.content %>
 	</div>

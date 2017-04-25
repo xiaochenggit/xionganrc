@@ -35,7 +35,7 @@ exports.articlecategory = function (request, response) {
 	console.log(id);
 	if (id) {
 		artCate.findOne({_id:id})
-		.populate('articles.article','author createAt updateAt title')
+		.populate('articles.article','author createAt updateAt title browseUsers')
 		.exec((error,artcate)=>{
 			if (error) {
 				console.log(error);
