@@ -71,8 +71,27 @@ exports.article = function (request, response) {
 			if (error) {
 				console.log(error);
 			} else {
-				response.render('article',{
-					article : article
+				User.findOne({_id:request.session.user._id},(error,user) => {
+					// for (var i = 0 ; i < article.browseUsers.length;) {
+					// 	console.log(article.browseUsers[i].user);
+					// 	if (article.browseUsers[i].user._id == article.session.user._id) {
+					// 		article.browseUsers.splice(i, 1);
+					// 	} else {
+					// 		i ++ ;
+					// 	}
+					// }
+					article.browseUsers.unshift({
+						user: {
+							name : user.name,
+							_id : user._id
+						},
+						time :  Date.now()
+					});
+					article.save((error,article) => {
+						response.render('article',{
+							article : article
+						})
+					});
 				})
 			}
 		})

@@ -30,8 +30,8 @@ var ArticleSchema = new Schema({
   // 浏览的人
   browseUsers: [{
     user : {
-      type : ObjectId,
-      ref : 'User'
+      name : String,
+      _id : '',
     },
     time : {
       type : Date,
