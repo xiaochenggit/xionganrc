@@ -97,8 +97,8 @@ exports.article = function (request, response) {
 }
 // 文章列表
 exports.articleList = function (request, response) {
-	const pageArts = 10;
-	const page = 3;
+	const pageArts = 2;
+	const page = parseInt(request.query.index);
 	Article.find({})
 	.exec((error,articles) => {
 		if (error) {

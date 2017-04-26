@@ -1,7 +1,7 @@
 <%- include('../comments/header')%>
 <%- include('../comments/navigation')%>
 <div class="container">
-	<h2><%= title %> 最大頁數<%=Maxpage %> 當前頁數<%=page%></h2>
+	<h2><%= title %> 最大頁數<%=Maxpage %> 當前頁數<%= page + 1 %></h2>
 	<table class="table table-bordered">
       <thead>
         <tr>
@@ -35,7 +35,36 @@
                 </tr>
             <% }); %>
         <% } %>
+
       </tbody>
     </table>
+    <nav aria-label="...">
+      <ul class="pager">
+      <%  if (page <= 0) { %>
+            <li class="previous disabled">
+              <a href="javascript:;">
+                <span aria-hidden="true">&larr;</span> Older
+              </a>
+            </li>
+      <%  } else { %>
+            <li class="previous">
+              <a href="?index=<%=page-1%>">
+                <span aria-hidden="true">&larr;</span> Older
+              </a>
+            </li>
+      <%  } %>
+      <%  if (page >= Maxpage-1) { %>
+            <li class="next disabled">
+              <a href="javascript:;">Newer <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+      <%  } else { %>
+            <li class="next">
+              <a href="?index=<%=page+1%>">Newer <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+      <%  } %>
+      </ul>
+    </nav>
 </div>
 <%- include('../comments/footer')%>
