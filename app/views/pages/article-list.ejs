@@ -47,8 +47,10 @@
               </a>
             </li>
       <%  } else { %>
+            <% var url = '?index=' + (page-1) %>
+            <% if (userId) { url = url + '&id=' + userId } %>
             <li class="previous">
-              <a href="?index=<%=page-1%>">
+              <a href="<%=url%>">
                 <span aria-hidden="true">&larr;</span> Older
               </a>
             </li>
@@ -59,8 +61,10 @@
               </a>
             </li>
       <%  } else { %>
+            <% var url = '?index=' + (page+1) %>
+            <% if (userId) { url = url + '&id=' + userId } %>
             <li class="next">
-              <a href="?index=<%=page+1%>">Newer <span aria-hidden="true">&rarr;</span>
+              <a href="<%=url%>">Newer <span aria-hidden="true">&rarr;</span>
               </a>
             </li>
       <%  } %>

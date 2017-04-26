@@ -98,23 +98,49 @@ exports.article = function (request, response) {
 // 文章列表
 exports.articleList = function (request, response) {
 	const pageArts = 2;
-	const page = parseInt(request.query.index);
-	Article.find({})
-	.exec((error,articles) => {
-		if (error) {
-			console.log(error);
-		} else {
-			console.log(articles.length);
-			var Maxpage = Math.ceil(articles.length/pageArts)
-			var articles = articles.splice(page*pageArts,pageArts);
-			response.render('article-list',{
-				title : '文章列表',
-				articles : articles,
-				Maxpage : Maxpage,
-				page:page
-			})
-		}
-	})
+	const page = parseInt(request.query.index || 0);
+	const userId = request.query.id || "";
+	if (userId) {
+		User.findOne({_id:userId})
+		.populate('articles.article','title updateAt createAt author')
+		.exec((error,user)=>{
+			if (error) {
+				console.log(error);
+			} else {
+				var articles = [];
+				user.articles.forEach(function(item){
+					articles.push(item.article)
+				});
+				var Maxpage = Math.ceil(articles.length/pageArts)
+				var articles = articles.splice(page*pageArts,pageArts);
+				console.log(user._id);
+				response.render('article-list',{
+					title : '文章列表',
+					articles : articles,
+					Maxpage : Maxpage,
+					page : page,
+					userId : user._id
+				});
+			}
+		})
+	} else {
+		Article.find({})
+		.exec((error,articles) => {
+			if (error) {
+				console.log(error);
+			} else {
+				var Maxpage = Math.ceil(articles.length/pageArts)
+				var articles = articles.splice(page*pageArts,pageArts);
+				response.render('article-list',{
+					title : '文章列表',
+					articles : articles,
+					Maxpage : Maxpage,
+					page:page,
+					userId : ''
+				})
+			}
+		})
+	}
 }
 // 删除文章
 exports.delete = function (request, response) {
