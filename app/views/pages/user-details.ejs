@@ -71,7 +71,9 @@
       <% seeUserArt = seeUser.articles%>
       <% if (seeUserArt && seeUserArt.length > 0 ) { %>
         <% for (var i = 0 ; i <  seeUserArt.length && i < 2; i ++ ) { %>
-           <p><a href="/article?id=<%=seeUserArt[i].article._id%>"><%= seeUserArt[i].article.title %></a> 更新时间: <%=moment(seeUserArt[i].article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
+            <% if(seeUserArt[i].article){ %>
+              <p><a href="/article?id=<%=seeUserArt[i].article._id%>"><%= seeUserArt[i].article.title %></a> 更新时间: <%=moment(seeUserArt[i].article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
+            <%}%>
         <% } %>
       <% } %>
      </div>

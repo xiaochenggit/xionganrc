@@ -16,23 +16,25 @@
       <tbody>
         <% if (articles && articles.length > 0) { %>
             <% articles.forEach(function (item,index) { %>
-                <tr>
-                  <td>
-                    <a href="/article?id=<%=item._id %>">
-                     <%= item.title %>
-                    </a>
-                  </td>
-                  <td><a href="/user/details?id=<%=item.author._id%>"><%= item.author.name %></a></td>
-                  <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
-                  <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
-                  <td>
-                    <a href="/article?id=<%=item._id %>" class='btn btn-info'>
-                    查看</a>
-                  </td>
-                  <td>
-                  <button class="deleteActicle btn btn-danger" data-id='<%=item._id %>'>删除</button>
-                  </td>
-                </tr>
+                <% if(item) { %>
+                  <tr>
+                    <td>
+                      <a href="/article?id=<%=item._id %>">
+                       <%= item.title %>
+                      </a>
+                    </td>
+                    <td><a href="/user/details?id=<%=item.author._id%>"><%= item.author.name %></a></td>
+                    <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
+                    <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
+                    <td>
+                      <a href="/article?id=<%=item._id %>" class='btn btn-info'>
+                      查看</a>
+                    </td>
+                    <td>
+                    <button class="deleteActicle btn btn-danger" data-id='<%=item._id %>'>删除</button>
+                    </td>
+                  </tr>
+               <% }  %>
             <% }); %>
         <% } %>
 

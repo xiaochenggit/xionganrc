@@ -109,8 +109,14 @@ exports.articleList = function (request, response) {
 				console.log(error);
 			} else {
 				var articles = [];
-				user.articles.forEach(function(item){
-					articles.push(item.article)
+				user.articles.forEach(function(item,index){
+					if (item.article) {
+						articles.push(item.article)
+					}
+					if (index == user.articles.length) {
+						user.articles = articles;
+						user.save();
+					}
 				});
 				var Maxpage = Math.ceil(articles.length/pageArts)
 				var articles = articles.splice(page*pageArts,pageArts);
@@ -128,12 +134,17 @@ exports.articleList = function (request, response) {
 		ArtCate.findOne({name: artCate})
 		.populate('articles.article','title updateAt createAt author')
 		.exec((error,artcate)=>{
-			console.log(artcate.name);
 			var articles = [];
-			artcate.articles.forEach(function(item){
-				articles.push(item.article)
+			artcate.articles.forEach(function(item,index){
+				if (item.article) {
+					articles.push(item.article)
+				}
+				if (index == artcate.articles.length) {
+					artcate.articles = articles;
+					artcate.save();
+				}
 			});
-			var Maxpage = Math.ceil(articles.length/pageArts)
+			var Maxpage = Math.ceil(articles.length/pageArts);
 			var articles = articles.splice(page*pageArts,pageArts);
 			response.render('article-list',{
 				title : '文章列表',
@@ -174,7 +185,7 @@ exports.delete = function (request, response) {
 			} else {
 				response.json({
 					success : 1
-				})
+				});
 			}
 		})
 	}

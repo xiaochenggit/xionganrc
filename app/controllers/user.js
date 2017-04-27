@@ -105,17 +105,29 @@ exports.details = function (request, response) {
 				.populate('browseUsers.user follows.user', 'name userImg')
 				.populate('articles.article','title updateAt')
 				.exec((error, user) => {
-					UserComment
-					.find({user: user._id})
-					.populate('from', 'name userImg')
-					.populate('reply.from reply.to', 'name userImg')
-					.exec((error, comments)=>{
-						response.render('user-details',{
-							title : '用户详情',
-							seeUser : user,
-							comments : comments
-						});
+					var articles = [];
+					user.articles.forEach( function(item,index) {
+						if (item.article) {
+							articles.push(item)
+						}
+						if (index == user.articles.length - 1) {
+							console.log(articles+'--');
+							user.articles = articles;
+							console.log(user.articles + '----');
+							user.save();
+						}
 					});
+					UserComment
+						.find({user: user._id})
+						.populate('from', 'name userImg')
+						.populate('reply.from reply.to', 'name userImg')
+						.exec((error, comments)=>{
+							response.render('user-details',{
+								title : '用户详情',
+								seeUser : user,
+								comments : comments
+							});
+						});
 				})
 			}
 		})
