@@ -63,14 +63,14 @@
    <div class="panel panel-info">
      <div class="panel-heading">
         他的文章
-        <% if (seeUser.articles.length >= 2) { %>
+        <% if (seeUser.articles.length > 2) { %>
           <p class="pull-right"><a href="/admin/article/list?id=<%=seeUser._id%>" target="_bland">更多>></a></p>
         <% } %>
      </div>
      <div class="panel-body">
       <% seeUserArt = seeUser.articles%>
       <% if (seeUserArt && seeUserArt.length > 0 ) { %>
-        <% for (var i = 0 ; i <= seeUserArt.length && i < 2; i ++ ) { %>
+        <% for (var i = 0 ; i <  seeUserArt.length && i < 2; i ++ ) { %>
            <p><a href="/article?id=<%=seeUserArt[i].article._id%>"><%= seeUserArt[i].article.title %></a> 更新时间: <%=moment(seeUserArt[i].article.updateAt).format('YYYY/MM/DD HH:mm:ss') %> <p> 
         <% } %>
       <% } %>
