@@ -22,7 +22,7 @@
                      <%= item.title %>
                     </a>
                   </td>
-                  <td><%= item.author.name %></td>
+                  <td><a href="/user/details?id=<%=item.author._id%>"><%= item.author.name %></a></td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td>
@@ -49,6 +49,7 @@
       <%  } else { %>
             <% var url = '?index=' + (page-1) %>
             <% if (userId) { url = url + '&id=' + userId } %>
+            <% if (artCate) { url = url + '&artCate=' + artCate } %>
             <li class="previous">
               <a href="<%=url%>">
                 <span aria-hidden="true">&larr;</span> Older
@@ -63,6 +64,7 @@
       <%  } else { %>
             <% var url = '?index=' + (page+1) %>
             <% if (userId) { url = url + '&id=' + userId } %>
+            <% if (artCate) { url = url + '&artCate=' + artCate } %>
             <li class="next">
               <a href="<%=url%>">Newer <span aria-hidden="true">&rarr;</span>
               </a>
