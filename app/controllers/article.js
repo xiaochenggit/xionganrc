@@ -119,7 +119,11 @@ exports.articleList = function (request, response) {
 					}
 				});
 				var Maxpage = Math.ceil(articles.length/pageArts)
-				var articles = articles.splice(page*pageArts,pageArts);
+				if (page >= Maxpage) {
+					articles = articles.splice((Maxpage-1)*pageArts,pageArts);
+				} else {
+					articles = articles.splice(page*pageArts,pageArts);
+				}
 				response.render('article-list',{
 					title : '文章列表',
 					articles : articles,
@@ -145,7 +149,11 @@ exports.articleList = function (request, response) {
 				}
 			});
 			var Maxpage = Math.ceil(articles.length/pageArts);
-			var articles = articles.splice(page*pageArts,pageArts);
+			if (page >= Maxpage) {
+				articles = articles.splice((Maxpage-1)*pageArts,pageArts);
+			} else {
+				articles = articles.splice(page*pageArts,pageArts);
+			}
 			response.render('article-list',{
 				title : '文章列表',
 				articles : articles,
@@ -161,8 +169,12 @@ exports.articleList = function (request, response) {
 			if (error) {
 				console.log(error);
 			} else {
-				var Maxpage = Math.ceil(articles.length/pageArts)
-				var articles = articles.splice(page*pageArts,pageArts);
+				var Maxpage = Math.ceil(articles.length/pageArts);
+				if (page >= Maxpage) {
+					articles = articles.splice((Maxpage-1)*pageArts,pageArts);
+				} else {
+					articles = articles.splice(page*pageArts,pageArts);
+				}
 				response.render('article-list',{
 					title : '文章列表',
 					articles : articles,

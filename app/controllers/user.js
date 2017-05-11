@@ -111,9 +111,7 @@ exports.details = function (request, response) {
 							articles.push(item)
 						}
 						if (index == user.articles.length - 1) {
-							console.log(articles+'--');
 							user.articles = articles;
-							console.log(user.articles + '----');
 							user.save();
 						}
 					});
@@ -157,6 +155,9 @@ exports.change = function (request , response) {
 	var _id = _user._id;
 	if (_id == request.session.user._id) {
 		User.findOne({_id: _id}, (error, user) => {
+			if (_user.userImg) {
+				user.userImg = _user.userImg;
+			}
 			user.sex = _user.sex;
 			user.major = _user.major;
 			user.school = _user.school;
@@ -165,7 +166,6 @@ exports.change = function (request , response) {
 			user.motto = _user.motto;
 			user.message = _user.message;
 			user.hobby = _user.hobby;
-			user.userImg = _user.userImg;
 			user.save((error,user) => {
 				if (error) {
 					console.log(error);
