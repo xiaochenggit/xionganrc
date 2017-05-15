@@ -1,4 +1,5 @@
 $(function (){
+	public.showTime("showTime");
 	console.log('载入文件成功');
 	// 用户删除的代码
 	$(".deleteUser").click(function (){
@@ -213,5 +214,17 @@ xc = {
 			var classname = classname;
 			element.parent().append($("<div class="+classname+">"+info+"</div>").addClass('alert'));
 		}
+	}
+}
+
+var public = {
+	// 展示时间
+	showTime : function (id){
+		$id = $('#'+id);
+		$id.html(new Date().toLocaleTimeString());
+		setInterval( function(){
+			var time = new Date().toLocaleTimeString();
+			$id.html(time);
+		},1000)
 	}
 }

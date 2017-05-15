@@ -5,7 +5,7 @@ const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
 const ArticleCategory = require('../controllers/articleCategory');
 const Moment = require('moment');
-// Moment.lang('zh-cn');
+Moment.lang('zh-cn');
 let router = function (app) {
 	app.use((request, response, next) => {
 		var user = request.session.user;
