@@ -49,13 +49,25 @@
   </div>
   <div class="col-md-7 col-md-pull-5">
    <div class="panel panel-info">
-     <div class="panel-heading">个人介绍</div>
+     <div class="panel-heading">个人介绍
+     <% if (seeUser.isLook.des) { %>
+        <a class="pull-right">保密</a>
+     <% } else { %>
+        <a class="pull-right">公开</a>
+     <% } %>
+     </div>
      <div class="panel-body">
       <%= seeUser.des %>
      </div>
    </div>
    <div class="panel panel-info">
-     <div class="panel-heading">座右铭</div>
+     <div class="panel-heading">座右铭
+     <% if (seeUser.isLook.motto) { %>
+        <a class="pull-right">保密</a>
+     <% } else { %>
+        <a class="pull-right">公开</a>
+     <% } %>
+     </div>
      <div class="panel-body">
       <%= seeUser.motto %>
      </div>

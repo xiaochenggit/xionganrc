@@ -66,9 +66,11 @@ exports.userList = function (request, response) {
 		if (error) {
 			console.log(error);
 		} else {
+			var role = request.session.user.role >= 50 ? true : false;
 			response.render('user-list',{
 				title : '用户列表',
-				users : users
+				users : users,
+				role : role
 			})
 		}
 	})
@@ -180,25 +182,30 @@ exports.change = function (request , response) {
 // 添加关注、取消关注
 exports.follows = function (request, response) {
 	var id = request.query.id;
+	// 是否删除
 	var de = request.query.delete;
 	if (id) {
 		User.findOne({_id: id},(error, user) => {
 			if (error) {
 				console.log(error);
 			} else {
+				// 删除用户
 				for (var i = 0 ; i < user.follows.length;) {
 					if (user.follows[i].user == request.session.user._id) {
 						user.follows.splice(i, 1);
+						break;
 					} else {
 						i ++ ;
 					}
 				}
+				// 如果删除指令为空 就添加用户
 				if (!de) {
 					user.follows.unshift({
 						user : request.session.user._id,
 						time : Date.now()
 					});
 				}
+				// 保存用户
 				user.save((error) => {
 					if (error) {
 						console.log(error);
@@ -215,7 +222,8 @@ exports.follows = function (request, response) {
 // 删除用户
 exports.delete = function (request, response) {
 	var id = request.query.id;
-	if (id) {
+	// 有删除用户的 id 并且权限够
+	if (id && request.session.user.role >= 50) {
 		User.remove({_id: id},(error) => {
 			if (error) {
 				console.log(error);

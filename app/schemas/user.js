@@ -8,6 +8,13 @@ var UserSchema = new Schema({
     type : String,
     default : 'noFind'
   },
+  isLook: {
+    type: Object,
+    default: {
+      des: true,
+      motto:true
+    }
+  },
   // 专业
   major : {
     type : String,
