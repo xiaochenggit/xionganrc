@@ -38,8 +38,8 @@
 	      <ul class="nav navbar-nav navbar-right">
 	      	<% if (user) { %>
 	      		<li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-		          <img src="/userImg/<%= user.userImg %>" alt="<% user.name%>" style ='with:24px; height:24px; border-radius:50%'>
+		          <a href="#" class="dropdown-toggle nav-user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
+		          <img src="/userImg/<%= user.userImg %>" alt="<% user.name %>" class='nav-user-img'>
 		          <%= user.name %>
 		          <span class="caret"></span>
 		          </a>

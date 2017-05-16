@@ -1,3 +1,18 @@
+/*nav*/
+.nav-user-img{
+	width: 24px;
+	height: 24px;
+	border-radius:50%; 
+}
+.navbar-nav>li>a.nav-user{
+	line-height: 24px;
+}
+@media (min-width: 768px) {
+	.navbar-nav>li>a.nav-user{
+		padding-top: 13px;
+	    padding-bottom: 12px;
+	}
+}
 .pointer{
 	cursor: pointer;
 }

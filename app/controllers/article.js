@@ -130,7 +130,8 @@ exports.articleList = function (request, response) {
 					Maxpage : Maxpage,
 					page : page,
 					userId : user._id,
-					artCate : ''
+					artCate : '',
+					by: user.name
 				});
 			}
 		})
@@ -160,7 +161,8 @@ exports.articleList = function (request, response) {
 				Maxpage : Maxpage,
 				page : page,
 				userId : '',
-				artCate : artCate
+				artCate : artCate,
+				by: artCate
 			});
 		})
 	} else {
@@ -181,7 +183,8 @@ exports.articleList = function (request, response) {
 					Maxpage : Maxpage,
 					page:page,
 					userId : '',
-					artCate : ''
+					artCate : '',
+					by : '所有文章'
 				})
 			}
 		})
