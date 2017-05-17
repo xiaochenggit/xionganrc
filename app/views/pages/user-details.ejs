@@ -4,7 +4,8 @@
   <div class="row">
   <!-- 右侧信息 -->
   <div class="col-md-5 col-md-push-7">
-    <div class="list-group">
+    <div class="list-group user">
+      <div class="user-box">
         <div class="pull-left" style = 'margin-right : 10px'>
           <img src="/userImg/<%= seeUser.userImg %>" alt="<%= seeUser.name %>" class='userImg'>
         </div>
@@ -25,7 +26,12 @@
             <% } %>
           </div>
           <p>性别 : <%= sex[seeUser.sex] %></p>
-          <p>专业 ：<%= seeUser.major %>
+          <div class="secrecy-div">专业 ：
+          <% if (seeUser.isLook.major || seeUser._id == user._id) { %>
+            <%= seeUser.major %>
+          <% } else { %>
+             保密
+          <% } %>
           <% if (user._id == seeUser._id ) { %>
            <% if (seeUser.isLook.major) { %>
               <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
@@ -37,29 +43,62 @@
               </div>
            <% } %>
          <% } %>
-          </p>
-          <p>学校 ：<%= seeUser.school %>
-
-          </p>
-          <p>爱好 : 
+          </div>
+          <div class="secrecy-div">学校 ：
+          <% if (seeUser.isLook.school || seeUser._id == user._id) { %>
+              <%= seeUser.school %>
+            <% } else { %>
+               保密
+            <% } %>
+            <% if (user._id == seeUser._id ) { %>
+             <% if (seeUser.isLook.school) { %>
+                <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                    <a class="is-look btn btn-danger" data-id='school' >保密</a>
+                </div>
+             <% } else { %>
+                <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                    <a class="is-look btn btn-primary" data-id='school' >公开</a>
+                </div>
+             <% } %>
+           <% } %>
+          </div>
+          <div>爱好 : 
             <% if (seeUser.hobby && seeUser.hobby.length > 0) { %>
             <% seeUser.hobby.forEach(function (item,index){ %>
                 <%= hobby[item] %>
             <%  }) %>
             <% } %>
-          </p>
+          </div>
         </div>
-      <a href="#" class="list-group-item">用户名 : <%= seeUser.name %></a>
-      <a href="#" class="list-group-item">邮箱 : <%= seeUser.email %></a>
-      <a href="#" class="list-group-item">
+      </div>
+      <div class="list-group-item">用户名 : <%= seeUser.name %></div>
+      <div class="list-group-item secrecy-div">邮箱 : 
+       <% if (seeUser.isLook.email || seeUser._id == user._id) { %>
+          <%= seeUser.email %>
+        <% } else { %>
+           保密
+        <% } %>
+        <% if (user._id == seeUser._id ) { %>
+         <% if (seeUser.isLook.email) { %>
+            <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                <a class="is-look btn btn-danger" data-id='email' >保密</a>
+            </div>
+         <% } else { %>
+            <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                <a class="is-look btn btn-primary" data-id='email' >公开</a>
+            </div>
+         <% } %>
+       <% } %>
+      </div>
+      <div class="list-group-item">
         注册时间 : <%=moment(seeUser.createAt).format('YYYY/MM/DD HH:mm:ss') %>
-      </a>
-      <a href="#" class="list-group-item">
+      </div>
+      <div href="#" class="list-group-item">
         上次登录时间 : <%= moment(seeUser.loadTime, "YYYYMMDDHHmmss").fromNow()  %>
-      </a>
+      </div>
     </div>
   </div>
-  <div class="col-md-7 col-md-pull-5">
+  <div class="col-md-7 col-md-pull-5 user-details-left">
    <div class="panel panel-info">
      <div class="panel-heading">个人介绍
      <% if (user._id == seeUser._id ) { %>

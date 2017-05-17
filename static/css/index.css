@@ -18,6 +18,37 @@
 	cursor: pointer;
 	text-decoration: none;
 }
+/*user-details*/
+.user-box{
+	border: 1px solid #ddd;
+	padding: 5px;
+	border-bottom: none;
+	border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    overflow: hidden;
+}
+.userRightDes div + div{
+	line-height: 22px;
+	margin-top: 10px;
+}
+.user{
+	cursor: pointer;
+}
+.user .list-group-item {
+	line-height: 22px;
+}
+.user .secrecy-div .btn-group,
+.user-details-left .panel-heading .btn-group{
+	opacity: 0;
+	transition: all 0.5s;
+}
+.user .list-group-item:hover{
+	background-color: rgba(190, 210, 204, 0.6)
+}
+.user .secrecy-div:hover .btn-group,
+.user-details-left .panel-heading:hover .btn-group{
+	opacity: 1;
+}
 .media {
 	display: flex;
 }
@@ -48,7 +79,7 @@
 .userRightDes #userfollow{
 	position: absolute;
 	right: 2px;
-	bottom: 10px;
+	bottom: 0;
 }
 .userRightDes #userfollow .active{
 	color: red;

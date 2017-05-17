@@ -14,7 +14,8 @@ var UserSchema = new Schema({
       des: true,
       motto: true,
       major: true,
-      school: true
+      school: true,
+      email: true
     }
   },
   // 专业
