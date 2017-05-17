@@ -13,8 +13,10 @@
 	    padding-bottom: 12px;
 	}
 }
-.pointer{
+.pointer,
+.panel-heading .pull-right{
 	cursor: pointer;
+	text-decoration: none;
 }
 .media {
 	display: flex;

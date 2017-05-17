@@ -42,6 +42,7 @@ let router = function (app) {
 	app.get('/user/details' , User.details);
 	app.post('/userComment', UserComment.comment);
 	app.post('/user/follows', User.follows);
+	app.get('/user/secrecy', User.secrecy);
 	app.delete('/admin/user/delete', User.delete);
 	app.delete('/usercomment/delete', UserComment.delete);
 

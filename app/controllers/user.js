@@ -117,6 +117,7 @@ exports.details = function (request, response) {
 							user.save();
 						}
 					});
+					console.log(user);
 					UserComment
 						.find({user: user._id})
 						.populate('from', 'name userImg')
@@ -181,15 +182,19 @@ exports.change = function (request , response) {
 }
 // 添加关注、取消关注
 exports.follows = function (request, response) {
+	/**
+	 * id {string} 需要关注/取消关注 的用户 id 
+	 * request.session.user {object} 当前用户
+	 * de {string} 有值说明是关注 没有就是取消关注
+	 */
 	var id = request.query.id;
-	// 是否删除
 	var de = request.query.delete;
 	if (id) {
 		User.findOne({_id: id},(error, user) => {
 			if (error) {
 				console.log(error);
 			} else {
-				// 删除用户
+				// 不知道用户有没有关注过 , 所以先遍历 , 找到就删除
 				for (var i = 0 ; i < user.follows.length;) {
 					if (user.follows[i].user == request.session.user._id) {
 						user.follows.splice(i, 1);
@@ -198,14 +203,12 @@ exports.follows = function (request, response) {
 						i ++ ;
 					}
 				}
-				// 如果删除指令为空 就添加用户
 				if (!de) {
 					user.follows.unshift({
 						user : request.session.user._id,
 						time : Date.now()
 					});
 				}
-				// 保存用户
 				user.save((error) => {
 					if (error) {
 						console.log(error);
@@ -219,10 +222,43 @@ exports.follows = function (request, response) {
 		})
 	}
 }
+
+// 用户的保密
+exports.secrecy = function(request, response) {
+	/**
+	 * secrecy {object} 保密信息 
+	 * id {string} 需要保密的用户 id
+	 * response.json  {object} 返回数据
+	 * descript(函数描述) 根据发送过来的保密对象和用户id 判断是否为用户自己修改,
+	 * 然后修改保密对象, 返回数据。
+	 */
+	var secrecy = JSON.parse(request.query.secrecy);
+	var id = request.query.id;
+	if (id == request.session.user._id ) {
+		User.findOne({_id: id}, (error, user) => {
+			user.isLook = secrecy;
+			user.save((error, user) => {
+				if (error) {
+					console.log(error);
+				} else {
+					response.json({
+						success : 1
+					});
+				}
+			});
+		})
+	};
+	
+}
+
 // 删除用户
 exports.delete = function (request, response) {
+	/**
+	 * id {string} 被删除用户的 id 
+	 * response.json {object} 返回的数据
+	 * 函数描述 首先判断当前用户是否有权限删除用户,删除成功返回数据
+	 */
 	var id = request.query.id;
-	// 有删除用户的 id 并且权限够
 	if (id && request.session.user.role >= 50) {
 		User.remove({_id: id},(error) => {
 			if (error) {

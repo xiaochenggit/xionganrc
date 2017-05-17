@@ -1,5 +1,15 @@
 $(function (){
+	// 导航时间
 	public.showTime("showTime");
+	// 用户保密
+	$('.is-look').click(function(){
+		if ($(this).text() == '保密') {
+			$(this).text('公开'); 
+		} else {
+			$(this).text('保密'); 
+		}
+		public.userSecrecyFunc();
+	})
 	console.log('载入文件成功');
 	// 用户删除的代码
 	$(".deleteUser").click(function (){
@@ -218,6 +228,8 @@ xc = {
 }
 
 var public = {
+	// 用户保密保密地址
+	userSecrecy: '/user/secrecy',
 	// 展示时间
 	showTime : function (id){
 		$id = $('#'+id);
@@ -226,5 +238,46 @@ var public = {
 			var time = new Date().toLocaleTimeString();
 			$id.html(time);
 		},1000)
-	}
+	},
+	// 用户页面 保密切换
+	userSecrecyFunc: function () {
+		var secrecyObj = {};
+		var $isLook = $(".is-look");
+		$isLook.each( function(index, item) {
+			if ($(item).text() == '保密') {
+				secrecyObj[$(item).attr('data-id')] = true;
+			}else {
+				secrecyObj[$(item).attr('data-id')] = false;
+			}
+		})
+		// secrecyObj 为保密信息的对象
+		var url = public.userSecrecy + '?secrecy=' + JSON.stringify(secrecyObj) + 
+		'&id=' + public.getUrlParam(window.location, 'id');
+		$.ajax({
+			type: 'GET',
+			url : url
+		}).done( function(result) {
+			if (result.success == 1) {
+				console.log('保存信息状态成功');
+			};
+		})
+	},
+	// 获得地址上的参数
+	getUrlParam : function(url,name){
+        var pattern = new RegExp("[?&]" + name +"\=([^&]+)","g");
+        var matcher = pattern.exec(url);
+        var items = null;
+        if(matcher != null){
+            try{
+                items = decodeURIComponent(decodeURIComponent(matcher[1]));   
+            }catch(e){
+                try{
+                    items = decodeURIComponent(matcher[1]);
+                }catch(e){
+                    items = matcher[1];
+                }
+            }
+        }
+        return items;
+    }
 }

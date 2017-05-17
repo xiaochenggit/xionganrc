@@ -50,26 +50,38 @@
   <div class="col-md-7 col-md-pull-5">
    <div class="panel panel-info">
      <div class="panel-heading">个人介绍
-     <% if (seeUser.isLook.des) { %>
-        <a class="pull-right">保密</a>
-     <% } else { %>
-        <a class="pull-right">公开</a>
+     <% if (user._id == seeUser._id ) { %>
+       <% if (seeUser.isLook.des) { %>
+          <a class="pull-right is-look" data-id='des' >保密</a>
+       <% } else { %>
+          <a class="pull-right is-look" data-id='des' >公开</a>
+       <% } %>
      <% } %>
      </div>
      <div class="panel-body">
+     <% if (seeUser.isLook.des || user._id == seeUser._id) {%>
       <%= seeUser.des %>
+     <% } else { %>
+       保密
+     <% } %>
      </div>
    </div>
    <div class="panel panel-info">
      <div class="panel-heading">座右铭
-     <% if (seeUser.isLook.motto) { %>
-        <a class="pull-right">保密</a>
-     <% } else { %>
-        <a class="pull-right">公开</a>
+     <% if (user._id == seeUser._id ) { %>
+       <% if (seeUser.isLook.motto) { %>
+          <a class="pull-right is-look" data-id='motto' >保密</a>
+       <% } else { %>
+          <a class="pull-right is-look" data-id='motto' >公开</a>
+       <% } %>
      <% } %>
      </div>
      <div class="panel-body">
+     <% if (seeUser.isLook.motto || user._id == seeUser._id) {%>
       <%= seeUser.motto %>
+     <% } else { %>
+       保密
+     <% } %>
      </div>
    </div>
    <div class="panel panel-info">
