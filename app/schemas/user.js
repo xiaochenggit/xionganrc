@@ -12,7 +12,9 @@ var UserSchema = new Schema({
     type: Object,
     default: {
       des: true,
-      motto:true
+      motto: true,
+      major: true,
+      school: true
     }
   },
   // 专业

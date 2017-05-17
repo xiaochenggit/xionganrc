@@ -5,7 +5,6 @@
   <!-- 右侧信息 -->
   <div class="col-md-5 col-md-push-7">
     <div class="list-group">
-      <a href="javascript:;" class="list-group-item" style="overflow:hidden">
         <div class="pull-left" style = 'margin-right : 10px'>
           <img src="/userImg/<%= seeUser.userImg %>" alt="<%= seeUser.name %>" class='userImg'>
         </div>
@@ -26,8 +25,22 @@
             <% } %>
           </div>
           <p>性别 : <%= sex[seeUser.sex] %></p>
-          <p>专业 ：<%= seeUser.major %></p>
-          <p>学校 ：<%= seeUser.school %></p>
+          <p>专业 ：<%= seeUser.major %>
+          <% if (user._id == seeUser._id ) { %>
+           <% if (seeUser.isLook.major) { %>
+              <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                  <a class="is-look btn btn-danger" data-id='major' >保密</a>
+              </div>
+           <% } else { %>
+              <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+                  <a class="is-look btn btn-primary" data-id='major' >公开</a>
+              </div>
+           <% } %>
+         <% } %>
+          </p>
+          <p>学校 ：<%= seeUser.school %>
+
+          </p>
           <p>爱好 : 
             <% if (seeUser.hobby && seeUser.hobby.length > 0) { %>
             <% seeUser.hobby.forEach(function (item,index){ %>
@@ -36,7 +49,6 @@
             <% } %>
           </p>
         </div>
-      </a>
       <a href="#" class="list-group-item">用户名 : <%= seeUser.name %></a>
       <a href="#" class="list-group-item">邮箱 : <%= seeUser.email %></a>
       <a href="#" class="list-group-item">
@@ -52,9 +64,13 @@
      <div class="panel-heading">个人介绍
      <% if (user._id == seeUser._id ) { %>
        <% if (seeUser.isLook.des) { %>
-          <a class="pull-right is-look" data-id='des' >保密</a>
+          <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+              <a class="is-look btn btn-danger" data-id='des' >保密</a>
+          </div>
        <% } else { %>
-          <a class="pull-right is-look" data-id='des' >公开</a>
+          <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+              <a class="is-look btn btn-primary" data-id='des' >公开</a>
+          </div>
        <% } %>
      <% } %>
      </div>
@@ -70,9 +86,13 @@
      <div class="panel-heading">座右铭
      <% if (user._id == seeUser._id ) { %>
        <% if (seeUser.isLook.motto) { %>
-          <a class="pull-right is-look" data-id='motto' >保密</a>
+          <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+              <a class="is-look btn btn-danger" data-id='motto' >保密</a>
+          </div>
        <% } else { %>
-          <a class="pull-right is-look" data-id='motto' >公开</a>
+          <div class="btn-group btn-group-xs pull-right" role="group" aria-label="Extra-small button group">
+             <a class="is-look btn btn-primary" data-id='motto' >公开</a>
+          </div>
        <% } %>
      <% } %>
      </div>

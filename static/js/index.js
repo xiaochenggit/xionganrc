@@ -4,9 +4,9 @@ $(function (){
 	// 用户保密
 	$('.is-look').click(function(){
 		if ($(this).text() == '保密') {
-			$(this).text('公开'); 
+			$(this).text('公开').removeClass('btn-danger').addClass('btn-primary'); 
 		} else {
-			$(this).text('保密'); 
+			$(this).text('保密').addClass('btn-danger').removeClass('btn-primary');
 		}
 		public.userSecrecyFunc();
 	})
