@@ -46,17 +46,33 @@ exports.postSignin = function (request, response) {
 	var _user = request.body.user;
 	User.findOne({name: _user.name}, (error,user) => {
 		if (error) {
-			console.log(error);
+			response.json({
+				code : 400,
+				msg: '系统繁忙!'
+			});
 		} else {
-			if (user.password = _user.password) {
-				// 然后改变登陆时间
-				user.loadTime = Date.now();
-				user.save((error,user)=>{
-					request.session.user = user;
-					response.redirect('/admin/user/list');
-				});
+			if (user) {
+				if (user.password == _user.password) {
+					// 然后改变登陆时间
+					user.loadTime = Date.now();
+					user.save((error,user)=>{
+						request.session.user = user;
+						response.json({
+							code : 200,
+							msg: '登录成功!'
+						});
+					});
+				} else {
+					response.json({
+						code : 202,
+						msg: '密码错误!'
+					});
+				}
 			} else {
-				response.redirect('/user/signin')
+				response.json({
+					code : 201,
+					msg: '账号错误！'
+				});
 			}
 		}
 	})

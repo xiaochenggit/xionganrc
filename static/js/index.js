@@ -2,6 +2,12 @@ $(function (){
 	// 导航时间
 	public.showTime("showTime");
 	// 用户保密
+	$("#userSignin").submit(function(event) {
+		event.preventDefault();
+		var username = $("#userName").val();
+		var password = $("#password").val();
+		public.userSigninFunc(username, password);
+	});
 	$('.is-look').click(function(){
 		if ($(this).text() == '保密') {
 			$(this).text('公开').removeClass('btn-danger').addClass('btn-primary'); 
@@ -230,6 +236,8 @@ xc = {
 var public = {
 	// 用户保密保密地址
 	userSecrecy: '/user/secrecy',
+	userSignin: '/user/signin',
+	userList: "/admin/user/list",
 	// 展示时间
 	showTime : function (id){
 		$id = $('#'+id);
@@ -238,6 +246,27 @@ var public = {
 			var time = new Date().toLocaleTimeString();
 			$id.html(time);
 		},1000)
+	},
+	userSigninFunc: function(username,password) {
+		var self = this;
+		console.log(username,password);
+		$.ajax({
+			url: self.userSignin,
+			type: 'POST',
+			data: {
+				user: {
+					name: username,
+					password: password
+				}
+			},
+			dataType: 'json'
+		}).done( function(result) {
+			if (result.code != 200) {
+				alert(result.msg);
+			} else {
+				window.location.href = self.userList; 
+			}
+		})
 	},
 	// 用户页面 保密切换
 	userSecrecyFunc: function () {
