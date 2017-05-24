@@ -1,6 +1,8 @@
 $(function (){
 	// 导航时间
 	public.showTime("showTime");
+	// 版权时间
+	public.setMachineTime();
 	// 用户保密
 	$("#userSignin").submit(function(event) {
 		event.preventDefault();
@@ -308,5 +310,12 @@ var public = {
             }
         }
         return items;
+    },
+   	/**
+   	 * [setMachineTime 设置页面下面的版权时间]
+   	 * @type {[type]}
+   	 */
+    setMachineTime : function() {
+    	$('#machine-time').text(new Date().getFullYear());
     }
 }
