@@ -5,7 +5,6 @@ exports.comment = function (request, response) {
 	// 是否是创建一个新的回复还是回复其他的人留言 tid 来判断
 	if (userComment.tid) {
 		UserComent.findOne({_id: userComment.pid}, (error,comment) => {
-			console.log(comment);
 			comment.reply.push({
 				from : userComment.from,
 				to : userComment.tid,
@@ -17,7 +16,10 @@ exports.comment = function (request, response) {
 				if (error) {
 					console.log(error);
 				} else {
-					response.redirect('/user/details?id=' + userComment.user)
+					response.json({
+						code : 200,
+						msg: '回复成功!'
+					});
 				}
 			});
 		})
@@ -29,7 +31,10 @@ exports.comment = function (request, response) {
 				if (error) {
 					console.log(error);
 				} else {
-					response.redirect('/user/details?id=' + userComment.user)
+					response.json({
+						code : 200,
+						msg: '留言成功!'
+					});
 				}
 			})
 		}

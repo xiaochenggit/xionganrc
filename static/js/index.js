@@ -10,6 +10,11 @@ $(function (){
 		var password = $("#password").val();
 		public.userSigninFunc(username, password);
 	});
+	$('#userCommentForm').submit(function(event) {
+		event.preventDefault();
+		var jsonData = $(this).serializeObject();
+		public.postCommentForm(jsonData);
+	})
 	$('.is-look').click(function(){
 		if ($(this).text() == '保密') {
 			$(this).text('公开').removeClass('btn-danger').addClass('btn-primary'); 
@@ -125,6 +130,23 @@ $(function (){
 	});
 	// 添加上登录表单验证
 	xc.signupValidate();
+
+	//将表单序列化为JSON对象   
+	$.fn.serializeObject = function() {  
+        var o = {};  
+        var a = this.serializeArray();  
+        $.each(a, function() {  
+            if (o[this.name]) {  
+                if (!o[this.name].push) {  
+                    o[this.name] = [ o[this.name] ];  
+                }  
+                o[this.name].push(this.value || '');  
+            } else {  
+                o[this.name] = this.value || '';  
+            }  
+        });  
+        return o;  
+    }  
 });
 xc = {
 	signupValidate : function () {
@@ -236,8 +258,8 @@ xc = {
 }
 
 var public = {
-	// 用户保密保密地址
-	userSecrecy: '/user/secrecy',
+	userSecrecy: '/user/secrecy', // 用户保密保密地址
+	usercomment: '/userComment', // 用户评论提交
 	userSignin: '/user/signin',
 	userList: "/admin/user/list",
 	// 展示时间
@@ -249,9 +271,14 @@ var public = {
 			$id.html(time);
 		},1000)
 	},
+	/**
+	 * [userSigninFunc 用户登录]
+	 * @param  {[string]} username [账号]
+	 * @param  {[string]} password [密码]
+	 * @return {[type]}          [description]
+	 */
 	userSigninFunc: function(username,password) {
 		var self = this;
-		console.log(username,password);
 		$.ajax({
 			url: self.userSignin,
 			type: 'POST',
@@ -267,6 +294,27 @@ var public = {
 				alert(result.msg);
 			} else {
 				window.location.href = self.userList; 
+			}
+		})
+	},
+	/**
+	 * [postCommentForm 用户留言提交]
+	 * @param  {[string]} form [表单数据]
+	 * @return {[type]}      [description]
+	 */
+	postCommentForm: function (data) {
+		console.log(data);
+		var self = this;
+		$.ajax({
+			url: self.usercomment,
+			type: 'POST',
+			data: data,
+			dataType: 'json'
+		}).done( function(result) {
+			if (result.code != 200) {
+				alert(result.msg);
+			} else {
+				 window.location.reload();
 			}
 		})
 	},
