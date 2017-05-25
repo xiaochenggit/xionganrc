@@ -51,7 +51,7 @@ $(function (){
 		})
 	});
 	// 用户留言删除
-	$('.deleteUserComment').click(function(event) {
+	$(document).on('click','.deleteUserComment',function(event){
 		var id = $(this).attr('data-id');
 		var index = $(this).attr('data-index');
 		var url = '';
@@ -69,7 +69,7 @@ $(function (){
 				$this.parents('.media').eq(0).remove();
 			}
 		});
-	});
+	})
 	// 关注用户
 	$("#userfollow .glyphicon-heart").click(function(event) {
 		var id = $(this).attr('data-id');
@@ -148,6 +148,7 @@ $(function (){
         return o;  
     }  
 });
+
 xc = {
 	signupValidate : function () {
 		// 初始化验证设定错误,选项都正确才可以提交
@@ -256,11 +257,64 @@ xc = {
 		}
 	}
 }
-
+// 关于创建 html 结构
+var craeteHTML = {
+	/**
+	 * [comment 创建评论]
+	 * @param  {[Object]} userComment [评论数据]
+	 * @return {[type]}             [description]
+	 */
+	comment: function(userComment) {
+		var user,toUser;
+		public.getUserMessage(userComment.from, function(usermsg){
+			user = usermsg;
+			if (userComment.tid) {
+				public.getUserMessage(userComment.tid, function(tousermsg){
+					toUser = tousermsg;
+					create(user,tousermsg,userComment.content)
+				})
+			} else {
+				create(user,'',userComment.content)
+			}
+		})
+		function create(user,toUser,context){
+			if (!toUser) {
+				if ($('#userComment .userCommentOne').length == 0) {
+					window.location.reload();
+				} else {
+					console.log('1');
+					var pid = $(".userCommentOne .addComment").eq(0).attr('data-pid');
+					var tpl = 
+		`<div class="media userCommentOne">
+	        <div class="media-left">
+	          <a href="#content" class="addComment" data-pid="${pid}" data-tid="${user._id}">
+	            <img class="media-object" src="/userImg/${user.userImg}" data-holder-rendered="true"></a>
+	        </div>
+	        <div class="media-body">
+	          <h4 class="media-heading">
+	            <p>
+	              <a href="/user/details?id=${user._id}">xiaocheng
+	              </a> 
+	              说 : 
+	              <span class="pull-right">刚刚</span>
+	            </p>
+	          </h4>
+	          <p>${userComment.content}</p>
+	          <p><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
+	        </div>
+	    </div>`;
+	    console.log(tpl);
+	       $("#userComment").append(tpl);
+				}
+			}
+		}
+	}
+}
 var public = {
 	userSecrecy: '/user/secrecy', // 用户保密保密地址
 	usercomment: '/userComment', // 用户评论提交
-	userSignin: '/user/signin',
+	userSignin: '/user/signin',  // 用户登录
+	userMessage: '/usermessage', // 获得用户信息
 	userList: "/admin/user/list",
 	// 展示时间
 	showTime : function (id){
@@ -298,12 +352,35 @@ var public = {
 		})
 	},
 	/**
+	 * [getUserMessage 获得用户信息]
+	 * @param  {[string]}   id       [用户id]
+	 * @param  {Function} callback [成功回调函数]
+	 * @return {[type]}            [description]
+	 */
+	getUserMessage: function (id,callback) {
+		console.log(id);
+		var self = this;
+		$.ajax({
+			url: self.userMessage,
+			type: 'POST',
+			data: {
+				id: id
+			},
+			dataType: 'json'
+		}).done(function(result) {
+			if (result.code == 200) {
+				callback&&callback(result.data);
+			} else {
+				alert(result.msg);
+			}
+		})
+	},
+	/**
 	 * [postCommentForm 用户留言提交]
 	 * @param  {[string]} form [表单数据]
 	 * @return {[type]}      [description]
 	 */
 	postCommentForm: function (data) {
-		console.log(data);
 		var self = this;
 		$.ajax({
 			url: self.usercomment,
@@ -314,7 +391,7 @@ var public = {
 			if (result.code != 200) {
 				alert(result.msg);
 			} else {
-				 window.location.reload();
+				 craeteHTML.comment(result.userComment);
 			}
 		})
 	},

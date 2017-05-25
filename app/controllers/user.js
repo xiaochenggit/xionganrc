@@ -133,7 +133,6 @@ exports.details = function (request, response) {
 							user.save();
 						}
 					});
-					console.log(user);
 					UserComment
 						.find({user: user._id})
 						.populate('from', 'name userImg')
@@ -266,7 +265,29 @@ exports.secrecy = function(request, response) {
 	};
 	
 }
-
+exports.getUserMessage = function (request, response) {
+	var id = request.body.id;
+	if (id == request.session.user._id) {
+		User.findOne({_id: id}, (error,user) => {
+			if (error) {
+				response.json({
+					code: 400,
+					msg: '获取用户信息失败!'
+				})
+			} else {
+				response.json({
+					code: 200,
+					msg: '获取用户信息成功!',
+					data: {
+						_id: user._id,
+						name : user.name,
+						userImg: user.userImg
+					}
+				})
+			}
+		})
+	}
+}
 // 删除用户
 exports.delete = function (request, response) {
 	/**

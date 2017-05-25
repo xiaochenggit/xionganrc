@@ -16,9 +16,11 @@ exports.comment = function (request, response) {
 				if (error) {
 					console.log(error);
 				} else {
+					userComment._id = comment._id;
 					response.json({
 						code : 200,
-						msg: '回复成功!'
+						msg: '回复成功!',
+						userComment: userComment
 					});
 				}
 			});
@@ -31,9 +33,11 @@ exports.comment = function (request, response) {
 				if (error) {
 					console.log(error);
 				} else {
+					userComment._id = comment._id;
 					response.json({
 						code : 200,
-						msg: '留言成功!'
+						msg: '留言成功!',
+						userComment: userComment
 					});
 				}
 			})
