@@ -319,10 +319,10 @@ var public = {
 	// 展示时间
 	showTime : function (id){
 		$id = $('#'+id);
-		$id.html(new Date().toLocaleTimeString());
+		var self = this;
+		$id.html(this.getTime(new Date()));
 		setInterval( function(){
-			var time = new Date().toLocaleTimeString();
-			$id.html(time);
+			$id.html(self.getTime(new Date()));
 		},1000)
 	},
 	/**
@@ -442,5 +442,68 @@ var public = {
    	 */
     setMachineTime : function() {
     	$('#machine-time').text(new Date().getFullYear());
+    },
+    /**
+     * [getTime 获得当前时间]
+     * @param  {[date]} date [当前时间]
+     * @return {[string]}      [返回时间字符串 例 中午01:30:59]
+     */
+    getTime : function (date) {
+    	var dateDesArray = ['凌晨','清晨','上午','中午','下午','傍晚','夜晚','深夜'];
+    	var h = date.getHours();
+    	var dateDes = '';
+    	switch (h) {
+    		case 0:
+    		case 1:
+    		case 2:
+    		case 3:
+    		case 4:
+    		case 5:
+    		dateDes = dateDesArray[0]
+    			break;
+    		case 6:
+    		case 7:
+    		dateDes = dateDesArray[1]
+    			break;
+    		case 8:
+    		case 9:
+    		case 10:
+    		case 11:
+    		dateDes = dateDesArray[2]
+    			break;
+    		case 12:
+    		case 13:
+    		dateDes = dateDesArray[3]
+    			break;
+    		case 14:
+    		case 15:
+    		case 16:
+    		case 17:
+    		dateDes = dateDesArray[4]
+    			break;
+    		case 18:
+    		case 19:
+    			dateDes = dateDesArray[5]
+    			break;
+    		case 20:
+    		case 21:
+    		case 22:
+    			dateDes = dateDesArray[6]
+    			break;
+    		case 23:
+    			dateDes = dateDesArray[7]
+    			break;
+    		default:
+    			// statements_def
+    			break;
+    	}
+    	if (h > 12) {
+    		h = h - 12;
+    	}
+    	// 最少两位
+    	h = ('0' + h).slice(-2);
+    	var m = ('0' + date.getMinutes()).slice(-2);
+    	var s = ('0' + date.getSeconds()).slice(-2);
+    	return dateDes + h + ':' + m + ':' + s;
     }
 }
