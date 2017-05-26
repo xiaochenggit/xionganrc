@@ -9,13 +9,14 @@ exports.comment = function (request, response) {
 				from : userComment.from,
 				to : userComment.tid,
 				content : userComment.content,
-				createAt : Date.now(),
-				updateAt : Date.now()
+				createAt : new Date().getTime(),
+				updateAt : new Date().getTime()
 			});
 			comment.save((error, comment) => {
 				if (error) {
 					console.log(error);
 				} else {
+					userComment.updateAt = userComment.createAt = new Date().getTime();
 					userComment._id = comment._id;
 					response.json({
 						code : 200,
@@ -27,7 +28,7 @@ exports.comment = function (request, response) {
 		})
 	} else {
 		if (userComment.user) {
-			userComment.createAt = userComment.updateAt = Date.now();
+			userComment.updateAt = userComment.createAt = new Date().getTime();
 			_UserComent = new UserComent(userComment);
 			_UserComent.save((error, comment) => {
 				if (error) {
@@ -50,6 +51,7 @@ exports.delete = function (request, response) {
 	var index = request.query.index;
 	// 判断是一级的留言，还是留言内的回复
 	if (index) {
+		var index  = index - 1;
 		if (id) {
 			UserComent.findOne({_id: id}, (error, comment) => {
 				// 判断是不是此用户的留言

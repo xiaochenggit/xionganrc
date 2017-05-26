@@ -138,6 +138,7 @@ exports.details = function (request, response) {
 						.populate('from', 'name userImg')
 						.populate('reply.from reply.to', 'name userImg')
 						.exec((error, comments)=>{
+							comments.reverse();
 							response.render('user-details',{
 								title : '用户详情',
 								seeUser : user,

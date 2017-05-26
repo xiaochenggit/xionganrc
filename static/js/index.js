@@ -13,6 +13,7 @@ $(function (){
 	$('#userCommentForm').submit(function(event) {
 		event.preventDefault();
 		var jsonData = $(this).serializeObject();
+		$('#content').val('');
 		public.postCommentForm(jsonData);
 	})
 	$('.is-look').click(function(){
@@ -23,7 +24,6 @@ $(function (){
 		}
 		public.userSecrecyFunc();
 	})
-	console.log('载入文件成功');
 	// 用户删除的代码
 	$(".deleteUser").click(function (){
 		var id = $(this).attr('data-id');
@@ -50,26 +50,6 @@ $(function (){
 			}
 		})
 	});
-	// 用户留言删除
-	$(document).on('click','.deleteUserComment',function(event){
-		var id = $(this).attr('data-id');
-		var index = $(this).attr('data-index');
-		var url = '';
-		if (index) {
-			url = '/usercomment/delete?id=' + id + '&index=' + index;
-		} else {
-			url = '/usercomment/delete?id=' + id;
-		}
-		var $this = $(this);
-		$.ajax({
-			type : 'delete',
-			url : url
-		}).done(function (result){
-			if (result.success == 1) {
-				$this.parents('.media').eq(0).remove();
-			}
-		});
-	})
 	// 关注用户
 	$("#userfollow .glyphicon-heart").click(function(event) {
 		var id = $(this).attr('data-id');
@@ -98,36 +78,6 @@ $(function (){
 			}
 		})
 	});
-	// 用户浏览版回复
-	$('.addComment').click(function(event) {
-		var tic = $(this).attr('data-tid');
-		var pid = $(this).attr('data-pid');
-		if ($("#commentTo").length <= 0) {
-			var commentTo = $("<input></input>");
-			commentTo.attr({
-				name: 'userComment[tid]',
-				value: tic,
-				type : 'hidden',
-				id : 'commentTo'
-			});
-			var commentPid = $("<input></input>");
-			commentPid.attr({
-				name: 'userComment[pid]',
-				value: pid,
-				type : 'hidden',
-				id : 'commentPid'
-			});
-			$("#userCommentForm").append(commentTo);
-			$("#userCommentForm").append(commentPid);
-		}else {
-			$("#commentTo").attr({
-				value: tic,
-			});
-			$("#commentPid").attr({
-				value: pid,
-			});
-		}
-	});
 	// 添加上登录表单验证
 	xc.signupValidate();
 
@@ -146,7 +96,8 @@ $(function (){
             }  
         });  
         return o;  
-    }  
+    } 
+    craeteHTML.init(); 
 });
 
 xc = {
@@ -265,7 +216,9 @@ var craeteHTML = {
 	 * @return {[type]}             [description]
 	 */
 	comment: function(userComment) {
+		var self = this;
 		var user,toUser;
+		console.log(userComment);
 		public.getUserMessage(userComment.from, function(usermsg){
 			user = usermsg;
 			if (userComment.tid) {
@@ -279,35 +232,138 @@ var craeteHTML = {
 		})
 		function create(user,toUser,context){
 			if (!toUser) {
-				if ($('#userComment .userCommentOne').length == 0) {
-					window.location.reload();
-				} else {
-					console.log('1');
-					var pid = $(".userCommentOne .addComment").eq(0).attr('data-pid');
-					var tpl = 
+				var time = public.getTimeAgo(userComment.createAt);
+				var tpl = 
 		`<div class="media userCommentOne">
 	        <div class="media-left">
-	          <a href="#content" class="addComment" data-pid="${pid}" data-tid="${user._id}">
+	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}">
 	            <img class="media-object" src="/userImg/${user.userImg}" data-holder-rendered="true"></a>
 	        </div>
 	        <div class="media-body">
 	          <h4 class="media-heading">
 	            <p>
-	              <a href="/user/details?id=${user._id}">xiaocheng
+	              <a href="/user/details?id=${user._id}">${user.name}
 	              </a> 
 	              说 : 
-	              <span class="pull-right">刚刚</span>
+	              <span class="pull-right timeSpan" time="${userComment.createAt}">${time}</span>
 	            </p>
 	          </h4>
 	          <p>${userComment.content}</p>
 	          <p><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
 	        </div>
 	    </div>`;
-	    console.log(tpl);
-	       $("#userComment").append(tpl);
-				}
+	       		$("#userComment").prepend(tpl);
+			} else {
+				var time = public.getTimeAgo(userComment.createAt);
+				var tpl = 
+		`<div class="media userCommentTwo">
+	        <div class="media-left">
+	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}">
+	            <img class="media-object" src="/userImg/${user.userImg}" data-holder-rendered="true">
+	          </a>
+	        </div>
+	        <div class="media-body">
+	          <h4 class="media-heading">
+	            <a href="/user/details?id=${user._id}">${user.name}</a> 回复：
+	            <a href="/user/details?id=${toUser._id}">${toUser.name}</a>
+	            <p class="pull-right timeSpan" time="${userComment.createAt}">${time}</p>
+	          </h4>
+	          <p>${userComment.content}</p>
+	          <p><a class="deleteUserComment" data-id="${userComment._id}" data-index="0">删除</a></p>
+	        </div>
+        </div>`;
+	       		$("#userComment .userCommentOne").eq(self.addCommentIndex).find('.media-body').eq(0).append(tpl);
 			}
 		}
+	},
+	/**
+	 * [commentTime 留言时间的自动更新]
+	 * @return {[type]} [description]
+	 */
+	commentTime: function () {
+		setInterval(() => {
+			$(".timeSpan").each((index, item) => {
+				$(item).html(public.getTimeAgo($(item).attr('time') * 1));
+			})
+		},5000);
+	},
+	deleteComment: function () {
+		$(document).on('click','.deleteUserComment',function(event){
+			var id = $(this).attr('data-id');
+			var index = $(this).parents('.media').find('.deleteUserComment').index(this);
+			var url = '';
+			if (index) {
+				url = '/usercomment/delete?id=' + id + '&index=' + index;
+			} else {
+				url = '/usercomment/delete?id=' + id;
+			}
+			var $this = $(this);
+			$.ajax({
+				type : 'delete',
+				url : url
+			}).done(function (result){
+				if (result.success == 1) {
+					$this.parents('.media').eq(0).remove();
+				}
+			});
+		})
+	},
+	addUserComment: function() {
+		var self = this;
+		// 用户浏览版回复
+		$('#userComment').on('click','.addComment',function(event) {
+			var tic = $(this).attr('data-tid');
+			var pid = $(this).attr('data-pid')
+			var index = $("#userComment").find('.userCommentOne').index($(this).parents('.userCommentOne').get(0));
+			self.addCommentIndex = index;
+			var name = $(this).parent().siblings('.media-body').find('a').eq(0).text();
+			$("#userCommentForm .reName span").html(name);
+			if ($("#commentTo").length <= 0) {
+				var commentTo = $("<input></input>");
+				commentTo.attr({
+					name: 'userComment[tid]',
+					value: tic,
+					type : 'hidden',
+					id : 'commentTo'
+				});
+				var commentPid = $("<input></input>");
+				commentPid.attr({
+					name: 'userComment[pid]',
+					value: pid,
+					type : 'hidden',
+					id : 'commentPid'
+				});
+				$("#userCommentForm").append(commentTo);
+				$("#userCommentForm").append(commentPid);
+			}else {
+				$("#commentTo").attr({
+					value: tic,
+				});
+				$("#commentPid").attr({
+					value: pid,
+				});
+			}
+		});
+	},
+	/**
+	 * [deleteCommentTo 用户详情留言回复类型切换]
+	 * @return {[type]} [description]
+	 */
+	deleteCommentTo: function () {
+		$("#userCommentForm").on('click', '.reName', function () {
+			$(this).find('span').remove();
+			$("#commentPid, #commentTo").remove();
+		})
+	},
+	/**
+	 * [init 开始就会执行的函数]
+	 * @return {[type]} [description]
+	 */
+	init: function () {
+		this.commentTime();
+		this.deleteComment();
+		this.deleteCommentTo();
+		this.addUserComment();
 	}
 }
 var public = {
@@ -358,7 +414,6 @@ var public = {
 	 * @return {[type]}            [description]
 	 */
 	getUserMessage: function (id,callback) {
-		console.log(id);
 		var self = this;
 		$.ajax({
 			url: self.userMessage,
@@ -391,6 +446,7 @@ var public = {
 			if (result.code != 200) {
 				alert(result.msg);
 			} else {
+				console.log(result)
 				 craeteHTML.comment(result.userComment);
 			}
 		})
@@ -505,5 +561,14 @@ var public = {
     	var m = ('0' + date.getMinutes()).slice(-2);
     	var s = ('0' + date.getSeconds()).slice(-2);
     	return dateDes + h + ':' + m + ':' + s;
+    },
+    /**
+     * [getTimeAgo 返回几分钟前]
+     * @param  {[number]} date [时间戳]
+     * @return {[string]}      [几分钟ago 列 刚刚 2分钟前 1小时前 1一天前 一个月前]
+     */
+    getTimeAgo: function(date) {
+    	moment.lang('zh-cn');
+    	return moment(date).fromNow()
     }
 }
