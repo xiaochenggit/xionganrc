@@ -227,7 +227,7 @@
                       </h4>
                 <p><%= item.content %></p>
                 <% if (seeUser._id == user._id || item.from._id == user._id) { %>
-                <p><a class='deleteUserComment' data-id='<%= comment._id %>' data-index='<%= index %>'>删除</a></p>
+                <p><a class='deleteUserComment' data-id='<%= comment._id %>' re-id="<%= item._id %>">删除</a></p>
                 <% } %>
               </div>
             </div>
@@ -243,7 +243,10 @@
  </div>
   <div>
    <form method="post" action="/userComment" id="userCommentForm">
-     <div class="reName"><span></span></div>
+     <div class="alert alert-success" role="alert">
+      <label for="content">为用户留言</label>
+      <button class="close" type="button" data-dismiss="alert">×</button>
+     </div>
      <div class="form-group">
        <input type="hidden" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
      </div>
@@ -251,7 +254,6 @@
        <input type="hidden" name='userComment[from]' value="<%=user._id%>" class="form-control">
      </div>
      <div class="form-group">
-        <label for="content">为用户留言</label>
         <textarea class="form-control" rows="3" id="content" name="userComment[content]"></textarea>
      </div>
      <% if (user) { %>

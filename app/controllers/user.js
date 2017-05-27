@@ -268,7 +268,7 @@ exports.secrecy = function(request, response) {
 }
 exports.getUserMessage = function (request, response) {
 	var id = request.body.id;
-	if (id == request.session.user._id) {
+	if (id) {
 		User.findOne({_id: id}, (error,user) => {
 			if (error) {
 				response.json({

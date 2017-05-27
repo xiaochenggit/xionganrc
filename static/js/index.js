@@ -218,11 +218,10 @@ var craeteHTML = {
 	comment: function(userComment) {
 		var self = this;
 		var user,toUser;
-		console.log(userComment);
 		public.getUserMessage(userComment.from, function(usermsg){
 			user = usermsg;
 			if (userComment.tid) {
-				public.getUserMessage(userComment.tid, function(tousermsg){
+				public.getUserMessage(userComment.tid, function(tousermsg){ 
 					toUser = tousermsg;
 					create(user,tousermsg,userComment.content)
 				})
@@ -233,6 +232,9 @@ var craeteHTML = {
 		function create(user,toUser,context){
 			if (!toUser) {
 				var time = public.getTimeAgo(userComment.createAt);
+				if($("#userComment .media").length == 0) {
+					$("#userComment").text("");
+				}
 				var tpl = 
 		`<div class="media userCommentOne">
 	        <div class="media-left">
@@ -248,7 +250,7 @@ var craeteHTML = {
 	              <span class="pull-right timeSpan" time="${userComment.createAt}">${time}</span>
 	            </p>
 	          </h4>
-	          <p>${userComment.content}</p>
+	          <p>${context}</p>
 	          <p><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
 	        </div>
 	    </div>`;
@@ -268,8 +270,8 @@ var craeteHTML = {
 	            <a href="/user/details?id=${toUser._id}">${toUser.name}</a>
 	            <p class="pull-right timeSpan" time="${userComment.createAt}">${time}</p>
 	          </h4>
-	          <p>${userComment.content}</p>
-	          <p><a class="deleteUserComment" data-id="${userComment._id}" data-index="0">删除</a></p>
+	          <p>${context}</p>
+	          <p><a class="deleteUserComment" data-id="${userComment._id}" re-id="${userComment._reid}">删除</a></p>
 	        </div>
         </div>`;
 	       		$("#userComment .userCommentOne").eq(self.addCommentIndex).find('.media-body').eq(0).append(tpl);
@@ -290,10 +292,9 @@ var craeteHTML = {
 	deleteComment: function () {
 		$(document).on('click','.deleteUserComment',function(event){
 			var id = $(this).attr('data-id');
-			var index = $(this).parents('.media').find('.deleteUserComment').index(this);
-			var url = '';
-			if (index) {
-				url = '/usercomment/delete?id=' + id + '&index=' + index;
+			var reId = $(this).attr('re-id');
+			if (reId) {
+				url = '/usercomment/delete?id=' + id + '&reId=' + reId;
 			} else {
 				url = '/usercomment/delete?id=' + id;
 			}
@@ -302,8 +303,12 @@ var craeteHTML = {
 				type : 'delete',
 				url : url
 			}).done(function (result){
-				if (result.success == 1) {
+				if (result.code == 200) {
 					$this.parents('.media').eq(0).remove();
+					if (!$("#userComment .media").length) {
+						$("#userComment").text('还没有人留言快点为此用户增加人气吧');
+						$("#userCommentForm .alert .close").click();
+					}
 				}
 			});
 		})
@@ -313,11 +318,12 @@ var craeteHTML = {
 		// 用户浏览版回复
 		$('#userComment').on('click','.addComment',function(event) {
 			var tic = $(this).attr('data-tid');
-			var pid = $(this).attr('data-pid')
+			var pid = $(this).attr('data-pid');
 			var index = $("#userComment").find('.userCommentOne').index($(this).parents('.userCommentOne').get(0));
 			self.addCommentIndex = index;
 			var name = $(this).parent().siblings('.media-body').find('a').eq(0).text();
-			$("#userCommentForm .reName span").html(name);
+			$("#userCommentForm .alert").find('label').html(`回复 ${name}`).parent().
+			find('.close').show();
 			if ($("#commentTo").length <= 0) {
 				var commentTo = $("<input></input>");
 				commentTo.attr({
@@ -350,9 +356,11 @@ var craeteHTML = {
 	 * @return {[type]} [description]
 	 */
 	deleteCommentTo: function () {
-		$("#userCommentForm").on('click', '.reName', function () {
-			$(this).find('span').remove();
+		$("#userCommentForm .alert").on('click', '.close', function (event) {
+			$(this).hide().siblings('label').html('为用户留言');
 			$("#commentPid, #commentTo").remove();
+			event.preventDefault();
+			return false;
 		})
 	},
 	/**
@@ -445,8 +453,9 @@ var public = {
 		}).done( function(result) {
 			if (result.code != 200) {
 				alert(result.msg);
+				$("#userCommentForm .alert .close").click();
+				$("#userComment .userCommentOne").eq(craeteHTML.addCommentIndex).remove();
 			} else {
-				console.log(result)
 				 craeteHTML.comment(result.userComment);
 			}
 		})

@@ -100,7 +100,9 @@ body{
 	height : auto ; 
 	border-radius : 10px;
 }
-
+#userCommentForm .alert .close{
+	display: none;
+}
 /*footer 頁脚*/
 footer {
 	padding-top: 5rem;	
