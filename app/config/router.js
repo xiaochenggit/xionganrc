@@ -5,7 +5,7 @@ const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
 const ArticleCategory = require('../controllers/articleCategory');
 const Moment = require('moment');
-// Moment.lang('zh-cn');
+Moment.lang('zh-cn');
 let router = function (app) {
 	app.use((request, response, next) => {
 		var user = request.session.user;
@@ -43,6 +43,7 @@ let router = function (app) {
 	app.post('/userComment', UserComment.comment);
 	app.post('/user/follows', User.follows);
 	app.get('/user/secrecy', User.secrecy);
+	app.post('/usermessage', User.getUserMessage)
 	app.delete('/admin/user/delete', User.delete);
 	app.delete('/usercomment/delete', UserComment.delete);
 

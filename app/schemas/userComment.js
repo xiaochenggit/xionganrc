@@ -22,22 +22,22 @@ var userCommentSchema = new Schema({
 		},
 		content : String,
 	    createAt: {
-	      type : Date,
-	      default : Date.now()
+	      type : Number,
+	      default : new Date().getTime()
 	    },
 	    updateAt: {
-	      type : Date,
-	      default : Date.now()
+	      type : Number,
+	      default : new Date().getTime()
 	    }
 	}],
 	content : String,
     createAt: {
-      type : Date,
-      default : Date.now()
+      type : Number,
+      default : new Date().getTime()
     },
     updateAt: {
-      type : Date,
-      default : Date.now()
+      type : Number,
+      default : new Date().getTime()
     }
 });
 // userCommentSchema.pre('save', (next) => {
