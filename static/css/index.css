@@ -100,8 +100,12 @@ body{
 	height : auto ; 
 	border-radius : 10px;
 }
+/*user-details*/
 #userCommentForm .alert .close{
 	display: none;
+}
+#userCommentForm .alert{
+	width: 300px;
 }
 /*footer 頁脚*/
 footer {

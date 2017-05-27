@@ -279,7 +279,7 @@ var craeteHTML = {
 		}
 	},
 	/**
-	 * [commentTime 留言时间的自动更新]
+	 * [commentTime 倒计时时间自动更新]
 	 * @return {[type]} [description]
 	 */
 	commentTime: function () {
@@ -287,8 +287,13 @@ var craeteHTML = {
 			$(".timeSpan").each((index, item) => {
 				$(item).html(public.getTimeAgo($(item).attr('time') * 1));
 			})
-		},5000);
+		},60000);
 	},
+	/**
+	 * [deleteComment 删除评论的按钮点击 , 根据 reId 判断是不是删除二级留言 , 通过 id 查找主留言,]
+	 * reId 查找二级留言 , 留言删除成功之后删除那个评论 media, 加一些判断, 回复变为默认回复 user
+	 * @return {[type]} [description]
+	 */
 	deleteComment: function () {
 		$(document).on('click','.deleteUserComment',function(event){
 			var id = $(this).attr('data-id');
@@ -313,6 +318,11 @@ var craeteHTML = {
 			});
 		})
 	},
+	/**
+	 * [addUserComment 点击添加二级留言回复, 为 form 表单添加 pid(留言主id) tid(被回复人的id) 字段]
+	 *  index 为判断是那个二级回复里面的确切位置 为以后回复成功添加留言做准备
+	 *  name 回复的 userName 添加到表单上方并显示关闭按钮, 点击关闭按钮可以切换回复状态(变成回复该空间用户)
+	 */
 	addUserComment: function() {
 		var self = this;
 		// 用户浏览版回复
@@ -353,6 +363,7 @@ var craeteHTML = {
 	},
 	/**
 	 * [deleteCommentTo 用户详情留言回复类型切换]
+	 * 点击关闭按钮 , 内容变成为用户留言, form 表单添加字段移出 
 	 * @return {[type]} [description]
 	 */
 	deleteCommentTo: function () {
@@ -380,7 +391,11 @@ var public = {
 	userSignin: '/user/signin',  // 用户登录
 	userMessage: '/usermessage', // 获得用户信息
 	userList: "/admin/user/list",
-	// 展示时间
+	/**
+	 * [showTime 展示时间]
+	 * @param  {[string]} id [dom ID]
+	 * @return {[type]}    [description]
+	 */
 	showTime : function (id){
 		$id = $('#'+id);
 		var self = this;
@@ -393,6 +408,7 @@ var public = {
 	 * [userSigninFunc 用户登录]
 	 * @param  {[string]} username [账号]
 	 * @param  {[string]} password [密码]
+	 * 登录成功跳入 用户列表页面
 	 * @return {[type]}          [description]
 	 */
 	userSigninFunc: function(username,password) {
@@ -440,6 +456,7 @@ var public = {
 	},
 	/**
 	 * [postCommentForm 用户留言提交]
+	 * 提交成功创建留言 , 失败弹出失败信息 , 然后回复类型切换 当前留言删除
 	 * @param  {[string]} form [表单数据]
 	 * @return {[type]}      [description]
 	 */
@@ -483,7 +500,12 @@ var public = {
 			};
 		})
 	},
-	// 获得地址上的参数
+	/**
+	 * [getUrlParam 获取地址参数]
+	 * @param  {[string]} url  [地址]
+	 * @param  {[string]} name [参数名字]
+	 * @return {[string]}      [参数值]
+	 */
 	getUrlParam : function(url,name){
         var pattern = new RegExp("[?&]" + name +"\=([^&]+)","g");
         var matcher = pattern.exec(url);
@@ -573,7 +595,7 @@ var public = {
     },
     /**
      * [getTimeAgo 返回几分钟前]
-     * @param  {[number]} date [时间戳]
+     * @param  {[string]} date [时间戳]
      * @return {[string]}      [几分钟ago 列 刚刚 2分钟前 1小时前 1一天前 一个月前]
      */
     getTimeAgo: function(date) {
