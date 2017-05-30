@@ -43,10 +43,10 @@ let router = function (app) {
 	app.post('/userComment', UserComment.comment);
 	app.post('/user/follows', User.follows);
 	app.get('/user/secrecy', User.secrecy);
-	app.post('/usermessage', User.getUserMessage)
+	app.post('/usermessage', User.getUserMessage);
 	app.delete('/admin/user/delete', User.delete);
+	app.post('/userCommentPage', UserComment.getUserCommentPage)
 	app.delete('/usercomment/delete', UserComment.delete);
-
 	// 文章发布页面
 	app.get('/admin/article', Article.admin);
 	app.post('/admin/article', Article.save);

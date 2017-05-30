@@ -210,6 +210,8 @@ xc = {
 }
 // 关于创建 html 结构
 var craeteHTML = {
+	user: {},
+	commentMessage: {},
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -295,6 +297,7 @@ var craeteHTML = {
 	 * @return {[type]} [description]
 	 */
 	deleteComment: function () {
+		var self = this;
 		$(document).on('click','.deleteUserComment',function(event){
 			var id = $(this).attr('data-id');
 			var reId = $(this).attr('re-id');
@@ -311,7 +314,8 @@ var craeteHTML = {
 				if (result.code == 200) {
 					$this.parents('.media').eq(0).remove();
 					if (!$("#userComment .media").length) {
-						$("#userComment").text('还没有人留言快点为此用户增加人气吧');
+						self.loadGetUserCommentPage(self.commentMessage.page);
+						// $("#userComment").text('还没有人留言快点为此用户增加人气吧');
 						$("#userCommentForm .alert .close").click();
 					}
 				}
@@ -375,19 +379,155 @@ var craeteHTML = {
 		})
 	},
 	/**
+	 * [drawUserComment 绘制留言板doom]
+	 * @param  {[type]} data [description]
+	 * @return {[type]}      [description]
+	 */
+	drawUserComment: function (data) {
+		var self = craeteHTML;
+		self.commentMessage = data;
+		var $userComment = $("#userComment");
+		$userComment.html("");
+		var comments = data.comments;
+		// 添加留言板
+		var tpl = '';
+		if (comments && comments.length > 0) { 
+        	comments.forEach(function (comment,index) {
+          		tpl += `<div class="media userCommentOne">
+			            <div class="media-left">
+			              <a href="#content" class="addComment" data-pid='${ comment._id }' data-tid='${comment.from._id }'>
+			                <img class="media-object" src="/userImg/${ comment.from.userImg }" data-holder-rendered="true"></a>
+			            </div>
+			            <div class="media-body">
+			              <h4 class="media-heading">
+			                <p>
+			                  <a href="/user/details?id=${ comment.from._id }">${ comment.from.name }
+			                  </a> 
+			                  说 : 
+			                  <span class="pull-right timeSpan" time="${comment.createAt }">${ moment(comment.createAt).fromNow()  }</span>
+			                </p>
+			              </h4>
+			              <p>${ comment.content }</p>`;
+				if (self.seeUserId == self.user._id || comment.from._id == self.user._id) { 
+	             	tpl += `<p><a class='deleteUserComment' data-id='${comment._id}'>删除</a></p>`;
+	            }
+	            if (comment.reply && comment.reply.length > 0) { 
+                	comment.reply.forEach( function (item,index) { 
+		            tpl += `<div class="media userCommentTwo">
+			                    <div class="media-left">
+			                      <a href="#content" class="addComment" data-pid='${comment._id }' data-tid='${item.from._id }'>
+			                        <img class="media-object" src="/userImg/${ item.from.userImg }" data-holder-rendered="true" >
+			                      </a>
+			                    </div>
+			                    <div class="media-body">
+			                      <h4 class="media-heading">
+			                        <a href="/user/details?id=${item.from._id }">${ item.from.name }</a> 回复：
+			                        <a href="/user/details?id=${item.to._id }">${ item.to.name }</a>
+			                        <p class="pull-right timeSpan" time="${item.createAt }" >
+			                          ${ moment(item.createAt).fromNow()  }
+			                        </p>
+			                      </h4>
+			               		  <p>${ item.content }</p>`;
+		            if (self.seeUserId == self.user._id || item.from._id == self.user._id) {
+                		tpl += `<p><a class='deleteUserComment' data-id='${ comment._id }' re-id="${ item._id }">删除</a></p>`;
+               		} 
+		            tpl += "</div></div>";
+	           		}) 
+	         	}
+	         	tpl += "</div></div>"; 
+      		}) 
+    	} else { 
+      		tpl += "还没有人留言快点为此用户增加人气吧";
+    	} 
+    	$userComment.append(tpl);
+		// 添加分页
+		var pageHTML = $("#page");
+		pageHTML.html("");
+		var page = data.page;
+		var maxPage = data.maxPage;
+		var pageNum = data.pageNum;
+		var pageTpl = '';
+		if (data.maxPage > 0) {
+			pageTpl +=  `<nav aria-label="Page navigation">
+					        <ul class="pagination">
+					          <li>
+					              <span aria-hidden="true">第${ page + 1 }/${ maxPage + 1 }页 每页${ pageNum }条</span>
+					          </li>
+					          <li><a href="#" page="0" >首页</a></li>
+					          <li>
+					            <a href="#" aria-label="Previous" page="${page - 1}">
+					              <span aria-hidden="true">&laquo;</span>
+					            </a>
+					          </li>`;
+			if (page - 2 >= 0 ) {
+				pageTpl += ` <li><a href="#" page="${page - 2}">${page -1 }</a></li>`;
+			}
+			if (page - 1 >= 0 ) {
+				pageTpl += ` <li><a href="#" page="${page - 1}">${page}</a></li>`;
+			}
+				pageTpl += ` <li class='active' page="${page}"><a href="#">${page + 1 }</a></li>`;
+			if (page + 1 <= maxPage ) {
+				pageTpl += ` <li><a href="#" page="${page + 1}">${page + 2}</a></li>`;
+			}
+			if (page + 2 <= maxPage ) {
+				pageTpl += ` <li><a href="#" page="${page + 2}">${page + 3 }</a></li>`;
+			}
+			pageTpl += 		 `<li>
+            			 		<a href="#" aria-label="Next" page="${page + 1}">
+              					<span aria-hidden="true">&raquo;</span>
+            					</a>
+          					  </li>
+          					  <li><a href="#" page="${maxPage}">尾页</a></li>
+        				    </ul>`;
+        	pageHTML.append(pageTpl);
+		}
+	},
+	/**
+	 * [clickGetUserCommentPage 点击切换用户留言]
+	 * @return {[type]} [description]
+	 */
+	clickGetUserCommentPage: function() {
+		var self = this;
+		$("#page").on("click", "a", function(event){
+			var page = parseInt($(this).attr("page"));
+			self.loadGetUserCommentPage(page);
+			event.preventDefault();
+		})
+	},
+	/**
+	 * [loadGetUserCommentPage 加载完 doom 获得 用户留言信息]
+	 * @param  {[type]}   page     [description]
+	 * @param  {Function} callback [description]
+	 * @return {[type]}            [description]
+	 */
+	loadGetUserCommentPage: function(page) {
+		var self = this;
+		var id = $("#seeUserId").val();
+		this.seeUserId = id;
+		var page = page || 0;
+		public.getUserCommentPage(id, page, self.drawUserComment);
+	},
+	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
 	 */
 	init: function () {
+		var self = this;
+		public.getUserMessage('',function(data){
+			self.user = data;
+			self.loadGetUserCommentPage(0);
+		})
 		this.commentTime();
 		this.deleteComment();
 		this.deleteCommentTo();
 		this.addUserComment();
+		this.clickGetUserCommentPage();
 	}
 }
 var public = {
 	userSecrecy: '/user/secrecy', // 用户保密保密地址
 	usercomment: '/userComment', // 用户评论提交
+	userCommentPage: '/userCommentPage', // 获得用户留言分页信息
 	userSignin: '/user/signin',  // 用户登录
 	userMessage: '/usermessage', // 获得用户信息
 	userList: "/admin/user/list",
@@ -403,6 +543,28 @@ var public = {
 		setInterval( function(){
 			$id.html(self.getTime(new Date()));
 		},1000)
+	},
+	/**
+	 * [getUserCommentPage 获得用户留言分页信息]
+	 * @param  {[string]} id [用户id]
+	 * @param  {[number]} page [页码]
+	 * @return {[type]}      [description]
+	 */
+	getUserCommentPage: function(id, page, callback) {
+		var self = this;
+		$.ajax({
+			url: this.userCommentPage,
+			type: 'POST',
+			data: {
+				id : id,
+				page : page
+			},
+			dataType: 'json'
+		}).done(function(result){
+			if (result.code == 200) {
+				callback && callback(result.data);
+			}
+		})
 	},
 	/**
 	 * [userSigninFunc 用户登录]

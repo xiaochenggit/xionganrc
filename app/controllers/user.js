@@ -10,7 +10,8 @@ exports.getSignup = function (request,response) {
 }
 exports.postSignup = function (request,response) {
 	var _user = request.body.user;
-	_user.createAt = _user.updateAt = _user.loadTime = Date.now();
+	_user.createAt = _user.updateAt  = Date.now();
+	_user.loadTime = new Date().getTime();
 	// 如果有这个 user 就返回登录页面
 	User.findOne({name : _user.name}, (error, user) => {
 		if (error) {
@@ -54,7 +55,7 @@ exports.postSignin = function (request, response) {
 			if (user) {
 				if (user.password == _user.password) {
 					// 然后改变登陆时间
-					user.loadTime = Date.now();
+					user.loadTime = new Date().getTime();
 					user.save((error,user)=>{
 						request.session.user = user;
 						response.json({
@@ -266,6 +267,12 @@ exports.secrecy = function(request, response) {
 	};
 	
 }
+/**
+ * [getUserMessage 获取用户信息]
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[object]}          [返回用户名 id name]
+ */
 exports.getUserMessage = function (request, response) {
 	var id = request.body.id;
 	if (id) {
@@ -287,8 +294,21 @@ exports.getUserMessage = function (request, response) {
 				})
 			}
 		})
+	} else {
+		var user = request.session.user;
+		response.json({
+			code: 200,
+			msg: '获取用户信息成功!',
+			data: {
+				_id: user._id,
+				name : user.name,
+				userImg: user.userImg
+			}
+		})
 	}
 }
+
+
 // 删除用户
 exports.delete = function (request, response) {
 	/**

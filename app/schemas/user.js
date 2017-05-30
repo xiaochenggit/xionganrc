@@ -101,8 +101,8 @@ var UserSchema = new Schema({
   },
   // 用户最近登录时间
   loadTime: {
-      type : Date,
-      default : Date.now()
+      type : String,
+      default : new Date().getTime()
   },
   // 注册时间
   createAt: {

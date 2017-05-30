@@ -25,7 +25,7 @@
                   </td>
                   <td><%= item.role %></td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
-                  <td><%= moment(item.loadTime, "YYYYMMDDHHmmss").fromNow()  %></td>
+                  <td time="<%= item.loadTime %>"><%= moment(parseInt(item.loadTime)).fromNow() %></td>
                   <td>
                     <a href="/user/details?id=<%=item._id %>" class='btn btn-info'>
                     查看</a>

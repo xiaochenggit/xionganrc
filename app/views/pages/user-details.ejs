@@ -94,7 +94,10 @@
         注册时间 : <%=moment(seeUser.createAt).format('YYYY/MM/DD HH:mm:ss') %>
       </div>
       <div href="#" class="list-group-item">
-        上次登录时间 : <%= moment(seeUser.loadTime, "YYYYMMDDHHmmss").fromNow()  %>
+        上次登录时间 :
+        <span class=" timeSpan" time="<%= seeUser.loadTime %>" >
+          <%= moment(parseInt(seeUser.loadTime)).fromNow() %>
+        </span>
       </div>
     </div>
   </div>
@@ -188,8 +191,9 @@
   </div>
   <div class="panel panel-info">
    <div class="panel-heading">留言板</div>
-   <div class="panel-body" id="userComment">
-    <% if (comments && comments.length > 0) { %>
+   <div class="panel-body" >
+    <div id="userComment"></div>
+    <!-- <% if (comments && comments.length > 0) { %>
         <% comments.forEach(function (comment,index) { %>
           <div class="media userCommentOne">
             <div class="media-left">
@@ -238,7 +242,34 @@
     <% }) %>
     <% } else { %>
       还没有人留言快点为此用户增加人气吧
-    <% } %>
+    <% } %> -->
+    <!-- 分页 -->
+    <div id="page" class="page">
+      <!-- <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li>
+              <span aria-hidden="true">第1/4页 每页10条</span>
+          </li>
+          <li><a href="#">首页</a></li>
+          <li>
+            <a href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li>
+            <a href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li><a href="#">尾页</a></li>
+        </ul>
+      </nav> -->
+    </div>
    </div>
  </div>
   <div>
@@ -248,7 +279,7 @@
       <button class="close" type="button" data-dismiss="alert">×</button>
      </div>
      <div class="form-group">
-       <input type="hidden" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
+       <input type="hidden" id="seeUserId" name='userComment[user]' value="<%=seeUser._id%>" class="form-control">
      </div>
      <div class="form-group">
        <input type="hidden" name='userComment[from]' value="<%=user._id%>" class="form-control">

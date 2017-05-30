@@ -138,3 +138,40 @@ exports.delete = function (request, response) {
 		}
 	}
 }
+
+/**
+ * [getUserCommentPage 获得用户留言的分页信息]
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[object]}          [description]
+ */
+exports.getUserCommentPage = function (request, response) {
+	var userId = request.body.id;
+	var page = parseInt(request.body.page);
+	var pageNum = 10;
+	UserComent
+		.find({user: userId})
+		.populate('from', 'name userImg')
+		.populate('reply.from reply.to', 'name userImg')
+		.exec((error, comments)=>{
+			comments = comments.reverse();
+			var maxPage = Math.ceil(comments.length / pageNum) - 1;
+			if (page < 0) {
+				page = 0;
+			}
+			if (page > maxPage) {
+				page = maxPage;
+			}
+			comments = comments.splice(page * pageNum, pageNum);
+			response.json({
+				code: 200,
+				msg: '获得留言分页信息成功',
+				data: {
+					comments: comments,
+					page: page,
+					pageNum: pageNum,
+					maxPage: maxPage
+				}
+			})
+		});
+}
