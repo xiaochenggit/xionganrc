@@ -83,7 +83,7 @@ exports.article = function (request, response) {
 							name : user.name,
 							_id : user._id
 						},
-						time :  Date.now()
+						time :  new Date().getTime()
 					});
 					article.save((error,article) => {
 						response.render('article',{

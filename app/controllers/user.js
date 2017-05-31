@@ -10,7 +10,7 @@ exports.getSignup = function (request,response) {
 }
 exports.postSignup = function (request,response) {
 	var _user = request.body.user;
-	_user.createAt = _user.updateAt  = Date.now();
+	_user.createAt = _user.updateAt  = new Date().getTime();
 	_user.loadTime = new Date().getTime();
 	// 如果有这个 user 就返回登录页面
 	User.findOne({name : _user.name}, (error, user) => {
@@ -112,7 +112,7 @@ exports.details = function (request, response) {
 					}
 					user.browseUsers.unshift({
 						user : request.session.user._id,
-						time : Date.now()
+						time : new Date().getTime()
 					});
 					user.save((error) => {
 						if (error) {
@@ -157,7 +157,7 @@ exports.saveImg = function (request, response, next){
 	if (saveImg.originalFilename) {
 		var oldPath = saveImg.path;
 		var type = saveImg.type.split('/')[1];
-		var imgName = Date.now() + '.' + type;
+		var imgName = new Date().getTime() + '.' + type;
 		var newPath = path.join(__dirname,'../../','/static/userImg/' + imgName);
 		fs.readFile(oldPath,(error, data) => {
 			fs.writeFile(newPath, data, () => {
@@ -223,7 +223,7 @@ exports.follows = function (request, response) {
 				if (!de) {
 					user.follows.unshift({
 						user : request.session.user._id,
-						time : Date.now()
+						time : new Date().getTime()
 					});
 				}
 				user.save((error) => {

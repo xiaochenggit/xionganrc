@@ -10,12 +10,6 @@ $(function (){
 		var password = $("#password").val();
 		public.userSigninFunc(username, password);
 	});
-	$('#userCommentForm').submit(function(event) {
-		event.preventDefault();
-		var jsonData = $(this).serializeObject();
-		$('#content').val('');
-		public.postCommentForm(jsonData);
-	})
 	$('.is-look').click(function(){
 		if ($(this).text() == '保密') {
 			$(this).text('公开').removeClass('btn-danger').addClass('btn-primary'); 
@@ -507,6 +501,18 @@ var craeteHTML = {
 		var page = page || 0;
 		public.getUserCommentPage(id, page, self.drawUserComment);
 	},
+	addCommentSubmitEvent: function () {
+		$('#userCommentForm').submit(function(event) {
+			event.preventDefault();
+			var jsonData = $(this).serializeObject();
+			if (jsonData['userComment[content]'].trim() == '') {
+				alert("留言不能为空!");
+				return;
+			}
+			$('#content').val('');
+			public.postCommentForm(jsonData);
+		})
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -516,7 +522,8 @@ var craeteHTML = {
 		public.getUserMessage('',function(data){
 			self.user = data;
 			self.loadGetUserCommentPage(0);
-		})
+		});
+		this.addCommentSubmitEvent();
 		this.commentTime();
 		this.deleteComment();
 		this.deleteCommentTo();

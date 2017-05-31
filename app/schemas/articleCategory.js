@@ -17,21 +17,21 @@ var ArticleCategorySchema = new Schema({
   }],
   // 注册时间
   createAt: {
-    type : Date,
-    default : Date.now()
+    type : Number,
+    default : new Date().getTime()
   },
   // 更新状态的时间
   updateAt: {
-    type : Date,
-    default : Date.now()
+    type : Number,
+    default : new Date().getTime()
   }
 });
 ArticleCategorySchema.pre('save', (next) => {
   // let user = this;
   if (this.isNew) {
-    this.createAt = this.updateAt = this.loadTime = Date.now();
+    this.createAt = this.updateAt = this.loadTime = new Date().getTime();
   } else {
-    this.updateAt = Date.now();
+    this.updateAt = new Date().getTime();
   }
   next();
 });
