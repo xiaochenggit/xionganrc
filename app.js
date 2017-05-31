@@ -1,4 +1,4 @@
-// 主文件
+﻿// 主文件
 const express = require('express');
 const path = require('path');
 const bodyParser = require("body-parser");
@@ -9,7 +9,7 @@ const session = require('express-session');
 const mongoSotre = require('connect-mongo')(session);
 const cookieParser = require('cookie-parser');
 
-const port = 8080;
+const port = 80;
 // 实例化
 const  app = express();
 // 连接数据库
