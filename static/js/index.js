@@ -1,4 +1,13 @@
 $(function (){
+	// 添加文章
+	$("#articleForm").submit(function(event) {
+		var artcates = $("#articleForm input[type='checkbox']:checked");
+		if (!artcates.length) {
+			alert("请选择分类")
+			return false;
+		}
+		
+	});
 	// 导航时间
 	public.showTime("showTime");
 	// 版权时间
@@ -31,7 +40,14 @@ $(function (){
 			}
 		})
 	});
-	// 用户删除的代码
+	$(".deleteArticleCategory").click(function (){
+		var id = $(this).attr('data-id');
+		var $this = $(this);
+		public.deleteArticleCategoryFun(id ,function(){
+			$this.parents('tr').remove();
+		})
+	})
+	// 删除文章
 	$(".deleteActicle").click(function (){
 		var id = $(this).attr('data-id');
 		var $this = $(this);
@@ -538,6 +554,7 @@ var public = {
 	userSignin: '/user/signin',  // 用户登录
 	userMessage: '/usermessage', // 获得用户信息
 	userList: "/admin/user/list",
+	deleteArticleCategory: "/admin/articlecategory/delete?id=", // 删除文章分页
 	/**
 	 * [showTime 展示时间]
 	 * @param  {[string]} id [dom ID]
@@ -550,6 +567,25 @@ var public = {
 		setInterval( function(){
 			$id.html(self.getTime(new Date()));
 		},1000)
+	},
+	/**
+	 * [deleteArticleCategoryFun description]
+	 * @param  {[type]}   id       [description]
+	 * @param  {Function} callback [description]
+	 * @return {[type]}            [description]
+	 */
+	deleteArticleCategoryFun: function(id, callback) {
+		var self = this;
+		$.ajax({
+			url: self.deleteArticleCategory + id,
+			type: 'delete'
+		}).done(function(result) {
+			if (result.code == 200) {
+				callback && callback();
+			} else {
+				alert(result.msg)
+			}
+		})
 	},
 	/**
 	 * [getUserCommentPage 获得用户留言分页信息]

@@ -29,7 +29,7 @@ var ArticleCategorySchema = new Schema({
 ArticleCategorySchema.pre('save', (next) => {
   // let user = this;
   if (this.isNew) {
-    this.createAt = this.updateAt = this.loadTime = new Date().getTime();
+    this.createAt = this.updateAt = new Date().getTime();
   } else {
     this.updateAt = new Date().getTime();
   }

@@ -9,6 +9,7 @@ exports.admin = function (request, response) {
 }
 exports.save = function (request, response) {
 	_artCate = request.body.artCate;
+	_artCate.createAt = _artCate.updateAt = new Date().getTime();
 	newArtCate = new artCate(_artCate);
 	newArtCate.save((error,artCate) => {
 		if (error) {
@@ -23,6 +24,7 @@ exports.list = function (request, response) {
 		if (error) {
 			console.log(error);
 		} else {
+			artCates.reverse();
 			response.render('articleCategory-list',{
 				title : '文章分类列表页面',
 				artCates : artCates
@@ -31,8 +33,7 @@ exports.list = function (request, response) {
 	})
 }
 exports.articlecategory = function (request, response) {
-	var id = request.query.id ;
-	console.log(id);
+	var id = request.query.id;
 	if (id) {
 		artCate.findOne({_id:id})
 		.populate('articles.article','author createAt updateAt title browseUsers')
@@ -46,6 +47,37 @@ exports.articlecategory = function (request, response) {
 					artcate : artcate
 				})
 			}
+		})
+	}
+}
+/**
+ * [delete 删除文章分类]
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[type]}          [description]
+ */
+exports.delete = function(request, response) {
+	var id = request.query.id;
+	// if (id && request.session.user.role >= 50) {
+	if (id) {
+		artCate.remove({_id: id},(error) => {
+			if (error) {
+				console.log(error);
+				response.json({
+					code : 400,
+					msg: '删除文章分类失败'
+				})
+			} else {
+				response.json({
+					code : 200,
+					msg: '删除文章分类成功'
+				})
+			}
+		})
+	} else {
+		response.json({
+			code : 400,
+			msg: '删除文章分类失败'
 		})
 	}
 }

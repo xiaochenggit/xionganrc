@@ -59,5 +59,6 @@ let router = function (app) {
 	app.post('/admin/articlecategory', ArticleCategory.save);
 	app.get('/admin/articlecategory/list', ArticleCategory.list)
 	app.get('/articlecategory', ArticleCategory.articlecategory)
+	app.delete('/admin/articlecategory/delete', ArticleCategory.delete);
 }
 module.exports = router;
