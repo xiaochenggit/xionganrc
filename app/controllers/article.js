@@ -35,6 +35,7 @@ exports.save = function (request, response) {
 		_article.categories.push({articlecategory:artcates[element]._id});
 		});
 		// 保存文章
+		_article.createAt = _article.updateAt = new Date().getTime();
 		var article = new Article(_article);
 		article.save((error,article) => {
 			if (error) {
@@ -95,6 +96,15 @@ exports.article = function (request, response) {
 		})
 	}
 }
+var compare = function (x, y) {
+    if (x.updateAt < y.updateAt) {
+        return 1;
+    } else if (x.updateAt > y.updateAt) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
 // 文章列表
 exports.articleList = function (request, response) {
 	const pageArts = 2;
@@ -118,6 +128,7 @@ exports.articleList = function (request, response) {
 						user.save();
 					}
 				});
+				articles = articles.sort(compare);
 				var Maxpage = Math.ceil(articles.length/pageArts)
 				if (page >= Maxpage) {
 					articles = articles.splice((Maxpage-1)*pageArts,pageArts);
@@ -149,6 +160,7 @@ exports.articleList = function (request, response) {
 					artcate.save();
 				}
 			});
+			articles = articles.sort(compare);
 			var Maxpage = Math.ceil(articles.length/pageArts);
 			if (page >= Maxpage) {
 				articles = articles.splice((Maxpage-1)*pageArts,pageArts);
@@ -171,6 +183,7 @@ exports.articleList = function (request, response) {
 			if (error) {
 				console.log(error);
 			} else {
+				articles = articles.sort(compare);
 				var Maxpage = Math.ceil(articles.length/pageArts);
 				if (page >= Maxpage) {
 					articles = articles.splice((Maxpage-1)*pageArts,pageArts);

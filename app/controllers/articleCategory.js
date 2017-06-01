@@ -25,7 +25,6 @@ exports.list = function (request, response) {
 			console.log(error);
 		} else {
 			artCates.reverse();
-			console.log(artCates)
 			response.render('articleCategory-list',{
 				title : '文章分类列表页面',
 				artCates : artCates

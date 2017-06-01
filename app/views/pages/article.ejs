@@ -17,7 +17,11 @@
 		<h1 class="title text-center"><%= article.title %></h1>
 		<div class="des text-center">
 			<span><a href="/user/details?id=<%= article.author._id %>">作者：<%= article.author.name %></a></span>
-			<span>发布时间: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span>
+			<span>发布时间: 
+				<span class=" timeSpan" time="<%= article.createAt %>" >
+                    <%= moment(parseInt(article.updateAt)).fromNow() %>
+                </span>
+			</span>
 			<!-- <span>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span> -->
 		</div>
 	</div>

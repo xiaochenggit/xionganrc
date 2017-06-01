@@ -78,12 +78,24 @@ exports.postSignin = function (request, response) {
 		}
 	})
 }
+
+var compare = function (x, y) {
+    if (x.updateAt < y.updateAt) {
+        return 1;
+    } else if (x.updateAt > y.updateAt) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
 exports.userList = function (request, response) {
 	User.find({}, (error,users) => {
 		if (error) {
 			console.log(error);
 		} else {
 			var role = request.session.user.role >= 50 ? true : false;
+			users = users.sort(compare);
 			response.render('user-list',{
 				title : '用户列表',
 				users : users,

@@ -160,7 +160,11 @@
             <% if(seeUserArt[i].article){ %>
               <p>
                 <a href="/article?id=<%=seeUserArt[i].article._id%>"><%= seeUserArt[i].article.title %></a>
-                <span class="pull-right"> 更新时间: <%=moment(seeUserArt[i].article.updateAt).format('YYYY/MM/DD HH:mm:ss') %></span> 
+                <span class="pull-right">
+                  <span class=" timeSpan" time="<%= seeUserArt[i].article.updateAt %>" >
+                    <%= moment(parseInt(seeUserArt[i].article.updateAt)).fromNow() %>
+                  </span> 
+                </span> 
               <p> 
             <%}%>
         <% } %>

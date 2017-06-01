@@ -19,7 +19,7 @@
                   <td>
                     <span class="list-group-item" >
                     <%= item.name %>
-                      <span class="badge"><%= item %></span>
+                      <span class="badge"><%= item.articles.length %></span>
                     </span>
                   </td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
