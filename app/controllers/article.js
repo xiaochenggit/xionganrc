@@ -103,7 +103,7 @@ exports.articleList = function (request, response) {
 	const artCate = request.query.artCate || "";
 	if (userId) {
 		User.findOne({_id:userId})
-		.populate('articles.article','title updateAt createAt author')
+		.populate('articles.article','title updateAt createAt author browseUsers')
 		.exec((error,user)=>{
 			if (error) {
 				console.log(error);
@@ -137,7 +137,7 @@ exports.articleList = function (request, response) {
 		})
 	} else if (artCate) {
 		ArtCate.findOne({name: artCate})
-		.populate('articles.article','title updateAt createAt author')
+		.populate('articles.article','title updateAt createAt author browseUsers')
 		.exec((error,artcate)=>{
 			var articles = [];
 			artcate.articles.forEach(function(item,index){

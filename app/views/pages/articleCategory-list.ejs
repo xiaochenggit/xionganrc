@@ -17,16 +17,19 @@
             <% artCates.forEach(function (item,index) { %>
                 <tr>
                   <td>
+                    <span class="list-group-item" >
                     <%= item.name %>
+                      <span class="badge"><%= item %></span>
+                    </span>
                   </td>
                   <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
                   <td>
-                    <a href="/admin/article/list?artCate=<%=item.name%>" class='btn btn-info'>
+                    <a href="/admin/article/list?artCate=<%=item.name%>" class='btn btn-info btn-xs'>
                     查看</a>
                   </td>
                   <td>
-                  <button class="deleteArticleCategory btn btn-danger" data-id='<%=item._id %>'>删除</button>
+                  <button class="deleteArticleCategory btn btn-danger btn-xs" data-id='<%=item._id %>'>删除</button>
                   </td>
                 </tr>
             <% }); %>

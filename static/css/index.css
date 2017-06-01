@@ -154,3 +154,10 @@ footer .machine{
   text-align: center;
   padding: 2rem;
 }
+
+/*文章分类列表*/
+.table .list-group-item {
+	border: none;
+	margin: 0px;
+	padding: 0px;
+}
