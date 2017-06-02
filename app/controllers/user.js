@@ -55,7 +55,7 @@ exports.postSignin = function (request, response) {
 			if (user) {
 				if (user.password == _user.password) {
 					// 然后改变登陆时间
-					user.loadTime = new Date().getTime();
+					user.loadTime = user.updateAt = new Date().getTime();
 					user.save((error,user)=>{
 						request.session.user = user;
 						response.json({
@@ -81,9 +81,9 @@ exports.postSignin = function (request, response) {
 
 var compare = function (x, y) {
     if (x.updateAt < y.updateAt) {
-        return 1;
-    } else if (x.updateAt > y.updateAt) {
         return -1;
+    } else if (x.updateAt > y.updateAt) {
+        return 1;
     } else {
         return 0;
     }

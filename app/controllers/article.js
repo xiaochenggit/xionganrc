@@ -207,14 +207,49 @@ exports.articleList = function (request, response) {
 exports.delete = function (request, response) {
 	var id = request.query.id;
 	if (id) {
-		Article.remove({_id: id},(error) => {
+		Article.findOne({_id: id}, (error, article) => {
 			if (error) {
 				console.log(error);
 			} else {
-				response.json({
-					success : 1
+				// 找到作者的文章
+				const userId = article.author._id;
+				User.findOne({_id: userId}, (error, user) => {
+					user.articles.forEach( function(element, index) {
+						if (element._id === id) {
+							user.articles.splice(index, 1);
+							return;
+						}
+					});
+					user.save(() => {
+						console.log("作者文章删除成功");
+					});
+				})
+				// 找到分类
+				var categories = article.categories;
+				categories.forEach( function(category, index) {
+					ArtCate.findOne({_id: category._id}, (error,categorysBycate) => {
+						categorysBycate.articles.forEach( function(element, index) {
+							if (element._id === id) {
+								categorysBycate.articles.splice(index, 1);
+								return;
+							}
+						});
+						categorysBycate.save( () => {
+							console.log('分类删除成功');
+						})
+					});
 				});
+				Article.remove({_id: id},(error) => {
+					if (error) {
+						console.log(error);
+					} else {
+						console.log('文章本身删除成功');
+						response.json({
+							success : 1
+						});
+					}
+				})
 			}
-		})
+		});
 	}
 }
