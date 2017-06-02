@@ -136,16 +136,6 @@ exports.details = function (request, response) {
 				.populate('browseUsers.user follows.user', 'name userImg')
 				.populate('articles.article','title updateAt')
 				.exec((error, user) => {
-					var articles = [];
-					user.articles.forEach( function(item,index) {
-						if (item.article) {
-							articles.push(item)
-						}
-						if (index == user.articles.length - 1) {
-							user.articles = articles;
-							user.save();
-						}
-					});
 					UserComment
 						.find({user: user._id})
 						.populate('from', 'name userImg')

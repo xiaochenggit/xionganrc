@@ -119,14 +119,8 @@ exports.articleList = function (request, response) {
 				console.log(error);
 			} else {
 				var articles = [];
-				user.articles.forEach(function(item,index){
-					if (item.article) {
-						articles.push(item.article)
-					}
-					if (index == user.articles.length) {
-						user.articles = articles;
-						user.save();
-					}
+				user.articles.forEach( function(element, index) {
+					articles.push(element.article)
 				});
 				articles = articles.sort(compare);
 				var Maxpage = Math.ceil(articles.length/pageArts)
@@ -151,14 +145,8 @@ exports.articleList = function (request, response) {
 		.populate('articles.article','title updateAt createAt author browseUsers')
 		.exec((error,artcate)=>{
 			var articles = [];
-			artcate.articles.forEach(function(item,index){
-				if (item.article) {
-					articles.push(item.article)
-				}
-				if (index == artcate.articles.length) {
-					artcate.articles = articles;
-					artcate.save();
-				}
+			artcate.articles.forEach( function(element, index) {
+				articles.push(element.article)
 			});
 			articles = articles.sort(compare);
 			var Maxpage = Math.ceil(articles.length/pageArts);
@@ -215,27 +203,25 @@ exports.delete = function (request, response) {
 				const userId = article.author._id;
 				User.findOne({_id: userId}, (error, user) => {
 					user.articles.forEach( function(element, index) {
-						if (element._id === id) {
+						if (element.article == id) {
 							user.articles.splice(index, 1);
 							return;
 						}
 					});
 					user.save(() => {
-						console.log("作者文章删除成功");
 					});
 				})
 				// 找到分类
 				var categories = article.categories;
 				categories.forEach( function(category, index) {
-					ArtCate.findOne({_id: category._id}, (error,categorysBycate) => {
+					ArtCate.findOne({_id: category.articlecategory}, (error,categorysBycate) => {
 						categorysBycate.articles.forEach( function(element, index) {
-							if (element._id === id) {
+							if (element.article == id) {
 								categorysBycate.articles.splice(index, 1);
 								return;
 							}
 						});
 						categorysBycate.save( () => {
-							console.log('分类删除成功');
 						})
 					});
 				});
