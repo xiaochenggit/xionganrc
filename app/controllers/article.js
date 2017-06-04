@@ -3,6 +3,7 @@ const User = require('../models/user');
 const ArtCate = require('../models/articleCategory');
 
 // 文章发布页面
+
 exports.admin = function (request, response) {
 	// 找到文章分类数组 
 	ArtCate.find({},(error,artcates) => {
@@ -12,13 +13,12 @@ exports.admin = function (request, response) {
 		})
 	})
 }
+
 // 文章保存
 exports.save = function (request, response) {
 	var _article = request.body.article;
 	var editorValue = request.body.editorValue;
 	_article.content = editorValue;
-	// 关键词
-	_article.keyword = _article.keyword.split(';');
 	
 	if( typeof(_article.categories) == "string" ) {
 		var _artCates = [];
@@ -26,13 +26,17 @@ exports.save = function (request, response) {
 	} else {
 		var _artCates = _article.categories;
 	}
+
 	// 找出对应的分类
 	_article.categories = [];
 	ArtCate.find({},(error,artcates) => {
 		_artCates.forEach( function(element, index) {
-		var element = parseInt(element);
-		// 文章的 分类 提取
-		_article.categories.push({articlecategory:artcates[element]._id});
+			var element = parseInt(element);
+			// 文章的 分类 提取
+			_article.categories.push({
+				_id: artcates[element]._id,
+				name: artcates[element].name
+			});
 		});
 		// 保存文章
 		_article.createAt = _article.updateAt = new Date().getTime();
@@ -191,7 +195,12 @@ exports.articleList = function (request, response) {
 		})
 	}
 }
-// 删除文章
+/**
+ * [delete 找到该文章删除,并且找到作者在其文章列表中删除它,文章所属分类列表中也需要删除]
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[type]}          [description]
+ */
 exports.delete = function (request, response) {
 	var id = request.query.id;
 	if (id) {

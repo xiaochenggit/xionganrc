@@ -2,7 +2,7 @@ html,body{
 	min-height: 100%;
 }
 body{
-	/*padding-bottom: 100px;*/
+	background-color: #f5f5f5;
 }
 /*nav*/
 .nav-user-img{
@@ -24,6 +24,77 @@ body{
 	cursor: pointer;
 	text-decoration: none;
 }
+
+/*index start*/
+.article-box{
+	background-color: #fff;
+	overflow: hidden;
+	padding-bottom: 10px;
+}
+.article-box + .article-box {
+	margin-top: 10px;
+}
+.article-box .media-left img{
+	width: 184px;
+	height: 110px;
+	border-radius: 4px;
+}
+.article-box .desc{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.article-box .media{
+	margin: 0px;
+	padding: 10px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.article-box .media:hover{
+	background-color: #ccc;
+}
+.article-box  a{
+	color: #666;
+}
+.article-box  a:hover{
+	color: #f60;
+}
+.article-box h2{
+	margin: 0px;
+	padding: 5px 10px;
+	border-bottom: 1px dashed #666;
+	color: #000;
+	line-height: 40px;
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+.article-box h2 a{
+	font-size: 2rem;
+}
+.article-box .author-create{
+	margin-bottom: 8px;
+}
+.article-box ul {
+	margin-bottom: 0px;
+}
+.article-box .list-group-item{
+	border: none;
+	cursor: pointer;
+}
+.article-box .list-group-item.active{
+	background-color: #ccc;
+}
+.article-box .list-group-item.active p{
+	display: block;
+}
+.article-box .list-group-item p{
+	display: none;
+	margin-bottom: 0px;
+	margin-top: 10px;
+} 
+/*index end*/
 /*user-details*/
 .user-box{
 	border: 1px solid #ddd;
@@ -112,7 +183,7 @@ body{
 }
 /*footer 頁脚*/
 footer {
-	padding-top: 5rem;	
+	padding: 4rem 0;	
 	width:  100%;
 }
 footer .friend-link{

@@ -530,6 +530,15 @@ var craeteHTML = {
 		})
 	},
 	/**
+	 * index 右侧 li 标签滑动切换
+	 * @return {[type]} [description]
+	 */
+	indexRightLiMove: function (){
+		$("#index-right-box .article-box li").mousemove(function() {
+			$(this).addClass('active').siblings().removeClass('active');
+		});
+	},
+	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
 	 */
@@ -545,6 +554,7 @@ var craeteHTML = {
 		this.deleteCommentTo();
 		this.addUserComment();
 		this.clickGetUserCommentPage();
+		this.indexRightLiMove();
 	}
 }
 var public = {

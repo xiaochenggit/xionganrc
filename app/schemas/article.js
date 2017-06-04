@@ -15,17 +15,14 @@ var ArticleSchema = new Schema({
     _id : '',
   },
   // 关键词
-  keyword : {
-    type : Array,
-    default : []
+  desc : {
+    type : String,
+    default : "描述"
   },
   content : String,
   // 分类
   categories: [{
-    articlecategory: {
-      type: ObjectId,
-      ref : 'articleCategory'
-    }
+   name:''
   }],
   // 浏览的人
   browseUsers: [{
