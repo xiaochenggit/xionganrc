@@ -539,6 +539,24 @@ var craeteHTML = {
 		});
 	},
 	/**
+	 * [BodyScroll side-bar 滚动返回顶部渐显, 返回顶部点击动画实现]
+	 */
+	BodyScroll: function (){
+		$(window).scroll(function(event) {
+			var $top = $(this).scrollTop()
+			var $returnTop = $("#returnTop");
+			if ($top > 600) {
+				$returnTop.show(200);
+			} else {
+				$returnTop.hide(200);
+			}
+		});
+		// 注火狐好像不支持body 所以加上了HTML
+		$("#returnTop").click(function(){
+			$('body,html').animate({'scrollTop': 0},500);
+		})
+	},
+	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
 	 */
@@ -555,6 +573,7 @@ var craeteHTML = {
 		this.addUserComment();
 		this.clickGetUserCommentPage();
 		this.indexRightLiMove();
+		this.BodyScroll();
 	}
 }
 var public = {

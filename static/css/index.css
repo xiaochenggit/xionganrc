@@ -7,7 +7,6 @@ body{
 /*side-bar*/
 .side-bar {
 	position: fixed;
-    padding: 0 16px;
     bottom: 150px;
     margin-top: -140px;
     right: 0;
@@ -15,17 +14,48 @@ body{
     background-color: #fff;
     box-shadow: 0 4px 12px 0 rgba(7,17,27,.1);
 }
+.side-bar .returnTop{
+	display: none;
+}
 .side-bar ul{
-	padding: 0px;
+	padding: 0 16px;
 	margin: 0px;
 	list-style: none;
+	position: relative;
 }
 .side-bar li{
 	margin: 5px 0px;
 }
+.side-bar li + li {
+	border-top: 1px solid #edf1f2;
+}
+.side-bar li div{
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+	padding: 15px;
+	background-color: #fff;
+	transform: translateX(calc(-100%));
+	box-shadow: 0 4px 12px 0 rgba(7,17,27,.1);
+	text-align: center;
+	line-height: 2rem;
+	height: auto;
+	width: 120px;
+	opacity: 0;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+.side-bar li:hover div {
+	opacity: 1;
+}
+.side-bar li div img{
+	width: 100%;
+}
 .side-bar li a {
 	font-size: 1.4rem;
-	line-height: 1.8rem;
+	line-height: 2rem;
 	width: 2.8rem;
 	display: inline-block;
 	text-decoration: none;
@@ -43,7 +73,7 @@ body{
 }
 .side-bar li a i{
 	font-size: 2.8rem;
-	line-height: 3.6rem;
+	line-height: 4rem;
 }
 /*nav*/
 .nav-user-img{
@@ -120,12 +150,14 @@ body{
 .article-box ul {
 	margin-bottom: 0px;
 }
+
 .article-box .list-group-item{
 	border: none;
 	cursor: pointer;
 }
 .article-box .list-group-item.active{
 	background-color: #ccc;
+	color: #666;
 }
 .article-box .list-group-item.active p{
 	display: block;
