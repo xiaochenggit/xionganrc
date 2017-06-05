@@ -4,6 +4,47 @@ html,body{
 body{
 	background-color: #f5f5f5;
 }
+/*side-bar*/
+.side-bar {
+	position: fixed;
+    padding: 0 16px;
+    bottom: 150px;
+    margin-top: -140px;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 4px 12px 0 rgba(7,17,27,.1);
+}
+.side-bar ul{
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+.side-bar li{
+	margin: 5px 0px;
+}
+.side-bar li a {
+	font-size: 1.4rem;
+	line-height: 1.8rem;
+	width: 2.8rem;
+	display: inline-block;
+	text-decoration: none;
+	color: #b5b9bc;
+}
+.side-bar li a span{
+	display: none;
+	color: #f01414;
+}
+.side-bar li a:hover span{
+	display: block;
+}
+.side-bar li a:hover  i{
+	display: none;
+}
+.side-bar li a i{
+	font-size: 2.8rem;
+	line-height: 3.6rem;
+}
 /*nav*/
 .nav-user-img{
 	width: 24px;

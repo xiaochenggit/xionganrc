@@ -33,7 +33,9 @@ exports.index = function (request, response) {
 				.populate()
 				.exec((error,articlesThree) => {
 					var  articlesBrowseUsers = articlesThree.sort(compareWithBrowseUsers);
-					articlesBrowseUsers.length = articlesUpdateAt.length = 5;
+					if ( articlesBrowseUsers.length > 5 ) {
+						articlesBrowseUsers.length = articlesUpdateAt.length = 5;
+					}
 					/**
 					 * [返回数据]
 					 * @param  {[Array]} artcates  [文章分类数组]

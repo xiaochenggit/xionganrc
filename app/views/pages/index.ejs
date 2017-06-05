@@ -5,7 +5,8 @@
   		<div class="col-md-8">
 			<% if (artcates && artcates.length > 0) { %>
 				<% artcates.forEach(function(item, index){ %>
-					<div class="article-box">
+					<% if (item.articles && item.articles.length > 0) { %>
+						<div class="article-box">
 				  		<h2><%= item.name %>
 								<% if (item.articles.length > maxNum) { %>
 									<% item.articles =  item.articles.splice(0,maxNum) %>
@@ -40,70 +41,72 @@
 		  				<% }) %>
 		  			<% } %>
 		  			</div>
+					<% } %>
 				<% }) %>
 			<% } %>
   		</div>
   		<div class="col-md-4" id="index-right-box">
-  				<div class="article-box" id="fire-articles">
-  					<h2>最热文章</h2>
-  					<ul class="list-group">
-						<% if (articlesHot && articlesHot.length > 0) { %>
-								<% articlesHot.forEach(function(item, index){ %>
-								  <% if (index == 0) { %>
-											<li class="list-group-item active">
-									<% } else { %>
-											<li class="list-group-item">
-									<%} %>
-								    <span class="badge"><%= item.browseUsers.length %></span>
-								    [
-								    <% item.categories.forEach(function(category, index){ %>
-												<a href="/admin/article/list?artCate=<%= category.name %>"><%= category.name %> </a>
-								    <% }) %>
-								    ]
-								    <a href="/article?id=<%= item._id %>"><%= item.title %></a>
-								    <p>
-								    		<a href="/user/details?id=<%= item.author._id %>">
-								    				<%= item.author.name %>
-								    		</a>
-								    		<span time="<%= item.updateAt %>" class="pull-right timeSpan">
-														<%= moment(item.updateAt).fromNow() %>
-								    		</span>
-								    </p>
-								  </li>
-								<% }) %>
-						<% } %>
-						</ul>
-  				</div>
-  				<div class="article-box" id="new-articles">
-  					<h2>最新更新</h2>
-  					<ul class="list-group">
-						<% if (articlesDate && articlesDate.length > 0) { %>
-								<% articlesDate.forEach(function(item, index){ %>
-									<% if (index == 0) { %>
-											<li class="list-group-item active">
-									<% } else { %>
-											<li class="list-group-item">
-									<%} %>
-								  	<span time="<%= item.updateAt %>" class="pull-right timeSpan">
-												<%= moment(item.updateAt).fromNow() %>
-								    </span>
-								    [
-								    <% item.categories.forEach(function(category, index){ %>
-												<a href="/admin/article/list?artCate=<%= category.name %>"><%= category.name %> </a>
-								    <% }) %>
-								    ]
-								    <a href="/article?id=<%= item._id %>"><%= item.title %></a>
-								    <p>
-								    		<a href="/user/details?id=<%= item.author._id %>">
-								    				<%= item.author.name %>
-								    		</a>
-								    		<span class="pull-right">浏览量: <%= item.browseUsers.length %></span>
-								    </p>
-								  </li>
-								<% }) %>
-						<% } %>
-						</ul>
-  				</div>
+			<div class="article-box" id="fire-articles">
+				<% if (articlesHot && articlesHot.length > 0) { %>
+				<h2>最热文章</h2>
+				<ul class="list-group">
+				<% articlesHot.forEach(function(item, index){ %>
+				  <% if (index == 0) { %>
+							<li class="list-group-item active">
+					<% } else { %>
+							<li class="list-group-item">
+					<%} %>
+				    <span class="badge"><%= item.browseUsers.length %></span>
+				    [
+				    <% item.categories.forEach(function(category, index){ %>
+								<a href="/admin/article/list?artCate=<%= category.name %>"><%= category.name %> </a>
+				    <% }) %>
+				    ]
+				    <a href="/article?id=<%= item._id %>"><%= item.title %></a>
+				    <p>
+				    		<a href="/user/details?id=<%= item.author._id %>">
+				    				<%= item.author.name %>
+				    		</a>
+				    		<span time="<%= item.updateAt %>" class="pull-right timeSpan">
+										<%= moment(item.updateAt).fromNow() %>
+				    		</span>
+				    </p>
+				  </li>
+				<% }) %>
+			</ul>
+			<% } %>
+			</div>
+			<div class="article-box" id="new-articles">
+				<% if (articlesDate && articlesDate.length > 0) { %>
+				<%= articlesDate.length %>
+				<h2>最新更新</h2>
+				<ul class="list-group">
+				<% articlesDate.forEach(function(item, index){ %>
+					<% if (index == 0) { %>
+							<li class="list-group-item active">
+					<% } else { %>
+							<li class="list-group-item">
+					<%} %>
+				  	<span time="<%= item.updateAt %>" class="pull-right timeSpan">
+								<%= moment(item.updateAt).fromNow() %>
+				    </span>
+				    [
+				    <% item.categories.forEach(function(category, index){ %>
+								<a href="/admin/article/list?artCate=<%= category.name %>"><%= category.name %> </a>
+				    <% }) %>
+				    ]
+				    <a href="/article?id=<%= item._id %>"><%= item.title %></a>
+				    <p>
+				    		<a href="/user/details?id=<%= item.author._id %>">
+				    				<%= item.author.name %>
+				    		</a>
+				    		<span class="pull-right">浏览量: <%= item.browseUsers.length %></span>
+				    </p>
+				  </li>
+				<% }) %>
+			</ul>
+			<% } %>
+			</div>
   		</div>
 	</div>
  </div>
