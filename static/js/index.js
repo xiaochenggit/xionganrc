@@ -551,7 +551,7 @@ var craeteHTML = {
 				$returnTop.hide(200);
 			}
 		});
-		// 注火狐好像不支持body 所以加上了HTML
+		// 注 火狐好像不支持body 所以加上了HTML
 		$("#returnTop").click(function(){
 			$('body,html').animate({'scrollTop': 0},500);
 		})

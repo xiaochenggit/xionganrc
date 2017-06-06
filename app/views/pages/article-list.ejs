@@ -1,81 +1,69 @@
 <%- include('../comments/header')%>
 <%- include('../comments/navigation')%>
 <div class="container">
-	<h2><%= title %> 最大頁數<%=Maxpage %> 當前頁數<%= page + 1 %> by <%= by %></h2>
-	<table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>标题</th>
-          <th>作者</th>
-          <th>發布時間</th>
-          <th>更新時間</th>
-          <th>查看信息</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (articles && articles.length > 0) { %>
-            <% articles.forEach(function (item,index) { %>
-                <% if(item) { %>
-                  <tr>
-                    <td>
-                      <p class="list-group-item">
-                         <a href="/article?id=<%=item._id %>">
-                           <%= item.title %>
-                         </a>
-                         <span class="badge"><%= item.browseUsers.length %></span>
-                      </p>
-                    </td>
-                    <td><a href="/user/details?id=<%=item.author._id%>"><%= item.author.name %></a></td>
-                    <td><%= moment(item.createAt).format('YYYY/MM/DD HH:mm:ss') %></td>
-                    <td><%= moment(item.updateAt).format('YYYY/MM/DD HH:mm:ss') %></td>
-                    <td>
-                      <a href="/article?id=<%=item._id %>" class='btn btn-info btn-xs'>
-                      查看</a>
-                    </td>
-                    <td>
-                    <button class="deleteActicle btn btn-danger btn-xs" data-id='<%=item._id %>'>删除</button>
-                    </td>
-                  </tr>
-               <% }  %>
-            <% }); %>
-        <% } %>
-
-      </tbody>
-    </table>
-    <nav aria-label="...">
-      <ul class="pager">
-      <%  if (page <= 0) { %>
-            <li class="previous disabled">
-              <a href="javascript:;">
-                <span aria-hidden="true">&larr;</span> Older
-              </a>
-            </li>
-      <%  } else { %>
-            <% var url = '?index=' + (page-1) %>
-            <% if (userId) { url = url + '&id=' + userId } %>
-            <% if (artCate) { url = url + '&artCate=' + artCate } %>
-            <li class="previous">
-              <a href="<%=url%>">
-                <span aria-hidden="true">&larr;</span> Older
-              </a>
-            </li>
-      <%  } %>
-      <%  if (page >= Maxpage-1) { %>
-            <li class="next disabled">
-              <a href="javascript:;">Newer <span aria-hidden="true">&rarr;</span>
-              </a>
-            </li>
-      <%  } else { %>
-            <% var url = '?index=' + (page+1) %>
-            <% if (userId) { url = url + '&id=' + userId } %>
-            <% if (artCate) { url = url + '&artCate=' + artCate } %>
-            <li class="next">
-              <a href="<%=url%>">Newer <span aria-hidden="true">&rarr;</span>
-              </a>
-            </li>
-      <%  } %>
-      </ul>
-    </nav>
+  <ol class="breadcrumb">
+  <li><a href="/">首页</a></li>
+  <li><a href="/admin/article/list">文章列表</a></li>
+  <li class="active"><%= by %></li>
+  </ol>
+  <div class="article-box">
+     <% if (articles && articles.length > 0) { %>
+        <% articles.forEach(function (item,index) { %>
+            <% if(item) { %>
+              <div class="media">
+                <div class="media-body">
+                  <h4 class="media-heading">
+                    <a href="/article?id=<%= item._id %>">
+                    <%= item.title %>
+                    </a>
+                  </h4>
+                  <p class="author-create">
+                    <a href="/user/details?id=<%=item.author._id %>">
+                      <%=item.author.name %>
+                    </a> 
+                    <%= moment(item.createAt).format('MM/DD HH:mm:ss') %> 
+                  </p>
+                  <p class="desc"><%= item.desc %></p>
+                </div>
+              </div>
+           <% }  %>
+        <% }); %>
+    <% } %>
+  </div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li>
+          <span aria-hidden="true">第<%= page %>/<%= Maxpage %>页 每页10条</span>
+      </li>
+      <% var url='' %>
+      <% if (userId) { url = url + '&id=' + userId } %>
+      <% if (artCate) { url = url + '&artCate=' + artCate } %>
+      <li><a href="?index=1<%= url %>">首页</a></li>
+      <li>
+        <a href="?index=<%= page - 1 %><%= url %>" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <% if (page - 2 > 0) { %>
+        <li><a href="?index=<%= page - 2 %><%= url %>"><%= page - 2 %></a></li>
+      <% } %>
+      <% if (page - 1 > 0) { %>
+        <li><a href="?index=<%= page - 1 %><%= url %>"><%= page - 1 %></a></li>
+      <% } %>
+      <li class="active"><a href="javascript:;"><%= page %></a></li>
+      <% if (page + 1 <= Maxpage) { %>
+        <li><a href="?index=<%= page + 1 %><%= url %>"><%= page + 1 %></a></li>
+      <% } %>
+      <% if (page + 2 <= Maxpage) { %>
+        <li><a href="?index=<%= page + 2 %><%= url %>"><%= page + 2 %></a></li>
+      <% } %>
+      <li>
+        <a href="?index=<%= page + 1 %><%= url %>" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <li><a href="?index=<%= Maxpage %><%= url %>">尾页</a></li>
+    </ul>
+  </nav>
 </div>
 <%- include('../comments/footer')%>

@@ -112,12 +112,12 @@ var compare = function (x, y) {
 // 文章列表
 exports.articleList = function (request, response) {
 	const pageArts = 2;
-	const page = parseInt(request.query.index || 0);
+	var  page = parseInt(request.query.index || 0);
 	const userId = request.query.id || "";
 	const artCate = request.query.artCate || "";
 	if (userId) {
 		User.findOne({_id:userId})
-		.populate('articles.article','title updateAt createAt author browseUsers')
+		.populate('articles.article','title updateAt createAt author browseUsers desc')
 		.exec((error,user)=>{
 			if (error) {
 				console.log(error);
@@ -127,17 +127,21 @@ exports.articleList = function (request, response) {
 					articles.push(element.article)
 				});
 				articles = articles.sort(compare);
-				var Maxpage = Math.ceil(articles.length/pageArts)
-				if (page >= Maxpage) {
-					articles = articles.splice((Maxpage-1)*pageArts,pageArts);
-				} else {
-					articles = articles.splice(page*pageArts,pageArts);
+				var Maxpage = Math.ceil(articles.length / pageArts);
+				console.log(Maxpage);
+				if (page < 1) {
+					page = 1
 				}
+				if (page > Maxpage) {
+					page = Maxpage
+				}
+				articles = articles.splice((page - 1)*pageArts,pageArts);
 				response.render('article-list',{
 					title : '文章列表',
 					articles : articles,
 					Maxpage : Maxpage,
 					page : page,
+					pageArts: pageArts,
 					userId : user._id,
 					artCate : '',
 					by: user.name
@@ -146,24 +150,28 @@ exports.articleList = function (request, response) {
 		})
 	} else if (artCate) {
 		ArtCate.findOne({name: artCate})
-		.populate('articles.article','title updateAt createAt author browseUsers')
+		.populate('articles.article','title updateAt createAt author browseUsers desc')
 		.exec((error,artcate)=>{
 			var articles = [];
 			artcate.articles.forEach( function(element, index) {
 				articles.push(element.article)
 			});
 			articles = articles.sort(compare);
-			var Maxpage = Math.ceil(articles.length/pageArts);
-			if (page >= Maxpage) {
-				articles = articles.splice((Maxpage-1)*pageArts,pageArts);
-			} else {
-				articles = articles.splice(page*pageArts,pageArts);
+			var Maxpage = Math.ceil(articles.length / pageArts);
+			console.log(Maxpage);
+			if (page < 1) {
+				page = 1
 			}
+			if (page > Maxpage) {
+				page = Maxpage
+			}
+			articles = articles.splice((page - 1)*pageArts,pageArts);
 			response.render('article-list',{
 				title : '文章列表',
 				articles : articles,
 				Maxpage : Maxpage,
 				page : page,
+				pageArts: pageArts,
 				userId : '',
 				artCate : artCate,
 				by: artCate
@@ -176,17 +184,21 @@ exports.articleList = function (request, response) {
 				console.log(error);
 			} else {
 				articles = articles.sort(compare);
-				var Maxpage = Math.ceil(articles.length/pageArts);
-				if (page >= Maxpage) {
-					articles = articles.splice((Maxpage-1)*pageArts,pageArts);
-				} else {
-					articles = articles.splice(page*pageArts,pageArts);
+				var Maxpage = Math.ceil(articles.length / pageArts);
+				console.log(articles.length);
+				if (page < 1) {
+					page = 1
 				}
+				if (page > Maxpage) {
+					page = Maxpage
+				}
+				articles = articles.splice((page - 1)*pageArts,pageArts);
 				response.render('article-list',{
 					title : '文章列表',
 					articles : articles,
 					Maxpage : Maxpage,
 					page:page,
+					pageArts: pageArts,
 					userId : '',
 					artCate : '',
 					by : '所有文章'
