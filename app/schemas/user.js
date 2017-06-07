@@ -59,6 +59,12 @@ var UserSchema = new Schema({
       ref : 'Article'
     }
   }],
+  collectionArticles:[{
+    article: {
+      type : ObjectId,
+      ref : 'Article'
+    }
+  }],
   // 最近浏览
   browseUsers: [{
     user : {

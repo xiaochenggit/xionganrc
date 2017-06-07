@@ -556,6 +556,23 @@ var craeteHTML = {
 			$('body,html').animate({'scrollTop': 0},500);
 		})
 	},
+	articleCollection: function(){
+		$(".articel-cont .desc .glyphicon-star").click(function() {
+			var $this = $(this);
+			var articleId = $(this).attr('article-id');
+			if ($this.hasClass('collectioned')) {
+				public.addArticleCollection('', articleId, function(){
+					$this.removeClass('collectioned');
+					$("#collection").html('收藏');
+				})
+			} else {
+				public.addArticleCollection(true, articleId, function(){
+					$this.addClass('collectioned');
+					$("#collection").html('已收藏');
+				})
+			}
+		});
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -574,6 +591,7 @@ var craeteHTML = {
 		this.clickGetUserCommentPage();
 		this.indexRightLiMove();
 		this.BodyScroll();
+		this.articleCollection();
 	}
 }
 var public = {
@@ -584,6 +602,7 @@ var public = {
 	userMessage: '/usermessage', // 获得用户信息
 	userList: "/admin/user/list",
 	deleteArticleCategory: "/admin/articlecategory/delete?id=", // 删除文章分页
+	articleCollection: '/article/collection',
 	/**
 	 * [showTime 展示时间]
 	 * @param  {[string]} id [dom ID]
@@ -615,6 +634,24 @@ var public = {
 				alert(result.msg)
 			}
 		})
+	},
+	addArticleCollection: function(isAdd,id, callback) {
+		var self = this;
+		$.ajax({
+			url: self.articleCollection,
+			type: 'POST',
+			data: {
+				isAdd: isAdd,
+				id: id
+			},
+			dataType: 'json'
+		}).done(function(result) {
+			if (result.code == 200) {
+				callback && callback();
+			} else {
+				alert(result.msg)
+			}
+		})	
 	},
 	/**
 	 * [getUserCommentPage 获得用户留言分页信息]

@@ -11,7 +11,7 @@
 </head>
 <body>
 <%- include('../comments/navigation')%>
-<div class="container">
+<div class="container articel-cont">
 	<div class="head">
 		<h1 class="title text-center"><%= article.title %></h1>
 		<div class="des text-center">
@@ -24,7 +24,16 @@
 			<!-- <span>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span> -->
 		</div>
 	</div>
-	<div>浏览人数:<%= article.browseUsers.length %></div>
+	<div class="desc">
+		<span class="browseUsers">浏览人数:<%= article.browseUsers.length %></span>
+		<span class="collec">
+			<% if (!isCollection) { %>
+			<span id="collection">收藏</span><span class="glyphicon glyphicon-star" aria-hidden="true" article-id="<%= article._id %>"></span>
+			<% } else { %>
+			<span id="collection">已收藏</span><span class="glyphicon glyphicon-star collectioned" aria-hidden="true" article-id="<%= article._id %>"></span>
+			<% } %>
+		</span>
+	</div>
 	<!-- <% if (article.browseUsers && article.browseUsers.length > 0) { %>
 	  <% article.browseUsers.forEach(function(item,index){ %>
 		   <p>用户名:<%= item.user.name %>   </p>

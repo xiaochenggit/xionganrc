@@ -6,36 +6,36 @@
     <li><a href="/admin/article/list">文章列表</a></li>
     <li class="active"><%= by %></li>
   </ol>
+   <% if (articles && articles.length > 0) { %>
   <div class="article-box">
-     <% if (articles && articles.length > 0) { %>
-        <% articles.forEach(function (item,index) { %>
-            <% if(item) { %>
-              <div class="media">
-                <div class="media-body">
-                  <h4 class="media-heading">
-                    <a href="/article?id=<%= item._id %>">
-                    <%= item.title %>
-                    </a>
-                  </h4>
-                  <p class="author-create">
-                    <a href="/user/details?id=<%=item.author._id %>">
-                      <%=item.author.name %>
-                    </a> 
-                    <%= moment(item.createAt).format('MM/DD HH:mm:ss') %> 
-                  </p>
-                  <p class="desc"><%= item.desc %></p>
-                </div>
-              </div>
-           <% }  %>
-        <% }); %>
-    <% } %>
+    <% articles.forEach(function (item,index) { %>
+        <% if(item) { %>
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">
+                <a href="/article?id=<%= item._id %>">
+                <%= item.title %>
+                </a>
+              </h4>
+              <p class="author-create">
+                <a href="/user/details?id=<%=item.author._id %>">
+                  <%=item.author.name %>
+                </a> 
+                <%= moment(item.createAt).format('MM/DD HH:mm:ss') %> 
+              </p>
+              <p class="desc"><%= item.desc %></p>
+            </div>
+          </div>
+       <% }  %>
+    <% }); %>
   </div>
+  <% } %>
   <div class="article-list-page">
     <% if (Maxpage > 0) { %>
       <nav aria-label="Page navigation">
         <ul class="pagination">
           <li>
-              <span aria-hidden="true">第<%= page %>/<%= Maxpage %>页 每页<%= pageArts %>条</span>
+              <span aria-hidden="true">第<%= page %>/<%= Maxpage %>页 每页<%= pageArts %>条> </span>
           </li>
           <% var url='' %>
           <% if (userId) { url = url + '&id=' + userId } %>

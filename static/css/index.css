@@ -258,6 +258,7 @@ body{
 #userCommentForm .alert{
 	width: 300px;
 }
+/*user-details*/
 /*分页*/
 .page nav{
 	text-align: center;
@@ -332,3 +333,26 @@ footer .machine{
 	display: inline-block;
 }
 /*article-list end*/
+
+/*articlecategory-list start*/
+.articlecategory-list div{
+	margin-bottom: 1rem;
+}
+/*articlecategory-list end*/
+
+/*article start*/
+
+.articel-cont .desc{
+	/*line-height: 2rem;*/
+}
+.articel-cont .desc .glyphicon-star{
+	vertical-align: top;
+	margin: 2px 0.5rem 0px;
+}
+.articel-cont .desc .collec{
+	margin-left: 3rem;
+}
+.articel-cont .desc .collectioned{
+	color: red;
+}
+/*article start*/

@@ -46,8 +46,8 @@
 			<% } %>
   		</div>
   		<div class="col-md-4" id="index-right-box">
+  			<% if (articlesHot && articlesHot.length > 0) { %>
 			<div class="article-box" id="fire-articles">
-				<% if (articlesHot && articlesHot.length > 0) { %>
 				<h2>最热文章</h2>
 				<ul class="list-group">
 				<% articlesHot.forEach(function(item, index){ %>
@@ -74,10 +74,10 @@
 				  </li>
 				<% }) %>
 			</ul>
-			<% } %>
 			</div>
+			<% } %>
+			<% if (articlesDate && articlesDate.length > 0) { %>
 			<div class="article-box" id="new-articles">
-				<% if (articlesDate && articlesDate.length > 0) { %>
 				<h2>最新更新</h2>
 				<ul class="list-group">
 				<% articlesDate.forEach(function(item, index){ %>
@@ -104,8 +104,8 @@
 				  </li>
 				<% }) %>
 			</ul>
-			<% } %>
 			</div>
+			<% } %>
   		</div>
 	</div>
  </div>

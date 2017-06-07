@@ -14,6 +14,12 @@ var ArticleSchema = new Schema({
     name : String,
     _id : '',
   },
+  collectionUsers:[{
+    user: {
+      type : ObjectId,
+      ref: 'User'
+    }
+  }],
   // 关键词
   desc : {
     type : String,

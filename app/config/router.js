@@ -53,6 +53,7 @@ let router = function (app) {
 	app.post('/admin/article', Article.save);
 	app.get('/article', Article.article)
 	app.get('/admin/article/list', Article.articleList)
+	app.post('/article/collection', Article.collection) 
 	app.delete('/admin/article/delete', Article.delete);
 
 	// 文章分类页面

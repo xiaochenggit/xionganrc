@@ -85,13 +85,7 @@ exports.postSignin = function (request, response) {
 }
 
 var compare = function (x, y) {
-    if (x.updateAt < y.updateAt) {
-        return -1;
-    } else if (x.updateAt > y.updateAt) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return y.updateAt - x.updateAt;
 }
 
 exports.userList = function (request, response) {

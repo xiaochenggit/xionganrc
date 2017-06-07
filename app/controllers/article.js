@@ -90,9 +90,17 @@ exports.article = function (request, response) {
 						},
 						time :  new Date().getTime()
 					});
+					var isCollection = false;
+					article.collectionUsers.forEach( function(element, index) {
+						if (element.user == request.session.user._id) {
+							isCollection = true;
+							return;
+						}
+					});
 					article.save((error,article) => {
 						response.render('article',{
-							article : article
+							article : article,
+							isCollection: isCollection
 						})
 					});
 				})
@@ -128,7 +136,6 @@ exports.articleList = function (request, response) {
 				});
 				articles = articles.sort(compare);
 				var Maxpage = Math.ceil(articles.length / pageArts);
-				console.log(Maxpage);
 				if (page < 1) {
 					page = 1
 				}
@@ -158,7 +165,6 @@ exports.articleList = function (request, response) {
 			});
 			articles = articles.sort(compare);
 			var Maxpage = Math.ceil(articles.length / pageArts);
-			console.log(Maxpage);
 			if (page < 1) {
 				page = 1
 			}
@@ -185,7 +191,6 @@ exports.articleList = function (request, response) {
 			} else {
 				articles = articles.sort(compare);
 				var Maxpage = Math.ceil(articles.length / pageArts);
-				console.log(articles.length);
 				if (page < 1) {
 					page = 1
 				}
@@ -258,5 +263,61 @@ exports.delete = function (request, response) {
 				})
 			}
 		});
+	}
+}
+
+exports.collection = function (request, response) {
+	var isAdd = request.body.isAdd;
+	var articleId = request.body.id;
+	console.log(isAdd,articleId);
+	var userId = request.session.user._id;
+	if (userId) {
+		if (isAdd) {
+			Article.findOne({_id: articleId}, (error, article) => {
+				article.collectionUsers.unshift({ user: userId});
+				article.save(()=>{
+					User.findOne({_id: userId}, (error, user) => {
+						user.collectionArticles.push({ article: articleId})
+						user.save(() => {
+							response.json({
+								code: 200,
+								msg: '收藏文章成功！'
+							})
+						})
+					})
+				})
+			})
+		} else {
+			User.findOne({_id: userId}, (error, user) => {
+				user.collectionArticles.forEach( function(element, index) {
+					console.log(element.article);
+					if (element.article == articleId) {
+						user.collectionArticles.splice(index, 1);
+						return;
+					}
+				});
+				user.save(() => {
+				});
+			})
+			Article.findOne({_id: articleId}, (error, article) => {
+				article.collectionUsers.forEach( function(element, index) {
+					if (element.user == userId) {
+						article.collectionUsers.splice(index, 1);
+						return;
+					}
+				});
+				article.save(() => {
+					response.json({
+						code: 200,
+						msg: '取消收藏文章成功!'
+					})
+				});
+			})
+		}
+	} else {
+		response.json({
+			code: 400,
+			msg: '请先登录!'
+		})
 	}
 }
