@@ -318,9 +318,9 @@ footer .machine{
 }
 
 /*article-list start*/
-.article-list .breadcrumb {
+.breadcrumb {
 	padding: 8px 0px;
-	margin: 0px 0  0px 10px;
+	margin: 0px 0  10px 0px;
 }
 .article-list .article-box{
 	padding-top: 10px;

@@ -1,9 +1,25 @@
 <%- include('../comments/header')%>
 <%- include('../comments/navigation')%>
 <div class="container">
-	<h2><%= title %></h2>
+	<ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">文章分类列表</li>
+  </ol>
+  <div class="row">
+    <% if (artCates && artCates.length > 0) { %>
+      <% artCates.forEach(function (item,index) { %>
+        <div class="col-sm-12 col-md-6">
+          <a href="/admin/article/list?artCate=<%=item.name%>" class="list-group-item" title="查看">
+            <span class="badge"><%= item.articles.length %></span>
+            <%= item.name %>
+          </a>
+        </div>
+      <% }); %>
+    <% } %>
+    
+  </div>
 	<table class="table table-bordered">
-      <thead>
+      <!-- <thead>
         <tr>
           <th>分类名字</th>
           <th>创建时间</th>
@@ -35,6 +51,6 @@
             <% }); %>
         <% } %>
       </tbody>
-    </table>
+    </table> -->
 </div>
 <%- include('../comments/footer')%>
