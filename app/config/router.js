@@ -40,6 +40,7 @@ let router = function (app) {
 	app.post('/user/signin', User.postSignin);
 	app.get('/admin/user/list', User.userList);
 	app.get('/user/details' , User.details);
+	app.get('/user/wall' , User.wall);
 	app.post('/userComment', UserComment.comment);
 	app.post('/user/follows', User.follows);
 	app.get('/user/secrecy', User.secrecy);

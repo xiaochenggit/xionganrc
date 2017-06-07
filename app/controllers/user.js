@@ -39,6 +39,11 @@ exports.getSignin = function (request,response) {
 		title : '用户登录'
 	})
 }
+exports.wall = function (request,response) {
+	response.render('wall',{
+		title : '用户登录'
+	})
+}
 exports.logout = function (request , response) {
 	request.session.user = '';
 	response.redirect('/');
