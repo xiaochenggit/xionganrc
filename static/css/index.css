@@ -341,13 +341,16 @@ footer .machine{
 /*articlecategory-list end*/
 
 /*article start*/
-
+.articel-cont{
+	word-wrap:break-word;
+}
 .articel-cont .desc{
 	/*line-height: 2rem;*/
 }
 .articel-cont .desc .glyphicon-star{
 	vertical-align: top;
 	margin: 2px 0.5rem 0px;
+	cursor: pointer;
 }
 .articel-cont .desc .collec{
 	margin-left: 3rem;

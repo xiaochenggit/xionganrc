@@ -56,7 +56,7 @@ $(function (){
 			url : '/admin/article/delete?id=' + id
 		}).done(function (result) {
 			if (result.success == 1) {
-				$this.parents('tr').remove();
+				$this.parents('.media').remove();
 			}
 		})
 	});

@@ -76,20 +76,24 @@ exports.article = function (request, response) {
 				console.log(error);
 			} else {
 				User.findOne({_id:request.session.user._id},(error,user) => {
-					for (var i = 0 ; i< article.browseUsers.length; ) {
-						if (article.browseUsers[i].user._id == request.session.user._id) {
-							article.browseUsers.splice(i, 1);
-						} else {
-							i ++;
+					// 判断是否浏览过
+					var isBrowse = false;
+					article.browseUsers.forEach( function(element, index) {
+						if (element.user._id == request.session.user._id) {
+							isBrowse = true;
+							return;
 						}
-					}
-					article.browseUsers.unshift({
-						user: {
-							name : user.name,
-							_id : user._id
-						},
-						time :  new Date().getTime()
 					});
+					if (!isBrowse) {
+						article.browseUsers.unshift({
+							user: {
+								name : user.name,
+								_id : user._id
+							},
+							time :  new Date().getTime()
+						});
+					}
+					// 判断是否收藏
 					var isCollection = false;
 					article.collectionUsers.forEach( function(element, index) {
 						if (element.user == request.session.user._id) {
@@ -240,16 +244,31 @@ exports.delete = function (request, response) {
 				// 找到分类
 				var categories = article.categories;
 				categories.forEach( function(category, index) {
-					ArtCate.findOne({_id: category.articlecategory}, (error,categorysBycate) => {
+					ArtCate.findOne({name: category.name}, (error,categorysBycate) => {
 						categorysBycate.articles.forEach( function(element, index) {
 							if (element.article == id) {
 								categorysBycate.articles.splice(index, 1);
 								return;
 							}
 						});
-						categorysBycate.save( () => {
-						})
+						categorysBycate.save(()=>{
+						});
 					});
+				});
+				// 收藏用户数组
+				var collectionUsers = article.collectionUsers;
+				collectionUsers.forEach( function(element, index) {
+					User.findOne({_id: userId}, (error, user) => {
+						user.collectionArticles.forEach( function(element, index) {
+							if (element.article == id) {
+								console.log('1')
+								user.collectionArticles.splice(index, 1);
+								user.save(() => {
+								});
+								return;
+							}
+						});
+					})
 				});
 				Article.remove({_id: id},(error) => {
 					if (error) {
@@ -265,19 +284,26 @@ exports.delete = function (request, response) {
 		});
 	}
 }
-
+/**
+ * [collection 文章收藏与取消收藏]
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[type]}          [description]
+ */
 exports.collection = function (request, response) {
 	var isAdd = request.body.isAdd;
 	var articleId = request.body.id;
-	console.log(isAdd,articleId);
 	var userId = request.session.user._id;
+	// 必须登录
 	if (userId) {
+		// 添加收藏
 		if (isAdd) {
+			// 找到该文章收藏人数组里面添加user 、 在该user 的收藏文章数组里面添加该文章
 			Article.findOne({_id: articleId}, (error, article) => {
 				article.collectionUsers.unshift({ user: userId});
 				article.save(()=>{
 					User.findOne({_id: userId}, (error, user) => {
-						user.collectionArticles.push({ article: articleId})
+						user.collectionArticles.unshift({ article: articleId})
 						user.save(() => {
 							response.json({
 								code: 200,
@@ -288,9 +314,10 @@ exports.collection = function (request, response) {
 				})
 			})
 		} else {
+			// 取消收藏
+			// 找到该文章收藏人数组刨除该user 、 在该user 的收藏文章数组里面刨除该文章
 			User.findOne({_id: userId}, (error, user) => {
 				user.collectionArticles.forEach( function(element, index) {
-					console.log(element.article);
 					if (element.article == articleId) {
 						user.collectionArticles.splice(index, 1);
 						return;
