@@ -238,6 +238,12 @@ exports.delete = function (request, response) {
 							return;
 						}
 					});
+					user.collectionArticles.forEach( function(element, index) {
+						if (element.article == id) {
+							user.collectionArticles.splice(index, 1);
+							return;
+						}
+					});
 					user.save(() => {
 					});
 				})
@@ -256,20 +262,19 @@ exports.delete = function (request, response) {
 					});
 				});
 				// 收藏用户数组
-				var collectionUsers = article.collectionUsers;
-				collectionUsers.forEach( function(element, index) {
-					User.findOne({_id: userId}, (error, user) => {
-						user.collectionArticles.forEach( function(element, index) {
-							if (element.article == id) {
-								console.log('1')
-								user.collectionArticles.splice(index, 1);
-								user.save(() => {
-								});
-								return;
-							}
-						});
-					})
-				});
+				// var collectionUsers = article.collectionUsers;
+				// collectionUsers.forEach( function(element, index) {
+				// 	User.findOne({_id: userId}, (error, user) => {
+				// 		user.collectionArticles.forEach( function(element, index) {
+				// 			if (element.article == id) {
+				// 				user.collectionArticles.splice(index, 1);
+				// 				user.save(() => {
+				// 				});
+				// 				return;
+				// 			}
+				// 		});
+				// 	})
+				// });
 				Article.remove({_id: id},(error) => {
 					if (error) {
 						console.log(error);

@@ -332,6 +332,18 @@ footer .machine{
 .article-list .article-list-page nav{
 	display: inline-block;
 }
+.article-list .media{
+	position: relative;
+}
+.article-list .media:hover .btn{
+	display: block;
+}
+.article-list .media .btn{
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	display: none;
+}
 /*article-list end*/
 
 /*articlecategory-list start*/
