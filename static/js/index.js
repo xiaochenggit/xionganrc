@@ -1,12 +1,26 @@
 $(function (){
 	// 添加文章
 	$("#articleForm").submit(function(event) {
+		$title = $("#title");
+		if (!$title.val().trim()) {
+			alert('文章标题不能为空！');
+			return false;
+		}
+		$keyword = $("#keyword");
+		if (!$keyword.val().trim()) {
+			alert('文章描述不能为空！');
+			return false;
+		}
 		var artcates = $("#articleForm input[type='checkbox']:checked");
 		if (!artcates.length) {
 			alert("请选择分类")
 			return false;
 		}
-		
+		var $content = $("#ueditor_textarea_editorValue").val();
+		if (!$content.trim()) {
+			alert("文章内容不能为空")
+			return false;
+		}
 	});
 	// 导航时间
 	public.showTime("showTime");

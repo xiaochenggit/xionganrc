@@ -78,6 +78,10 @@ exports.article = function (request, response) {
 				User.findOne({_id:request.session.user._id},(error,user) => {
 					// 判断是否浏览过
 					var isBrowse = false;
+					if (!article) {
+						response.redirect('/');
+						return;
+					}
 					article.browseUsers.forEach( function(element, index) {
 						if (element.user._id == request.session.user._id) {
 							isBrowse = true;
@@ -238,13 +242,22 @@ exports.delete = function (request, response) {
 							return;
 						}
 					});
-					user.collectionArticles.forEach( function(element, index) {
-						if (element.article == id) {
-							user.collectionArticles.splice(index, 1);
-							return;
-						}
-					});
 					user.save(() => {
+						//收藏用户数组
+						var collectionUsers = article.collectionUsers;
+						collectionUsers.forEach( function(element, index) {
+							User.findOne({_id: element.user}, (error, user) => {
+								user.collectionArticles.forEach( function(element, index) {
+									if (element.article == id) {
+										user.collectionArticles.splice(index, 1);
+										return;
+									}
+								});
+								user.save(() => {
+									
+								});
+							})
+						});
 					});
 				})
 				// 找到分类
@@ -261,20 +274,6 @@ exports.delete = function (request, response) {
 						});
 					});
 				});
-				// 收藏用户数组
-				// var collectionUsers = article.collectionUsers;
-				// collectionUsers.forEach( function(element, index) {
-				// 	User.findOne({_id: userId}, (error, user) => {
-				// 		user.collectionArticles.forEach( function(element, index) {
-				// 			if (element.article == id) {
-				// 				user.collectionArticles.splice(index, 1);
-				// 				user.save(() => {
-				// 				});
-				// 				return;
-				// 			}
-				// 		});
-				// 	})
-				// });
 				Article.remove({_id: id},(error) => {
 					if (error) {
 						console.log(error);

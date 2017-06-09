@@ -62,5 +62,6 @@ let router = function (app) {
 	app.get('/admin/articlecategory/list', ArticleCategory.list)
 	app.get('/articlecategory', ArticleCategory.articlecategory)
 	app.delete('/admin/articlecategory/delete', ArticleCategory.delete);
+	app.get("/*",Index.error);
 }
 module.exports = router;

@@ -54,4 +54,9 @@ exports.index = function (request, response) {
 				
 			})
 		})
-} 
+}
+exports.error = (request, response) =>{
+	response.render('404',{
+		title: '404'
+	})
+}
