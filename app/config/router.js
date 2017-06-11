@@ -68,6 +68,6 @@ let router = function (app) {
 	app.get('/user/note/new', Note.new);
 	app.post('/editor/images', Note.images);
 
-	//app.get("/*",Index.error);
+	app.get("/*",Index.error);
 }
 module.exports = router;
