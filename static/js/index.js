@@ -580,9 +580,9 @@ var craeteHTML = {
 					$("#collection").html('收藏');
 				})
 			} else {
-				public.addArticleCollection(true, articleId, function(){
+				public.addArticleCollection(true, articleId, function(length){
 					$this.addClass('collectioned');
-					$("#collection").html('已收藏');
+					$("#collection").html(`已收藏(${length})`);
 				})
 			}
 		});
@@ -661,7 +661,7 @@ var public = {
 			dataType: 'json'
 		}).done(function(result) {
 			if (result.code == 200) {
-				callback && callback();
+				callback && callback(result.collectionlength);
 			} else {
 				alert(result.msg)
 			}

@@ -68,6 +68,7 @@ exports.save = function (request, response) {
 // 文章内容页面
 exports.article = function (request, response) {
 	var id = request.query.id;
+	console.log(id);
 	if (id) {
 		Article.findOne({_id: id})
 		// .populate('author', 'name')
@@ -311,6 +312,7 @@ exports.collection = function (request, response) {
 						user.save(() => {
 							response.json({
 								code: 200,
+								collectionlength: article.collectionUsers.length,
 								msg: '收藏文章成功！'
 							})
 						})

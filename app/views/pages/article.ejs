@@ -7,7 +7,9 @@
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<script type="text/javascript" src='/js/jquery-2.1.4.min.js'></script>
 	<script type="text/javascript" src='/js/bootstrap.min.js'></script>
+	<script type="text/javascript" src='/js/moment.js'></script>
 	<script type="text/javascript" src='/js/index.js'></script>
+	<script type="text/javascript" src=""></script>
 </head>
 <body>
 <%- include('../comments/navigation')%>
@@ -17,7 +19,7 @@
 		<div class="des text-center">
 			<span><a href="/user/details?id=<%= article.author._id %>">作者：<%= article.author.name %></a></span>
 			<span>发布时间: 
-				<span class=" timeSpan" time="<%= article.createAt %>" >
+				<span class="timeSpan" time="<%=article.updateAt %>" >
                     <%= moment(parseInt(article.updateAt)).fromNow() %>
                 </span>
 			</span>
@@ -30,7 +32,7 @@
 			<% if (!isCollection) { %>
 			<span id="collection">收藏</span><span class="glyphicon glyphicon-star" aria-hidden="true" article-id="<%= article._id %>"></span>
 			<% } else { %>
-			<span id="collection">已收藏</span><span class="glyphicon glyphicon-star collectioned" aria-hidden="true" article-id="<%= article._id %>"></span>
+			<span id="collection">已收藏(<%= article.collectionUsers.length %>)</span><span class="glyphicon glyphicon-star collectioned" aria-hidden="true" article-id="<%= article._id %>"></span>
 			<% } %>
 		</span>
 	</div>

@@ -4,6 +4,7 @@ const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
 const ArticleCategory = require('../controllers/articleCategory');
+const Note = require('../controllers/note');
 const Moment = require('moment');
 Moment.lang('zh-cn');
 let router = function (app) {
@@ -62,6 +63,11 @@ let router = function (app) {
 	app.get('/admin/articlecategory/list', ArticleCategory.list)
 	app.get('/articlecategory', ArticleCategory.articlecategory)
 	app.delete('/admin/articlecategory/delete', ArticleCategory.delete);
-	app.get("/*",Index.error);
+
+	// note
+	app.get('/user/note/new', Note.new);
+	app.post('/editor/images', Note.images);
+
+	//app.get("/*",Index.error);
 }
 module.exports = router;
