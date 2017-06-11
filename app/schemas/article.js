@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 var ArticleSchema = new Schema({
-  // 标题
+  // 标题 
   title : {
     type : String,
     unique : true
@@ -26,6 +26,7 @@ var ArticleSchema = new Schema({
     default : "描述"
   },
   content : String,
+  markDown: String,
   // 分类
   categories: [{
    name:''

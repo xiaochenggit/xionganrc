@@ -11,12 +11,14 @@ $(function (){
 			alert('文章描述不能为空！');
 			return false;
 		}
-		var artcates = $("#articleForm input[type='checkbox']:checked");
-		if (!artcates.length) {
-			alert("请选择分类")
-			return false;
+		if (!$('#articleId').length > 0 ) {
+			var artcates = $("#articleForm input[type='checkbox']:checked");
+			if (!artcates.length) {
+				alert("请选择分类")
+				return false;
+			}
 		}
-		var $content = $("#ueditor_textarea_editorValue").val();
+		var $content = $(".editormd-markdown-textarea").val();
 		if (!$content.trim()) {
 			alert("文章内容不能为空")
 			return false;

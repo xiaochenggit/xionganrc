@@ -18,7 +18,7 @@ exports.images = (request, response) => {
 		fs.readFile(oldPath,(error, data) => {
 			if (error) {
 			   response.json({
-				    success :  1,           // 0 表示上传失败，1 表示上传成功
+				    success :  0,           // 0 表示上传失败，1 表示上传成功
 				    message : "上传失败",
 				    url     : ""        // 上传成功时才返回
 			   })

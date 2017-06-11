@@ -26,7 +26,10 @@
               <p class="desc"><%= item.desc %></p>
             </div>
             <% if(item.author._id == user._id) { %>
-              <button class="deleteActicle btn btn-danger btn-xs" data-id='<%=item._id %>'>删除</button>
+              <div class="action">
+                <a href="/admin/article/change?id=<%=item._id %>" class="btn btn-default btn-xs">修改</a>
+                <button class="deleteActicle btn btn-danger btn-xs" data-id='<%=item._id %>'>删除</button>
+              </div>
             <% } %>
           </div>
        <% }  %>

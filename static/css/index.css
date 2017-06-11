@@ -335,10 +335,10 @@ footer .machine{
 .article-list .media{
 	position: relative;
 }
-.article-list .media:hover .btn{
+.article-list .media:hover .action{
 	display: block;
 }
-.article-list .media .btn{
+.article-list .media .action{
 	position: absolute;
 	right: 15px;
 	top: 15px;

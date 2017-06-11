@@ -52,6 +52,8 @@ let router = function (app) {
 	// 文章发布页面
 	app.get('/admin/article', Article.admin);
 	app.post('/admin/article', Article.save);
+	app.get('/admin/article/change', Article.change);
+	app.post('/admin/article/change', Article.changeSave);
 	app.get('/article', Article.article)
 	app.get('/admin/article/list', Article.articleList)
 	app.post('/article/collection', Article.collection) 

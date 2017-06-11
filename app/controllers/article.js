@@ -13,13 +13,62 @@ exports.admin = function (request, response) {
 		})
 	})
 }
+ 
+exports.changeSave = (request, response) => {
+	var _article = request.body.article;
+	var id = _article.id;
+	// 内容
+	_article.content = request.body['editormd-html-code'];
+	// markDown 
+	_article.markDown = request.body['editormd-markdown-doc'];
+	if (id) {
+		Article.findOne({_id: id},(error,article) => {
+			if (article && request.session.user._id == article.author._id) {
+				article.content = _article.content;
+				article.markDown = _article.markDown;
+				article.desc = _article.desc;
+				article.title = _article.title;
+				article.updateAt = new Date().getTime();
+				article.save(()=> {
+					response.redirect('/article?id=' + article._id)
+				})
+			} else {
+				response.redirect('/article/list')
+			}
+		})
+	} else {
+		response.redirect('/article/list')
+	}
+}
+
+exports.change = function (request, response) {
+	var id = request.query.id;
+	if (id) {
+		Article.findOne({_id: id},(error,article) => {
+			if (article && request.session.user._id == article.author._id) {
+				ArtCate.find({},(error,artcates) => {
+					response.render('admin-article-change', {
+						title: article.title,
+						article: article,
+						artcates : artcates
+					})
+				})
+			} else {
+				response.redirect('/admin/article');
+			}
+		})
+	} else {
+		response.redirect('/admin/article')
+	}
+}
 
 // 文章保存
 exports.save = function (request, response) {
 	var _article = request.body.article;
-	var editorValue = request.body.editorValue;
-	_article.content = editorValue;
-	
+	// 内容
+	_article.content = request.body['editormd-html-code'];
+	// markDown 
+	_article.markDown = request.body['editormd-markdown-doc'];
 	if( typeof(_article.categories) == "string" ) {
 		var _artCates = [];
 		_artCates.push(_article.categories);
@@ -65,10 +114,10 @@ exports.save = function (request, response) {
 		})
 	});
 }
+
 // 文章内容页面
 exports.article = function (request, response) {
 	var id = request.query.id;
-	console.log(id);
 	if (id) {
 		Article.findOne({_id: id})
 		// .populate('author', 'name')
