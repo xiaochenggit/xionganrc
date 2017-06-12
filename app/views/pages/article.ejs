@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title><%= article.title %></title>
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="/css/iconfont.css"> -->
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<script type="text/javascript" src='/js/jquery-2.1.4.min.js'></script>
 	<script type="text/javascript" src='/js/bootstrap.min.js'></script>
@@ -33,6 +34,7 @@
 			<span id="collection">收藏</span><span class="glyphicon glyphicon-star" aria-hidden="true" article-id="<%= article._id %>"></span>
 			<% } else { %>
 			<span id="collection">已收藏(<%= article.collectionUsers.length %>)</span><span class="glyphicon glyphicon-star collectioned" aria-hidden="true" article-id="<%= article._id %>"></span>
+			<i class='iconfont icon-xin'></i>
 			<% } %>
 		</span>
 	</div>
