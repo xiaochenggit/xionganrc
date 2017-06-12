@@ -28,6 +28,17 @@
 		</div>
 	</div>
 	<div class="desc">
+		<% if (!isCollection) { %>
+		<div class="lick" article-id="<%= article._id %>">
+			<span class="ds"><i class='iconfont icon-xin'></i>喜欢</span>
+			<span class="length" id="length"><%= article.collectionUsers.length %></span>
+		</div>
+		<% } else { %>
+		<div class="lick collectioned" article-id="<%= article._id %>">
+			<span class="ds"><i class='iconfont icon-xin'></i>喜欢</span>
+			<span class="length" id="length"><%= article.collectionUsers.length %></span>
+		</div>
+		<% } %>
 		<span class="browseUsers">浏览人数:<%= article.browseUsers.length %></span>
 		<span class="collec pull-right">
 			<% if (!isCollection) { %>

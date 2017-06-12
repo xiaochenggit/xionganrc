@@ -391,6 +391,7 @@ exports.collection = function (request, response) {
 				article.save(() => {
 					response.json({
 						code: 200,
+						collectionlength: article.collectionUsers.length,
 						msg: '取消收藏文章成功!'
 					})
 				});

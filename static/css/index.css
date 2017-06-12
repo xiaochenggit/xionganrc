@@ -359,16 +359,54 @@ footer .machine{
 .articel-cont .desc{
 	/*line-height: 2rem;*/
 }
-.articel-cont .desc .glyphicon-star{
-	vertical-align: top;
-	margin: 2px 0.5rem 0px;
-	cursor: pointer;
-}
 .articel-cont .desc .collec{
 	margin-left: 3rem;
 }
-.articel-cont .desc .collectioned{
-	color: red;
+
+.lick {
+	padding: 13px 15px;
+	border: 1px solid #ea6f5a;
+    border-radius: 40px;
+    display: inline-block;
+    font-size: 0px;
+    cursor: pointer;
+}
+.lick.collectioned{
+	background-color: #ea6f5a;
+}
+.lick.collectioned span{
+	color: #fff;
+}
+.lick.collectioned span i{
+	color: #fff;
+	font-size: 2.0rem;
+}
+.lick.collectioned span.ds{
+	border-color: #fff;
+}
+.lick span{
+	display: inline-block;
+	font-size: 2rem;
+	color: #ea6f5a;
+	position: relative;
+}
+.lick span i {
+	color: #ea6f5a;
+	margin-right: 4px;
+	font-size: 1.8rem;
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+.lick span.ds {
+	border-right: 1px solid rgba(236,97,73,.4);
+	padding-right: 10px;
+	padding-left: 25px;
+	margin-right: 10px;
 }
 /*article start*/
 

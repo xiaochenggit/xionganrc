@@ -573,18 +573,18 @@ var craeteHTML = {
 		})
 	},
 	articleCollection: function(){
-		$(".articel-cont .desc .glyphicon-star").click(function() {
+		$(".articel-cont .lick").click(function() {
 			var $this = $(this);
 			var articleId = $(this).attr('article-id');
 			if ($this.hasClass('collectioned')) {
-				public.addArticleCollection('', articleId, function(){
+				public.addArticleCollection('', articleId, function(length){
 					$this.removeClass('collectioned');
-					$("#collection").html('收藏');
+					$("#length").html(length);
 				})
 			} else {
 				public.addArticleCollection(true, articleId, function(length){
 					$this.addClass('collectioned');
-					$("#collection").html(`已收藏(${length})`);
+					$("#length").html(length);
 				})
 			}
 		});
