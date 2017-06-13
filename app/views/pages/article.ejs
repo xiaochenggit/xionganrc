@@ -28,6 +28,23 @@
 		</div>
 	</div>
 	<div class="desc">
+		<div class="author-desc">
+			<div class="author">
+				<div class="author-left" id='author'  data-id='<%= author._id %>'>
+					<a href="/user/details?id=<%= author._id %>" >
+						<img src="/userImg/<%=author.userImg %>" alt="作者头像" class='authorImg'>
+					</a>
+				</div>
+				<div class="author-right">
+					<p><span class='author-icon'></span><%= author.name %></p>
+					<p>
+						<span class='article-time'><%=moment(article.updateAt).format('YYYY.MM.DD HH:mm') %></span>
+						<span class='browseUsers'><%= article.browseUsers.length %></span>
+						<span id="articlelength"></span>
+					</p>
+				</div>
+			</div>
+		</div>
 		<% if (!isCollection) { %>
 		<div class="lick" article-id="<%= article._id %>">
 			<span class="ds"><i class='iconfont icon-xin'></i>喜欢</span>
@@ -39,15 +56,6 @@
 			<span class="length" id="length"><%= article.collectionUsers.length %></span>
 		</div>
 		<% } %>
-		<span class="browseUsers">浏览人数:<%= article.browseUsers.length %></span>
-		<span class="collec pull-right">
-			<% if (!isCollection) { %>
-			<span id="collection">收藏</span><span class="glyphicon glyphicon-star" aria-hidden="true" article-id="<%= article._id %>"></span>
-			<% } else { %>
-			<span id="collection">已收藏(<%= article.collectionUsers.length %>)</span><span class="glyphicon glyphicon-star collectioned" aria-hidden="true" article-id="<%= article._id %>"></span>
-			<i class='iconfont icon-xin'></i>
-			<% } %>
-		</span>
 	</div>
 	<!-- <% if (article.browseUsers && article.browseUsers.length > 0) { %>
 	  <% article.browseUsers.forEach(function(item,index){ %>
@@ -63,6 +71,7 @@
 <script type="text/javascript">
 	$(function (){
 		$("#content").html($("#content").text()).show();
+		$("#articlelength").html($("#content").text().trim().length);
 	})
 </script>
 <%- include('../comments/footer')%>

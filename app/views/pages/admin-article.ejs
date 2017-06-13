@@ -6,7 +6,7 @@
 	<h2><%= title %></h2>
 	<div class="div">
 		<form action="/admin/article" method="post" id="articleForm">
-		<input type="hidden" name='article[author][name]' value="<%= user.name %>">
+		  <input type="hidden" name='article[author][name]' value="<%= user.name %>">
 		  <input type="hidden" name='article[author][_id]' value="<%= user._id %>">
 			<div class="form-group">
 			  <label for="title">标题<span>*</span></label>
