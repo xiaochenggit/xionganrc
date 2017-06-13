@@ -1,5 +1,6 @@
 const ArtCate = require('../models/articleCategory');
 const Article = require('../models/article');
+const User = require('../models/user');
 
 /**
  * [compareWithUpdateAt 排序（根据更新时间 、浏览人数）]
@@ -24,6 +25,9 @@ exports.index = function (request, response) {
 	ArtCate.find({})
 		.populate('articles.article','title updateAt createAt author browseUsers desc')
 		.exec((error,artcates) => {
+			if ( artcates.length > 5 ) {
+				artcates.length = 5;
+			}
 			Article.find({})
 			.populate()
 			.exec((error,articlesTwo) => {

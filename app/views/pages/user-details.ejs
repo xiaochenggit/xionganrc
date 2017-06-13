@@ -19,9 +19,9 @@
             <span class='number' data-toggle="modal" data-target="#userFollowsModal"><%= seeUser.follows.length %></span>
             <% if (user._id != seeUser._id) { %>
               <% if (seeUser.follows.join('').indexOf(user._id) > -1) { %>
-                <span class="glyphicon glyphicon-heart active" aria-hidden="true" data-id='<%= seeUser._id %>'></span>
+                <span class="glyphicon glyphicon-heart active" aria-hidden="true" data-id='<%= seeUser._id %>' id='follow'></span>
               <% } else { %>
-                 <span class="glyphicon glyphicon-heart" aria-hidden="true" data-id='<%= seeUser._id %>'></span>
+                 <span class="glyphicon glyphicon-heart" aria-hidden="true" data-id='<%= seeUser._id %>' id='follow'></span>
               <% } %>
             <% } %>
           </div>

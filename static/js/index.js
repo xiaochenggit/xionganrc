@@ -77,7 +77,7 @@ $(function (){
 		})
 	});
 	// 关注用户
-	$("#userfollow .glyphicon-heart").click(function(event) {
+	$("body #follow").click(function(event) {
 		var id = $(this).attr('data-id');
 		var url = '';
 		var isActive = $(this).hasClass('active');
@@ -580,21 +580,25 @@ var craeteHTML = {
 				public.addArticleCollection('', articleId, function(length){
 					$this.removeClass('collectioned');
 					$("#length").html(length);
+					$("#lickNum").html('喜欢 ' + length);
 				})
 			} else {
 				public.addArticleCollection(true, articleId, function(length){
 					$this.addClass('collectioned');
 					$("#length").html(length);
+					$("#lickNum").html('喜欢 ' + length);
 				})
 			}
 		});
 	},
 	articleAuthorMessage: function() {
-		var $author = $('#author');
-		var authorId = $author.attr('data-id');
-		public.getUserMessage(authorId, function(data) {
-			$author.find('.authorImg').attr('src','/userImg/' + data.userImg)
-		})
+		$(".authormessage").each(function(index, el) {
+			var $author = $(el);
+			var authorId = $author.attr('data-id');
+			public.getUserMessage(authorId, (data) => {
+				$author.find('img').attr('src','/userImg/' + data.userImg)
+			})
+		});
 	},
 	/**
 	 * [init 开始就会执行的函数]
@@ -615,7 +619,7 @@ var craeteHTML = {
 		this.indexRightLiMove();
 		this.BodyScroll();
 		this.articleCollection();
-		// this.articleAuthorMessage();
+		this.articleAuthorMessage();
 	}
 }
 var public = {

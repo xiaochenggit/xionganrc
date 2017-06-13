@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title><%= article.title %></title>
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-	<!-- <link rel="stylesheet" type="text/css" href="/css/iconfont.css"> -->
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<script type="text/javascript" src='/js/jquery-2.1.4.min.js'></script>
 	<script type="text/javascript" src='/js/bootstrap.min.js'></script>
@@ -17,15 +16,6 @@
 <div class="container articel-cont">
 	<div class="head">
 		<h1 class="title text-center"><%= article.title %></h1>
-		<div class="des text-center">
-			<span><a href="/user/details?id=<%= article.author._id %>">作者：<%= article.author.name %></a></span>
-			<span>发布时间: 
-				<span class="timeSpan" time="<%=article.updateAt %>" >
-                    <%= moment(parseInt(article.updateAt)).fromNow() %>
-                </span>
-			</span>
-			<!-- <span>更新: <%=moment(article.createAt).format('YYYY/MM/DD HH:mm:ss') %></span> -->
-		</div>
 	</div>
 	<div class="desc">
 		<div class="author-desc">
@@ -36,11 +26,23 @@
 					</a>
 				</div>
 				<div class="author-right">
-					<p><span class='author-icon'></span><%= author.name %></p>
+					<p>
+						<span class='author-icon'>作者</span>
+						<a href="/user/details?id=<%= author._id %>" class='author-name'>	<%= author.name %>
+						</a>
+			            <% if (user._id != author._id) { %>
+			              <% if (author.follows.join('').indexOf(user._id) > -1) { %>
+			                <span class="glyphicon glyphicon-heart active" aria-hidden="true" data-id='<%= author._id %>' id='follow'></span>
+			              <% } else { %>
+			                 <span class="glyphicon glyphicon-heart" aria-hidden="true" data-id='<%= author._id %>' id='follow'></span>
+			              <% } %>
+			            <% } %>
+					</p>
 					<p>
 						<span class='article-time'><%=moment(article.updateAt).format('YYYY.MM.DD HH:mm') %></span>
-						<span class='browseUsers'><%= article.browseUsers.length %></span>
+						<span class='browseUsers'>阅读 <%= article.browseUsers.length %></span>
 						<span id="articlelength"></span>
+						<span id="lickNum">喜欢 <%= article.collectionUsers.length %></span>
 					</p>
 				</div>
 			</div>
@@ -71,7 +73,7 @@
 <script type="text/javascript">
 	$(function (){
 		$("#content").html($("#content").text()).show();
-		$("#articlelength").html($("#content").text().trim().length);
+		$("#articlelength").html('字数 ' + $("#content").text().trim().length);
 	})
 </script>
 <%- include('../comments/footer')%>

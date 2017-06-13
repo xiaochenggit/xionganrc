@@ -8,22 +8,20 @@
 					<% if (item.articles && item.articles.length > 0) { %>
 						<div class="article-box">
 				  		<h2><%= item.name %>
-								<% if (item.articles.length > maxNum) { %>
-									<% item.articles =  item.articles.splice(0,maxNum) %>
-									<a href="/admin/article/list?artCate=<%= item.name %>" class="pull-right">
-											更多>>
-									</a>
-								<% }%>
+							<% if (item.articles.length > maxNum) { %>
+								<% item.articles =  item.articles.splice(0,maxNum) %>
+								<a href="/admin/article/list?artCate=<%= item.name %>" class="pull-right">
+										更多>>
+								</a>
+							<% }%>
 				  		</h2>
 							<% if (item.articles && item.articles.length > 0) { %>
 		  				<% item.articles.forEach(function(article, num) { %>
 			  				<div class="media">
-							 <!--  <div class="media-left">
-							    <a href="/article?id=<%=article.article._id %>">
-							      <img class="media-object" src="/userImg/suo.jpg" alt="<%= article.article.title %>">
-							    </a>
-							  </div> -->
 							  <div class="media-body">
+							  	<div class="authormessage" data-id='<%=article.article.author._id %>'>
+							  		<img src="" alt='头像'>
+							  	</div>
 							    <h4 class="media-heading">
 							    	<a href="/article?id=<%=article.article._id %>">
 							    	<%= article.article.title %>
