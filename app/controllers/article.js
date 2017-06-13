@@ -156,9 +156,13 @@ exports.article = function (request, response) {
 						}
 					});
 					article.save((error,article) => {
-						response.render('article',{
-							article : article,
-							isCollection: isCollection
+						User.findOne({_id: article.author._id })
+						.exec((error,author) => {
+							response.render('article',{
+								article : article,
+								author : author,
+								isCollection: isCollection
+							})
 						})
 					});
 				})

@@ -589,6 +589,13 @@ var craeteHTML = {
 			}
 		});
 	},
+	articleAuthorMessage: function() {
+		var $author = $('#author');
+		var authorId = $author.attr('data-id');
+		public.getUserMessage(authorId, function(data) {
+			$author.find('.authorImg').attr('src','/userImg/' + data.userImg)
+		})
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -608,6 +615,7 @@ var craeteHTML = {
 		this.indexRightLiMove();
 		this.BodyScroll();
 		this.articleCollection();
+		// this.articleAuthorMessage();
 	}
 }
 var public = {
