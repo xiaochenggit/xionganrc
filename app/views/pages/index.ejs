@@ -20,20 +20,26 @@
 			  				<div class="media">
 							  <div class="media-body">
 							  	<div class="authormessage" data-id='<%=article.article.author._id %>'>
-							  		<img src="" alt='头像'>
+							  		<a href="/user/details?id=<%=article.article.author._id %>">
+							  			<img src="" alt='头像'>
+							  		</a>
+							  		<span class='author-name'>
+							  			<a href="/user/details?id=<%=article.article.author._id %>">
+							  				<%=article.article.author.name %>
+							  			</a>
+							  		</span>
+							  		<span class='article-time timeSpan'>	<%= moment(article.article.updateAt).fromNow() %></span>
 							  	</div>
 							    <h4 class="media-heading">
-							    	<a href="/article?id=<%=article.article._id %>">
+							    	<a href="/article?id=<%=article.article._id %>" class='title'>
 							    	<%= article.article.title %>
 							    	</a>
 							    </h4>
-							    <p class="author-create">
-							    	<a href="/user/details?id=<%=article.article.author._id %>">
-							    		<%=article.article.author.name %>
-							    	</a> 
-							    	<%= moment(article.article.createAt).format('MM/DD HH:mm:ss') %> 
-							    </p>
-							    <p class="desc"><%= article.article.desc %></p>
+							  	<p class="desc"><%= article.article.desc %></p>
+							   	<div class="article-about"> 
+										<span class='aticle-browse'><i class='icon iconfont icon-liulan'></i><%= article.article.browseUsers.length %></span>
+										<span class='aticle-collection'><i class='icon iconfont icon-xin'></i><%= article.article.collectionUsers.length %></span>
+							   	</div>
 							  </div>
 							</div>
 		  				<% }) %>

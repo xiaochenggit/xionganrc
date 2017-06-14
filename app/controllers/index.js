@@ -23,7 +23,7 @@ var compareWithBrowseUsers = function (x, y) {
  */
 exports.index = function (request, response) {
 	ArtCate.find({})
-		.populate('articles.article','title updateAt createAt author browseUsers desc')
+		.populate('articles.article','title updateAt createAt author browseUsers collectionUsers desc')
 		.exec((error,artcates) => {
 			if ( artcates.length > 5 ) {
 				artcates.length = 5;
