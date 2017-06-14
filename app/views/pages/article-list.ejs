@@ -17,13 +17,14 @@
                 <%= item.title %>
                 </a>
               </h4>
-              <p class="author-create">
+              <p class="desc"><%= item.desc %></p>
+              <p class="author-create authormessage">
                 <a href="/user/details?id=<%=item.author._id %>">
+                  <img src="/userImg/<%=item.author.userImg %>">
                   <%=item.author.name %>
                 </a> 
                 <%= moment(item.createAt).format('MM/DD HH:mm:ss') %> 
               </p>
-              <p class="desc"><%= item.desc %></p>
             </div>
             <% if(item.author._id == user._id) { %>
               <div class="action">

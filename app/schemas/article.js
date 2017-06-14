@@ -12,7 +12,8 @@ var ArticleSchema = new Schema({
   // 作者
   author : {
     name : String,
-    _id : ''
+    _id : '',
+    userImg: ''
   },
   collectionUsers:[{
     user: {

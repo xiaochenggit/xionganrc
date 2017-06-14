@@ -121,11 +121,31 @@ body{
 .authormessage .article-time{
 	color: #969696;
 }
+.article-about {
+	font-size: 14px;
+	line-height: 20px;
+}
+.article-about i{
+	vertical-align: middle;
+}
+.article-about i::before{
+	margin-right: 2px;
+}
+.article-about span{
+	color: #555;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	margin-right: 5px;
+}
+.article-about span:hover{
+	color: #000;
+}
 .article-box{
 	background-color: #fff;
 	overflow: hidden;
 	padding-bottom: 10px;
-	 box-shadow: 0 4px 12px 0 rgba(7,17,27,.1);
+	box-shadow: 0 4px 12px 0 rgba(7,17,27,.1);
 }
 .article-box + .article-box {
 	margin-top: 10px;
@@ -199,10 +219,23 @@ body{
 	display: block;
 }
 .article-box .list-group-item p{
+	line-height: 32px;
 	display: none;
 	margin-bottom: 0px;
 	margin-top: 10px;
-} 
+}
+.article-box .list-group-item .badged{
+	float: right;
+}
+.article-box .list-group-item p img{
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+}
+.article-box .list-group-item  i {
+	margin-right: 2px;
+	vertical-align: middle;
+}
 /*index end*/
 /*user-details*/
 .user-box{
