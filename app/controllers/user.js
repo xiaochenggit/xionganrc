@@ -330,3 +330,19 @@ exports.delete = function (request, response) {
 		})
 	}
 }
+/**
+ * 	判断是否用户在登录状态 
+ * @param  {[type]} request  [description]
+ * @param  {[type]} response [description]
+ * @return {[type]}          [description]
+ */
+exports.isSignIn = (request, response, next) => {
+
+	let user = request.session.user;
+	if (user) {
+		next()
+	} else{
+		response.redirect('/user/signin?href=' + request.route.path)
+	}
+	
+}

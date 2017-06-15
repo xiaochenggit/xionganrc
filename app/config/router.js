@@ -39,11 +39,11 @@ let router = function (app) {
 	app.get('/user/signin', User.getSignin);
 	app.get('/user/logout', User.logout);
 	app.post('/user/signin', User.postSignin);
-	app.get('/admin/user/list', User.userList);
+	app.get('/admin/user/list', User.isSignIn, User.userList);
 	app.get('/user/details' , User.details);
 	app.get('/user/wall' , User.wall);
 	app.post('/userComment', UserComment.comment);
-	app.post('/user/follows', User.follows);
+	app.post('/user/follows', User.isSignIn , User.follows);
 	app.get('/user/secrecy', User.secrecy);
 	app.post('/usermessage', User.getUserMessage);
 	app.delete('/admin/user/delete', User.delete);

@@ -139,7 +139,7 @@ exports.article = function (request, response) {
 							return;
 						}
 					});
-					if (!isBrowse) {
+					if (!isBrowse && user) {
 						article.browseUsers.unshift({
 							user: {
 								name : user.name,

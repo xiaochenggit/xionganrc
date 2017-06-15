@@ -33,7 +33,11 @@ $(function (){
 		event.preventDefault();
 		var username = $("#userName").val();
 		var password = $("#password").val();
-		public.userSigninFunc(username, password);
+		var href = window.location.href;
+		if (href.indexOf('signin') > 0) {
+			href = public.getUrlParam(window.location,'href') || '/';
+		}
+		public.userSigninFunc(username, password,href);
 	});
 	$('.is-look').click(function(){
 		if ($(this).text() == '保密') {
@@ -78,6 +82,10 @@ $(function (){
 	});
 	// 关注用户
 	$("body #follow").click(function(event) {
+		if(!craeteHTML.user.name) {
+			$('#signinModal').modal('show')
+			return false;
+		}
 		var id = $(this).attr('data-id');
 		var url = '';
 		var isActive = $(this).hasClass('active');
@@ -574,6 +582,10 @@ var craeteHTML = {
 	},
 	articleCollection: function(){
 		$(".articel-cont .lick").click(function() {
+			if(!craeteHTML.user.name) {
+				$('#signinModal').modal('show')
+				return false;
+			}
 			var $this = $(this);
 			var articleId = $(this).attr('article-id');
 			if ($this.hasClass('collectioned')) {
@@ -700,7 +712,7 @@ var public = {
 	 * 登录成功跳入 用户列表页面
 	 * @return {[type]}          [description]
 	 */
-	userSigninFunc: function(username,password) {
+	userSigninFunc: function(username,password,href) {
 		var self = this;
 		$.ajax({
 			url: self.userSignin,
@@ -716,7 +728,7 @@ var public = {
 			if (result.code != 200) {
 				alert(result.msg);
 			} else {
-				window.location.href = self.userList; 
+				window.location.href = href; 
 			}
 		})
 	},
