@@ -1,0 +1,57 @@
+ <%- include('../comments/header')%>
+ <%- include('../comments/navigation')%>
+ <div class="container warpper">
+ 	<div class="row">
+ 		<div class="col-md-8">
+ 			<h3><%= title %></h3>
+ 			<div class="opinion-form">
+ 				<form id="opinionForm">
+ 					<input type="hidden" value='<%= user._id %>' name="opinion[user]">
+ 					<div class="form-group">
+				      <textarea class="form-control" rows="4" name="opinion[content]" id="opinionContent"></textarea>
+				  </div>
+ 				</form>
+ 				<% if(user) { %>
+					 <button class="btn btn-primary" id="opinionBtn">提交</button>
+ 				<% } else { %>
+					 <a href="/user/signin?href=/opinion" class="btn btn-default">登陆</a>
+ 				<% } %>
+ 			</div>
+ 			<div class="opinion-body" id="opinion">
+ 				<% if (opinions && opinions.length > 0) { %>
+					 <% opinions.forEach( function(opinion, index) { %>
+							<div class="opinion">
+			 					<div class="opinionUser">
+			 						<a href="/user/details?id=<%= opinion.user._id%>">
+			 							<img src="/userImg/<%= opinion.user.userImg %>">
+			 						</a>
+			 						<div class="opinionUserDes">
+			 							<p class="opinionUserName">
+			 								<a href="/user/details?id=<%= opinion.user._id %>">
+			 									<%= opinion.user.name %>
+			 								</a>
+			 							</p>
+			 							<p class="opinionCreateTime">
+			 								<%= moment(opinion.createAt).format('YYYY.MM.DD HH:mm:ss') %> 
+			 							</p>
+			 							<% if(user._id == opinion.user._id || user.role >= 10) { %>
+												<button class="btn btn-danger deleteOpinion" data-id="<%= opinion._id %>">
+				 								删除
+				 							</button>
+			 							<% } %>
+			 						</div>
+			 					</div>
+			 					<div class="opinionContent">
+			 						<p><%= opinion.content %></p>
+			 					</div>
+			 				</div>
+					 <% }) %>
+ 				<% } %>
+ 			</div>
+ 		</div>
+ 		<div class="col-md-4">
+ 			<h3>想及时沟通，请加QQ群！</h3>
+ 		</div>
+ 	</div>
+ </div>
+ <%- include('../comments/footer')%>
