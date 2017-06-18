@@ -337,12 +337,16 @@ exports.delete = function (request, response) {
  * @return {[type]}          [description]
  */
 exports.isSignIn = (request, response, next) => {
-
+	var href = request.route.path;
+	// var query = request.query;
+	// for (key in query) {
+	// 	href += '?' + key + "=" + query[key];
+	// }
 	let user = request.session.user;
 	if (user) {
 		next()
 	} else{
-		response.redirect('/user/signin?href=' + request.route.path)
+		response.redirect('/user/signin?href=' + href)
 	}
 	
 }

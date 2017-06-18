@@ -31,16 +31,28 @@
 	</div>
 	<script type="text/javascript">
         $(function() {
-            var editor = editormd("editormd", {
-                path : "/editormd/lib/",
-                width: '100%',
-                height: 640,
-                markdown:`<%= article.markDown %>`,
-                saveHTMLToTextarea : true,
-                imageUpload : true,
-                imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                imageUploadURL : "/editor/images",
-            });
+        	$.ajax({
+        		url:'/article/markdown',
+        		type: 'POST',
+        		data: {
+        			id: $("#articleId").val(),
+        		},
+        		dataType : 'json'
+        	}).done( function(result) {
+				if (result.code == 200) {
+					var editor = editormd("editormd", {
+		                path : "/editormd/lib/", 
+		                width: '100%',
+		                height: 640,
+		                markdown: result.markDown,
+		                saveHTMLToTextarea : true,
+		                imageUpload : true,
+		                imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+		                imageUploadURL : "/editor/images",
+		            });
+				} 
+			})
+            
         });
     </script>
 </div>

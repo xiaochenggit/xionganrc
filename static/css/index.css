@@ -508,6 +508,56 @@ footer .machine{
 }
 /*article start*/
 
+/* 意见反馈  start*/
+.opinion-body {
+	padding-top: 20px;
+}
+.opinion {
+	padding: 10px 0px;
+	position: relative;
+}
+.opinion + .opinion{
+	border-top: 1px solid #d6c7c7;
+}
+.opinion p {
+	margin-bottom: 0px;
+}
+.opinion .opinionUser img{
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	vertical-align: top;
+	margin-right: 10px;
+}
+.opinion .opinionUser .opinionUserDes {
+
+	display: inline-block;
+	font-size: 0px;
+}
+.opinion .opinionUser .opinionUserDes .btn{
+	position: absolute;
+	top: 10px;
+	right: -9999px;
+	opacity: 0;
+}
+.opinion:hover .opinionUser .opinionUserDes .btn{
+	right: 0px;
+	opacity: 1;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+}
+.opinion .opinionUser .opinionUserDes p{
+	line-height: 24px;
+	font-size: 14px;
+	margin-bottom: 0px;
+}
+.opinion .opinionContent{
+	padding-left: 62px;
+	margin-top: 5px;
+	line-height: 24px;
+}
+/* 意见反馈  end*/
 
 /*字体*/
 @font-face {font-family: "iconfont";

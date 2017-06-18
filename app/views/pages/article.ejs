@@ -4,12 +4,13 @@
 	<meta charset="UTF-8">
 	<title><%= article.title %></title>
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/editormd.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<script type="text/javascript" src='/js/jquery-2.1.4.min.js'></script>
 	<script type="text/javascript" src='/js/bootstrap.min.js'></script>
 	<script type="text/javascript" src='/js/moment.js'></script>
 	<script type="text/javascript" src='/js/index.js'></script>
-	<script type="text/javascript" src=""></script>
+	<script type="text/javascript" src="/js/editormd.min.js"></script>
 </head>
 <body>
 <%- include('../comments/navigation')%>
@@ -47,7 +48,13 @@
 				</div>
 			</div>
 		</div>
-		<% if (!isCollection) { %>
+	</div>
+	<div class="content editormd-dialog-container markdown-body" id="content" style="display: none;">
+		<%= article.content %>
+	</div>
+	<div class="article-footer">
+		<% if(article.author._id != user._id) { %>
+		<% if (!isCollection ) { %>
 		<div class="lick" article-id="<%= article._id %>">
 			<span class="ds"><i class='icon iconfont icon-hert'></i>喜欢</span>
 			<span class="length" id="length"><%= article.collectionUsers.length %></span>
@@ -58,16 +65,7 @@
 			<span class="length" id="length"><%= article.collectionUsers.length %></span>
 		</div>
 		<% } %>
-	</div>
-	<!-- <% if (article.browseUsers && article.browseUsers.length > 0) { %>
-	  <% article.browseUsers.forEach(function(item,index){ %>
-		   <p>用户名:<%= item.user.name %>   </p>
-		   <p>id : <%= item.user._id %></p> 
-		   <p>time :<%= item.time %>   </p> 
-	  <% }) %>
-	<% } %> -->
-	<div class="content" id="content" style="display: none;">
-		<%= article.content %>
+		<% } %>
 	</div>
 </div>
 <script type="text/javascript">

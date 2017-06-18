@@ -580,6 +580,10 @@ var craeteHTML = {
 			$('body,html').animate({'scrollTop': 0},500);
 		})
 	},
+	/**
+	 * 	文章收藏
+	 * @return {[type]} [description]
+	 */
 	articleCollection: function(){
 		$(".articel-cont .lick").click(function() {
 			if(!craeteHTML.user.name) {
@@ -604,6 +608,64 @@ var craeteHTML = {
 		});
 	},
 	/**
+	 * opinion 意见反馈表单提交
+	 */
+	opinionBtnClick : function () {
+		var self = this;
+		$("#opinionBtn").click(function(event) {
+			event.preventDefault();
+			var opinionForm = $("#opinionForm");
+			if (!$("#opinionContent").val().trim()) {
+				alert('请输入反馈内容');
+				return false;
+			}
+			var data = opinionForm.serializeObject();
+			public.ajax('/opinion', 'POST', data, function(data){
+				self.appOpinion(data);
+			})
+		});
+	},
+	/**
+	 * [appOpinion 添加意见反馈]
+	 * @param  {[type]} data [意见反馈成功返回数据]
+	 */
+	appOpinion: function(data) {
+		var opinionHTML = 
+		`<div class="opinion">
+			<div class="opinionUser">
+				<a href="/user/details?id=${data.user._id}">
+					<img src="/userImg/${data.user.userImg}">
+				</a>
+				<div class="opinionUserDes">
+					<p class="opinionUserName">
+						<a href="/user/details?id=${data.user._id}">
+							${data.user.name}
+						</a>
+					</p>
+					<p class="opinionCreateTime">
+						${moment(data.opinionMessage.createAt).format('YYYY.MM.DD HH:mm:ss')}
+					</p>
+					<button class="btn btn-danger deleteOpinion" data-id=${data.opinionMessage._id}>
+						删除
+					</button>
+				</div>
+			</div>
+			<div class="opinionContent">
+				<p>${data.opinionMessage.content}</p>
+			</div>
+		</div>`;
+		$("#opinion").prepend(opinionHTML);
+	},
+	deleteOpinion: function(){
+		$(document).on('click', '.deleteOpinion', function(){
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			public.ajax('/opinion/delete', 'POST', {id: id}, function(){
+				$this.parents('.opinion').remove();
+			});
+		});
+	},
+	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
 	 */
@@ -622,6 +684,8 @@ var craeteHTML = {
 		this.indexRightLiMove();
 		this.BodyScroll();
 		this.articleCollection();
+		this.opinionBtnClick();
+		this.deleteOpinion();
 	}
 }
 var public = {
@@ -633,6 +697,28 @@ var public = {
 	userList: "/admin/user/list",
 	deleteArticleCategory: "/admin/articlecategory/delete?id=", // 删除文章分页
 	articleCollection: '/article/collection',
+	/**
+	 * [ajax 公共ajax方法]
+	 * @param  {[type]}   url      [请求地址]
+	 * @param  {[type]}   data     [数据]
+	 * @param  {Function} callback [成功回调]
+	 * @return {[type]}            [description]
+	 */
+	ajax : function(url, type, data , callback) {
+		$.ajax({
+			url: url,
+			type: type,
+			data: data,
+			dataType:'json',
+		}).done(function (result) {
+			if (result.code == 200) {
+				console.log(result.data);
+				callback&& callback(result.data);
+			} else {
+				alert(result.msg);
+			}
+		});
+	},
 	/**
 	 * [showTime 展示时间]
 	 * @param  {[string]} id [dom ID]

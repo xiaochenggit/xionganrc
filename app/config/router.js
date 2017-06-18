@@ -4,6 +4,7 @@ const User = require('../controllers/user');
 const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
 const ArticleCategory = require('../controllers/articleCategory');
+const Opinion = require('../controllers/opinion');
 const Note = require('../controllers/note');
 const Moment = require('moment');
 Moment.lang('zh-cn');
@@ -50,13 +51,14 @@ let router = function (app) {
 	app.post('/userCommentPage', UserComment.getUserCommentPage)
 	app.delete('/usercomment/delete', UserComment.delete);
 	// 文章发布页面
-	app.get('/admin/article', Article.admin);
+	app.get('/admin/article', User.isSignIn, Article.admin);
 	app.post('/admin/article', Article.save);
 	app.get('/admin/article/change', Article.change);
 	app.post('/admin/article/change', Article.changeSave);
 	app.get('/article', Article.article)
 	app.get('/admin/article/list', Article.articleList)
-	app.post('/article/collection', Article.collection) 
+	app.post('/article/collection', Article.collection);
+	app.post('/article/markdown', Article.getArticleMarkdown) 
 	app.delete('/admin/article/delete', Article.delete);
 
 	// 文章分类页面
@@ -69,6 +71,11 @@ let router = function (app) {
 	// note
 	app.get('/user/note/new', Note.new);
 	app.post('/editor/images', Note.images);
+
+	// opinion 
+	app.get('/opinion', Opinion.main);
+	app.post('/opinion', Opinion.save);
+	app.post('/opinion/delete', Opinion.delete);
 
 	app.get("/*",Index.error);
 }

@@ -126,6 +126,16 @@ exports.article = function (request, response) {
 			if (error) {
 				console.log(error);
 			} else {
+				if (!request.session.user) {
+					User.findOne({_id: article.author._id })
+					.exec((error,author) => {
+						response.render('article',{
+							article : article,
+							author : author,
+							isCollection: false
+						})
+					})
+				}
 				User.findOne({_id:request.session.user._id},(error,user) => {
 					// 判断是否浏览过
 					var isBrowse = false;
@@ -406,6 +416,22 @@ exports.collection = function (request, response) {
 		response.json({
 			code: 400,
 			msg: '请先登录!'
+		})
+	}
+}
+/**
+ * 	获取文章的 markdown 数据
+ */
+exports.getArticleMarkdown = (request, response) => {
+	var id = request.body.id;
+	if (id) {
+		Article.findOne({_id: id}, (error, article) => {
+			if (article) {
+				response.json({
+					code : 200,
+					markDown: article.markDown
+				})
+			}
 		})
 	}
 }
