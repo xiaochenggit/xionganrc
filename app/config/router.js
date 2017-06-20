@@ -76,7 +76,7 @@ let router = function (app) {
 	app.get('/opinion', Opinion.main);
 	app.post('/opinion', Opinion.save);
 	app.post('/opinion/delete', Opinion.delete);
-
+	app.post('/getOpinions', Opinion.getOpinions);
 	app.get("/*",Index.error);
 }
 module.exports = router;

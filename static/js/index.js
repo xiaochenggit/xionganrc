@@ -246,6 +246,7 @@ xc = {
 var craeteHTML = {
 	user: {},
 	commentMessage: {},
+	opinionPage: 1,
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -621,7 +622,7 @@ var craeteHTML = {
 			}
 			var data = opinionForm.serializeObject();
 			public.ajax('/opinion', 'POST', data, function(data){
-				self.appOpinion(data);
+				$("#opinion .opinionGroup").prepend(self.appOpinion(data.opinion));
 			})
 		});
 	},
@@ -643,25 +644,50 @@ var craeteHTML = {
 						</a>
 					</p>
 					<p class="opinionCreateTime">
-						${moment(data.opinionMessage.createAt).format('YYYY.MM.DD HH:mm:ss')}
+						${moment(data.createAt).format('YYYY.MM.DD HH:mm:ss')}
 					</p>
-					<button class="btn btn-danger deleteOpinion" data-id=${data.opinionMessage._id}>
+					<button class="btn btn-danger deleteOpinion" data-id=${data._id}>
 						删除
 					</button>
 				</div>
 			</div>
 			<div class="opinionContent">
-				<p>${data.opinionMessage.content}</p>
+				<p>${data.content}</p>
 			</div>
 		</div>`;
-		$("#opinion").prepend(opinionHTML);
+		return opinionHTML;
 	},
+	/**
+	 * [deleteOpinion 删除意见反馈]
+	 * @return {[type]} [description]
+	 */
 	deleteOpinion: function(){
 		$(document).on('click', '.deleteOpinion', function(){
 			const $this = $(this);
 			const id = $this.attr('data-id');
 			public.ajax('/opinion/delete', 'POST', {id: id}, function(){
 				$this.parents('.opinion').remove();
+				if ($(".opinion").length === 0) {
+					$("#opinionMore").click();
+				}
+			});
+		});
+	},
+	/**
+	 * [getOpinions 获得更多意见反馈]
+	 * @return {[type]} [description]
+	 */
+	getOpinions: function() {
+		var self = this;
+		$("#opinionMore").click(function(event) {
+			self.opinionPage += 1;
+			public.ajax('/getOpinions', 'POST', {page: self.opinionPage}, function(data){
+				if (data.isBtn) {
+					$("#opinionMore").remove();
+				}
+				data.opinions.forEach( function(element, index) {
+					$("#opinion .opinionGroup").append(self.appOpinion(element));
+				});
 			});
 		});
 	},
@@ -686,6 +712,7 @@ var craeteHTML = {
 		this.articleCollection();
 		this.opinionBtnClick();
 		this.deleteOpinion();
+		this.getOpinions();
 	}
 }
 var public = {

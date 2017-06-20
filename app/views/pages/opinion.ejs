@@ -18,6 +18,7 @@
  				<% } %>
  			</div>
  			<div class="opinion-body" id="opinion">
+ 			<div class="opinionGroup">
  				<% if (opinions && opinions.length > 0) { %>
 					 <% opinions.forEach( function(opinion, index) { %>
 							<div class="opinion">
@@ -47,10 +48,19 @@
 			 				</div>
 					 <% }) %>
  				<% } %>
+ 				</div>
+ 				<% if (isBtn) { %>
+					<div class="opinionFooter">
+						<button class="btn btn-info" id="opinionMore">更多>></button>
+					</div>
+ 				<% } %>
  			</div>
  		</div>
  		<div class="col-md-4">
  			<h3>想及时沟通，请加QQ群！</h3>
+ 			<h3>QQ 1群: 547136809</h3>
+ 			<h3 style="width: 221px;text-align: center;">微信群:</h3>
+ 			<img src="/userImg/authorWeiXin.jpg" alt="微信">
  		</div>
  	</div>
  </div>

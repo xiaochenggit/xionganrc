@@ -560,6 +560,13 @@ footer .machine{
 	margin-top: 5px;
 	line-height: 24px;
 }
+.opinionFooter {
+	padding: 0px 20px;
+	text-align: center;
+}
+.opinionFooter .btn {
+	width: 180px;
+}
 /* 意见反馈  end*/
 
 /*字体*/
