@@ -142,6 +142,7 @@ body{
 	color: #000;
 }
 .article-box{
+	padding: 0 10px;
 	background-color: #fff;
 	overflow: hidden;
 	padding-bottom: 10px;
@@ -177,8 +178,13 @@ body{
 	padding: 10px;
 	overflow: hidden;
 	cursor: pointer;
+	border-radius: 8px;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 .article-box .media:hover{
+	
 	background-color: #ccc;
 }
 .article-box  a{
@@ -210,6 +216,7 @@ body{
 .article-box .list-group-item{
 	border: none;
 	cursor: pointer;
+	border-radius: 4px;
 }
 .article-box .list-group-item.active{
 	background-color: #ccc;
@@ -570,12 +577,13 @@ footer .machine{
 /* 意见反馈  end*/
 
 /*字体*/
-@font-face {font-family: "iconfont";
-  src: url('//at.alicdn.com/t/font_7o4zoe59b74d9529.eot?t=1497437167863'); /* IE9*/
-  src: url('//at.alicdn.com/t/font_7o4zoe59b74d9529.eot?t=1497437167863#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/font_7o4zoe59b74d9529.woff?t=1497437167863') format('woff'), /* chrome, firefox */
-  url('//at.alicdn.com/t/font_7o4zoe59b74d9529.ttf?t=1497437167863') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/font_7o4zoe59b74d9529.svg?t=1497437167863#iconfont') format('svg'); /* iOS 4.1- */
+@font-face {
+  font-family: 'iconfont';  /* project id 326936 */
+  src: url('//at.alicdn.com/t/font_fdjnkbcr8ovwjyvi.eot');
+  src: url('//at.alicdn.com/t/font_fdjnkbcr8ovwjyvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_fdjnkbcr8ovwjyvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_fdjnkbcr8ovwjyvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_fdjnkbcr8ovwjyvi.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -586,8 +594,14 @@ footer .machine{
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-woMan:before { content: "\e61b"; }
+
+.icon-man:before { content: "\e639"; }
+
 .icon-hert:before { content: "\e616"; }
 
 .icon-xin:before { content: "\e648"; }
 
 .icon-liulan:before { content: "\e690"; }
+
+.icon-noFind:before { content: "\e622"; }

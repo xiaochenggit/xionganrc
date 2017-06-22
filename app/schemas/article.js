@@ -13,7 +13,8 @@ var ArticleSchema = new Schema({
   author : {
     name : String,
     _id : '',
-    userImg: ''
+    userImg: '',
+    sex: ''
   },
   collectionUsers:[{
     user: {

@@ -28,7 +28,13 @@
 							  				<%=article.article.author.name %>
 							  			</a>
 							  		</span>
-							  		<span class='article-time timeSpan'>	<%= moment(article.article.updateAt).fromNow() %></span>
+							  		<span class='iconfont icon-<%= article.article.author.sex %>'>
+							  			<%=article.article.author.sex %>
+							  		</span>
+							  		<span class='article-time timeSpan pull-right' 
+							  			time='<%= article.article.updateAt %>'>	
+							  			<%= moment(article.article.updateAt).fromNow() %>
+							  		</span>
 							  	</div>
 							    <h4 class="media-heading">
 							    	<a href="/article?id=<%=article.article._id %>" class='title'>

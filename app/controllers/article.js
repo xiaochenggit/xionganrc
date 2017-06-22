@@ -90,6 +90,7 @@ exports.save = function (request, response) {
 		// 保存文章
 		_article.createAt = _article.updateAt = new Date().getTime();
 		_article.author.userImg = request.session.user.userImg;
+		_article.author.sex = request.session.user.sex;
 		var article = new Article(_article);
 		article.save((error,article) => {
 			if (error) {
