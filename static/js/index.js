@@ -282,6 +282,8 @@ var craeteHTML = {
 	          <h4 class="media-heading">
 	            <p>
 	              <a href="/user/details?id=${user._id}">${user.name}
+	              <span class='iconfont icon-${user.sex}'>
+				  </span>
 	              </a> 
 	              说 : 
 	              <span class="pull-right timeSpan" time="${userComment.createAt}">${time}</span>
@@ -303,8 +305,14 @@ var craeteHTML = {
 	        </div>
 	        <div class="media-body">
 	          <h4 class="media-heading">
-	            <a href="/user/details?id=${user._id}">${user.name}</a> 回复：
-	            <a href="/user/details?id=${toUser._id}">${toUser.name}</a>
+	            <a href="/user/details?id=${user._id}">${user.name}
+				  <span class='iconfont icon-${user.sex}'>
+				  </span>
+	            </a> 回复：
+	            <a href="/user/details?id=${toUser._id}">${toUser.name}
+				  <span class='iconfont icon-${toUser.sex}'>
+				  </span>
+	            </a>
 	            <p class="pull-right timeSpan" time="${userComment.createAt}">${time}</p>
 	          </h4>
 	          <p>${context}</p>
@@ -437,6 +445,8 @@ var craeteHTML = {
 			              <h4 class="media-heading">
 			                <p>
 			                  <a href="/user/details?id=${ comment.from._id }">${ comment.from.name }
+			                  	<span class='iconfont icon-${ comment.from.sex }'>
+							    </span>
 			                  </a> 
 			                  说 : 
 			                  <span class="pull-right timeSpan" time="${comment.createAt }">${ moment(comment.createAt).fromNow()  }</span>
@@ -456,8 +466,14 @@ var craeteHTML = {
 			                    </div>
 			                    <div class="media-body">
 			                      <h4 class="media-heading">
-			                        <a href="/user/details?id=${item.from._id }">${ item.from.name }</a> 回复：
-			                        <a href="/user/details?id=${item.to._id }">${ item.to.name }</a>
+			                        <a href="/user/details?id=${item.from._id }">${ item.from.name }
+										<span class='iconfont icon-${ item.from.sex }'>
+							    		</span>
+			                        </a> 回复：
+			                        <a href="/user/details?id=${item.to._id }">${ item.to.name }
+										<span class='iconfont icon-${ item.to.sex }'>
+							    		</span>
+			                        </a>
 			                        <p class="pull-right timeSpan" time="${item.createAt }" >
 			                          ${ moment(item.createAt).fromNow()  }
 			                        </p>
@@ -623,6 +639,7 @@ var craeteHTML = {
 			var data = opinionForm.serializeObject();
 			public.ajax('/opinion', 'POST', data, function(data){
 				$("#opinion .opinionGroup").prepend(self.appOpinion(data.opinion));
+				$("#opinionContent").val('').focus();
 			})
 		});
 	},
@@ -642,6 +659,8 @@ var craeteHTML = {
 						<a href="/user/details?id=${data.user._id}">
 							${data.user.name}
 						</a>
+						<span class='iconfont icon-${data.user.sex}'>
+					    </span>
 					</p>
 					<p class="opinionCreateTime">
 						${moment(data.createAt).format('YYYY.MM.DD HH:mm:ss')}

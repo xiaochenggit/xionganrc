@@ -21,7 +21,8 @@
               <p class="author-create authormessage">
                 <a href="/user/details?id=<%=item.author._id %>">
                   <img src="/userImg/<%=item.author.userImg %>">
-                  <%=item.author.name %>
+                  <%=item.author.name %><span class='iconfont icon-<%= item.author.sex %>'>
+                  </span>
                 </a> 
                 <%= moment(item.createAt).format('MM/DD HH:mm:ss') %> 
               </p>

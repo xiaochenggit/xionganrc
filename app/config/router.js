@@ -15,7 +15,6 @@ let router = function (app) {
 		app.locals.sex = {
 			'man' : '男',
 			'woMan' : '女',
-			'renYao' : '人妖',
 			'noFind' : '未知'
 		}
 		app.locals.hobby = {

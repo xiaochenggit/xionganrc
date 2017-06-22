@@ -66,7 +66,7 @@ exports.save = (request, response) => {
 		const opinion = new Opinion(_opinion);
 		opinion.save((error, opinionM) => {
 			Opinion.findOne({_id: opinionM._id})
-			.populate('user','name userImg')
+			.populate('user','name userImg sex')
 			.exec((error, opinionMessage) => {
 				response.json({
 					code : 200,

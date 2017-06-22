@@ -516,7 +516,32 @@ footer .machine{
 	color: #f60;
 	border: 1px solid #f60;
 }
-/*article start*/
+.articleBrowseUsers li {
+  list-style: none;
+  line-height: 36px;
+  padding: 5px 0px;
+}
+.articleBrowseUsers ul{
+	padding: 0px;
+	margin: 0px;
+}
+.articleBrowseUsers li img{
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	margin-right: 5px;
+}
+.articleBrowseUsers li a{
+	color: #000;
+	-webkit-transition: color 0.5s ease-in-out;
+	-o-transition: color 0.5s ease-in-out;
+	transition: color 0.5s ease-in-out;
+}
+.articleBrowseUsers li a:hover{
+	text-decoration: none;
+	color: #f60;
+}
+/*article end*/
 
 /* 意见反馈  start*/
 .opinion-body {
@@ -525,6 +550,7 @@ footer .machine{
 .opinion {
 	padding: 10px 0px;
 	position: relative;
+	overflow: hidden;
 }
 .opinion + .opinion{
 	border-top: 1px solid #d6c7c7;

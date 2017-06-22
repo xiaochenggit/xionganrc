@@ -29,7 +29,6 @@
 							  			</a>
 							  		</span>
 							  		<span class='iconfont icon-<%= article.article.author.sex %>'>
-							  			<%=article.article.author.sex %>
 							  		</span>
 							  		<span class='article-time timeSpan pull-right' 
 							  			time='<%= article.article.updateAt %>'>	
@@ -80,6 +79,8 @@
 				    				<img src="/userImg/<%=item.author.userImg %>">
 				    				<%= item.author.name %>
 				    		</a>
+				    		<span class='iconfont icon-<%= item.author.sex %>'>
+							  </span>
 				    		<span time="<%= item.updateAt %>" class="pull-right timeSpan">
 										<%= moment(item.updateAt).fromNow() %>
 				    		</span>
@@ -113,6 +114,8 @@
 				    				<img src="/userImg/<%= item.author.userImg %>" alt='头像'>
 				    				<%= item.author.name %>
 				    		</a>
+				    		<span class='iconfont icon-<%= item.author.sex %>'>
+							  </span>
 				    		<span class="pull-right"><i class='icon iconfont icon-liulan'></i><%= item.browseUsers.length %></span>
 				    </p>
 				  </li>

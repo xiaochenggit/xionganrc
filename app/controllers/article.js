@@ -154,7 +154,9 @@ exports.article = function (request, response) {
 						article.browseUsers.unshift({
 							user: {
 								name : user.name,
-								_id : user._id
+								_id : user._id,
+								userImg: user.userImg,
+								sex: user.sex
 							},
 							time :  new Date().getTime()
 						});

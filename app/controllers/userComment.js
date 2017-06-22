@@ -151,8 +151,8 @@ exports.getUserCommentPage = function (request, response) {
 	var pageNum = 10;
 	UserComent
 		.find({user: userId})
-		.populate('from', 'name userImg')
-		.populate('reply.from reply.to', 'name userImg')
+		.populate('from', 'name userImg sex')
+		.populate('reply.from reply.to', 'name userImg sex')
 		.exec((error, comments)=>{
 			comments = comments.reverse();
 			var maxPage = Math.ceil(comments.length / pageNum) - 1;

@@ -38,6 +38,8 @@ var ArticleSchema = new Schema({
     user : {
       name : String,
       _id : '',
+      userImg: '',
+      sex: ''
     },
     time : {
       type : Number,

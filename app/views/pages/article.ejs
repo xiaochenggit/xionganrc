@@ -29,7 +29,7 @@
 				<div class="author-right">
 					<p>
 						<span class='author-icon'>作者</span>
-						<a href="/user/details?id=<%= author._id %>" class='author-name'>	<%= author.name %>
+						<a href="/user/details?id=<%= author._id %>" class='author-name'>	<%= author.name %><span class='iconfont icon-<%= author.sex %>'></span>
 						</a>
 			            <% if (user._id != author._id) { %>
 			              <% if (author.follows.join('').indexOf(user._id) > -1) { %>
@@ -66,6 +66,33 @@
 		</div>
 		<% } %>
 		<% } %>
+	</div>
+</div>
+<div class="articleDwon container">
+	<div class="row">
+		<div class="col-md-8"></div>
+		<div class="col-md-4">
+			<div class="articleBrowseUsers">
+				<h3>最近浏览</h3>
+				<ul>
+				<% if(article.browseUsers && article.browseUsers.length > 0) { %>
+					<% article.browseUsers.forEach(function(item){ %>
+						<li>
+							<a href="/user/details?id=<%= item.user._id %>">
+								<img src="/userImg/<%= item.user.userImg %>">
+								<%= item.user.name %>
+								<span class='iconfont icon-<%= item.user.sex %>'>
+							  </span>
+							</a>
+							<span time="<%= item.time %>" class="pull-right timeSpan">
+								<%= moment(item.time).fromNow() %>
+				    	</span>
+						</li>
+					<% }) %>
+				<% } %>
+				</ul>
+			</div>
+		</div>
 	</div>
 </div>
 <script type="text/javascript">

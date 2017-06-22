@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const UserComment = require('../models/userComment');
+const Article = require('../models/article');
 
 const path = require('path');
 const fs = require('fs');
@@ -187,6 +188,14 @@ exports.change = function (request , response) {
 			user.motto = _user.motto;
 			user.message = _user.message;
 			user.hobby = _user.hobby;
+			// 改变作者麾下所以文章作者的性别
+			user.articles.forEach( function(element, index) {
+				console.log(element.article);
+				Article.findOne({_id:element.article},(error,article) => {
+					article.author.sex = _user.sex;
+					article.save(()=>{});
+				})
+			});
 			user.save((error,user) => {
 				if (error) {
 					console.log(error);
@@ -290,7 +299,8 @@ exports.getUserMessage = function (request, response) {
 					data: {
 						_id: user._id,
 						name : user.name,
-						userImg: user.userImg
+						userImg: user.userImg,
+						sex: user.sex
 					}
 				})
 			}
@@ -303,7 +313,8 @@ exports.getUserMessage = function (request, response) {
 			data: {
 				_id: user._id,
 				name : user.name,
-				userImg: user.userImg
+				userImg: user.userImg,
+				sex: user.sex
 			}
 		})
 	}
