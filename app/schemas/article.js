@@ -36,10 +36,8 @@ var ArticleSchema = new Schema({
   // 浏览的人
   browseUsers: [{
     user : {
-      name : String,
-      _id : '',
-      userImg: '',
-      sex: ''
+      type : ObjectId,
+      ref: 'User'
     },
     time : {
       type : Number,

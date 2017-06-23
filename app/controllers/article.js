@@ -122,7 +122,7 @@ exports.article = function (request, response) {
 	var id = request.query.id;
 	if (id) {
 		Article.findOne({_id: id})
-		// .populate('author', 'name')
+		.populate('browseUsers.user','name userImg sex')
 		.exec((error,article) => {
 			if (error) {
 				console.log(error);
@@ -152,12 +152,7 @@ exports.article = function (request, response) {
 					});
 					if (!isBrowse && user) {
 						article.browseUsers.unshift({
-							user: {
-								name : user.name,
-								_id : user._id,
-								userImg: user.userImg,
-								sex: user.sex
-							},
+							user : request.session.user._id,
 							time :  new Date().getTime()
 						});
 					}
@@ -172,11 +167,15 @@ exports.article = function (request, response) {
 					article.save((error,article) => {
 						User.findOne({_id: article.author._id })
 						.exec((error,author) => {
-							response.render('article',{
-								article : article,
-								author : author,
-								isCollection: isCollection
-							})
+						Article.findOne({_id: id})
+							.populate('browseUsers.user','name userImg sex')
+							.exec((error,article) => {
+								response.render('article',{
+									article : article,
+									author : author,
+									isCollection: isCollection
+								})
+							});
 						})
 					});
 				})
