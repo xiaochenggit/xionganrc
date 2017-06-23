@@ -136,8 +136,8 @@ exports.article = function (request, response) {
 							isCollection: false
 						})
 					})
-				}
-				User.findOne({_id:request.session.user._id},(error,user) => {
+				} else {
+					User.findOne({_id:request.session.user._id},(error,user) => {
 					// 判断是否浏览过
 					var isBrowse = false;
 					if (!article) {
@@ -179,6 +179,7 @@ exports.article = function (request, response) {
 						})
 					});
 				})
+				}
 			}
 		})
 	}
