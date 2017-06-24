@@ -146,7 +146,7 @@ exports.article = function (request, response) {
 					}
 					article.browseUsers.forEach( function(element, index) {
 						if (element.user._id == request.session.user._id) {
-							isBrowse = true;
+							isBrowse = false;
 							return;
 						}
 					});
@@ -435,6 +435,56 @@ exports.getArticleMarkdown = (request, response) => {
 					markDown: article.markDown
 				})
 			}
+		})
+	}
+}
+
+/**
+ * 缓冲加载文章浏览者信息
+ * pageNow 当前页
+ * pageMax 最大页
+ * pageNum 每次条数
+ */
+
+exports.getBUsers = (request,response) => {
+	var id = request.body.id ;
+	console.log(request.body.pageNow);
+	var pageNow = request.body.pageNow || 2;
+	const pageNum = 10;
+	var isBtn = true;
+	if (id) {
+		Article.findOne({_id: id})
+		.populate('browseUsers.user','name userImg sex')
+		.exec((error,article) => {
+			if (!article) {
+				response.json({
+					code: 400,
+					msg: '该文章不存在,请浏览其他文章'
+				})
+			} else {
+				const pageMax = Math.ceil(article.browseUsers.length / pageNum);
+				if ( pageNow < 1) {
+					pageNow = 1;
+				} 
+				if (pageNow >= pageMax) {
+					pageNow = pageMax;
+					isBtn = false;
+				}
+				var browseUsers = article.browseUsers.splice((pageNow - 1) * pageNum, pageNum );
+				response.json({
+					code: 200,
+					data: {
+						browseUsers: browseUsers,
+						isBtn: isBtn
+					},
+					msg:'获得文章浏览者信息成功!'
+				})
+			}
+		})
+	} else {
+		response.json({
+			code: 400,
+			msg : '获取文章浏览者信息失败 文章id参数错误'
 		})
 	}
 }

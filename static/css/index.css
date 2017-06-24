@@ -516,6 +516,16 @@ footer .machine{
 	color: #f60;
 	border: 1px solid #f60;
 }
+.articleBrowseUsers .more{
+	font-size: 16px;
+	cursor: pointer;
+	-webkit-transition: color 0.5s ease-in-out;
+	-o-transition: color 0.5s ease-in-out;
+	transition: color 0.5s ease-in-out;
+}
+.articleBrowseUsers .more:hover{
+	color: #f60;
+}
 .articleBrowseUsers li {
   list-style: none;
   line-height: 36px;
@@ -524,6 +534,18 @@ footer .machine{
 .articleBrowseUsers ul{
 	padding: 0px;
 	margin: 0px;
+}
+.modal-body.articleBrowseUsers{
+	padding: 0px;
+	height: 385px;
+	overflow: auto;
+}
+
+.modal-body.articleBrowseUsers li{
+	padding: 8px 15px;
+}
+.articleBrowseUsers li{
+	border-top: 1px solid #f0f0f0;
 }
 .articleBrowseUsers li img{
 	width: 36px;

@@ -32,9 +32,7 @@ exports.getOpinions = (request, response) => {
 				nowPage = 1;
 			} else if (nowPage > maxPage) {
 				nowPage = maxPage;
-			}
-			console.log(nowPage + '-' ,maxPage)
-			if (nowPage == maxPage) {
+			}			if (nowPage == maxPage) {
 				isBtn = true;
 			}
 			opinions = opinions.splice((nowPage - 1) * pageNum, pageNum);

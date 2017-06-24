@@ -73,10 +73,15 @@
 		<div class="col-md-8"></div>
 		<div class="col-md-4">
 			<div class="articleBrowseUsers">
-				<h3>最近浏览</h3>
+				<h3>最近浏览
+					<% if(article.browseUsers.length > 5) { %>
+						<span class="pull-right more"  data-toggle="modal" data-target="#MoreBrowseUsers">更多>></span>
+					<% } %>
+				</h3>
 				<ul>
 				<% if(article.browseUsers && article.browseUsers.length > 0) { %>
-					<% article.browseUsers.forEach(function(item){ %>
+				<% if(article.browseUsers.length > 5) {var arr = article.browseUsers.slice(0,5) } else { var arr = article.browseUsers } %>
+					<% arr.forEach(function(item){ %>
 						<li>
 							<a href="/user/details?id=<%= item.user._id %>">
 								<img src="/userImg/<%= item.user.userImg %>">
@@ -94,6 +99,36 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal fade" id="MoreBrowseUsers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">最近浏览(<%= article.browseUsers.length %>)</h4>
+      </div>
+      <div class="modal-body articleBrowseUsers" id="articleBrowseUsers" data-id="<%= article._id %>">
+       <ul>
+		<% if(article.browseUsers && article.browseUsers.length > 0) { %>
+		<% if(article.browseUsers.length > 10) {article.browseUsers.length = 10} %>
+			<% article.browseUsers.forEach(function(item){ %>
+				<li>
+					<a href="/user/details?id=<%= item.user._id %>">
+						<img src="/userImg/<%= item.user.userImg %>">
+						<%= item.user.name %>
+						<span class='iconfont icon-<%= item.user.sex %>'>
+					  </span>
+					</a>
+					<span time="<%= item.time %>" class="pull-right timeSpan">
+						<%= moment(item.time).fromNow() %>
+		    	</span>
+				</li>
+			<% }) %>
+		<% } %>
+		</ul>
+      </div>
+    </div>
+  </div>
 </div>
 <script type="text/javascript">
 	$(function (){

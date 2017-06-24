@@ -247,6 +247,8 @@ var craeteHTML = {
 	user: {},
 	commentMessage: {},
 	opinionPage: 1,
+	getBUsersPage: 2,
+	isGetBUsers: true,
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -710,6 +712,41 @@ var craeteHTML = {
 			});
 		});
 	},
+	getBUsers: function () {
+		const self = this;
+		$("#articleBrowseUsers").scroll(function(event) {
+			var pageNow = self.getBUsersPage;
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			var nDivHight = $this.height();
+			var nScrollHight = $this[0].scrollHeight;
+		    var nScrollTop = $this[0].scrollTop;
+		    if(nScrollTop + nDivHight >= nScrollHight && self.isGetBUsers) {
+		        public.ajax('/article/getBUsers', 'POST', {id:id, pageNow: pageNow },function(data){
+					self.getBUsersPage += 1;
+					self.isGetBUsers = data.isBtn;
+					data.browseUsers.forEach( function(element, index) {
+						self.addBUsers(element);
+					});
+				})
+		    }
+		});
+		
+	},
+	addBUsers: function (item) {
+		var tpl =   `<li>
+						<a href="/user/details?id=${ item.user._id }">
+							<img src="/userImg/${ item.user.userImg }">
+							${ item.user.name}
+							<span class='iconfont icon-${item.user.sex }'>
+						  </span>
+						</a>
+						<span time="${ item.time }" class="pull-right timeSpan">
+							${ moment(item.time).fromNow() }
+			    		</span>
+				    </li>`;
+		$("#articleBrowseUsers ul").append(tpl);
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -732,6 +769,7 @@ var craeteHTML = {
 		this.opinionBtnClick();
 		this.deleteOpinion();
 		this.getOpinions();
+		this.getBUsers();
 	}
 }
 var public = {
@@ -758,7 +796,6 @@ var public = {
 			dataType:'json',
 		}).done(function (result) {
 			if (result.code == 200) {
-				console.log(result.data);
 				callback&& callback(result.data);
 			} else {
 				alert(result.msg);
