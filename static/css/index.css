@@ -509,6 +509,9 @@ footer .machine{
 	font-size: 16px;
 	margin-left: 4px;
 }
+.author-right .lickLength{
+	cursor: pointer;
+}
 .author-right .author-icon{
 	font-size: 10px;
 	border-radius: 2px;
@@ -545,7 +548,7 @@ footer .machine{
 	padding: 8px 15px;
 }
 .articleBrowseUsers li{
-	border-top: 1px solid #f0f0f0;
+	border-bottom: 1px solid #f0f0f0;
 }
 .articleBrowseUsers li img{
 	width: 36px;

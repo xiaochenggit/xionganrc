@@ -20,6 +20,10 @@ var ArticleSchema = new Schema({
     user: {
       type : ObjectId,
       ref: 'User'
+    },
+    time : {
+      type : Number,
+      default : new Date().getTime()
     }
   }],
   // 关键词

@@ -249,6 +249,8 @@ var craeteHTML = {
 	opinionPage: 1,
 	getBUsersPage: 2,
 	isGetBUsers: true,
+	getCUsersPage: 2,
+	isGetCUsers: true,
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -604,6 +606,7 @@ var craeteHTML = {
 	 * @return {[type]} [description]
 	 */
 	articleCollection: function(){
+		const self = this;
 		$(".articel-cont .lick").click(function() {
 			if(!craeteHTML.user.name) {
 				$('#signinModal').modal('show')
@@ -612,16 +615,20 @@ var craeteHTML = {
 			var $this = $(this);
 			var articleId = $(this).attr('article-id');
 			if ($this.hasClass('collectioned')) {
-				public.addArticleCollection('', articleId, function(length){
+				public.addArticleCollection('', articleId, function(data){
 					$this.removeClass('collectioned');
-					$("#length").html(length);
-					$("#lickNum").html('喜欢 ' + length);
+					$(".lickNum").html(data.collectionlength);
+					$("#MoreCollectionUsers ul li a").each(function(index, el) {
+						if ($(el).attr('href').indexOf(data.user._id)) {
+							$(el).parent().remove();
+						}
+					});
 				})
 			} else {
-				public.addArticleCollection(true, articleId, function(length){
+				public.addArticleCollection(true, articleId, function(data){
 					$this.addClass('collectioned');
-					$("#length").html(length);
-					$("#lickNum").html('喜欢 ' + length);
+					$(".lickNum").html(data.collectionlength);
+					$("#MoreCollectionUsers ul").prepend(self.addBUsers(data));
 				})
 			}
 		});
@@ -712,12 +719,18 @@ var craeteHTML = {
 			});
 		});
 	},
+	/**
+	 * [getBUsers 滑动加载更多的文章浏览者的信息]
+	 * @ajax [url post {id:id, pageNow: pageNow} func] 
+	 * @return {[type]} [description]
+	 */
 	getBUsers: function () {
 		const self = this;
 		$("#articleBrowseUsers").scroll(function(event) {
 			var pageNow = self.getBUsersPage;
 			const $this = $(this);
 			const id = $this.attr('data-id');
+			// 判断是否到底部 且 允许获得信息
 			var nDivHight = $this.height();
 			var nScrollHight = $this[0].scrollHeight;
 		    var nScrollTop = $this[0].scrollTop;
@@ -726,13 +739,36 @@ var craeteHTML = {
 					self.getBUsersPage += 1;
 					self.isGetBUsers = data.isBtn;
 					data.browseUsers.forEach( function(element, index) {
-						self.addBUsers(element);
+						$("#articleBrowseUsers ul").append(self.addBUsers(element));
 					});
 				})
 		    }
 		});
 		
 	},
+	// 同上
+	getCUsers: function () {
+		const self = this;
+		$("#articleCollectionUsers").scroll(function(event) {
+			var pageNow = self.getCUsersPage;
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			var nDivHight = $this.height();
+			var nScrollHight = $this[0].scrollHeight;
+		    var nScrollTop = $this[0].scrollTop;
+		    if(nScrollTop + nDivHight >= nScrollHight && self.isGetCUsers) {
+		        public.ajax('/article/getCUsers', 'POST', {id:id, pageNow: pageNow },function(data){
+					self.getCUsersPage += 1;
+					self.isGetCUsers = data.isBtn;
+					data.collectionUsers.forEach( function(element, index) {
+						$("#articleCollectionUsers ul").append(self.addBUsers(element));
+					});
+				})
+		    }
+		});
+		
+	},
+	// 添加信息
 	addBUsers: function (item) {
 		var tpl =   `<li>
 						<a href="/user/details?id=${ item.user._id }">
@@ -745,7 +781,7 @@ var craeteHTML = {
 							${ moment(item.time).fromNow() }
 			    		</span>
 				    </li>`;
-		$("#articleBrowseUsers ul").append(tpl);
+		return tpl;
 	},
 	/**
 	 * [init 开始就会执行的函数]
@@ -770,6 +806,7 @@ var craeteHTML = {
 		this.deleteOpinion();
 		this.getOpinions();
 		this.getBUsers();
+		this.getCUsers();
 	}
 }
 var public = {
@@ -846,7 +883,7 @@ var public = {
 			dataType: 'json'
 		}).done(function(result) {
 			if (result.code == 200) {
-				callback && callback(result.collectionlength);
+				callback && callback(result.data);
 			} else {
 				alert(result.msg)
 			}

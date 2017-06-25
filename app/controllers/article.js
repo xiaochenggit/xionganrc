@@ -123,6 +123,7 @@ exports.article = function (request, response) {
 	if (id) {
 		Article.findOne({_id: id})
 		.populate('browseUsers.user','name userImg sex')
+		.populate('collectionUsers.user','name userImg sex')
 		.exec((error,article) => {
 			if (error) {
 				console.log(error);
@@ -138,28 +139,26 @@ exports.article = function (request, response) {
 					})
 				} else {
 					User.findOne({_id:request.session.user._id},(error,user) => {
-					// 判断是否浏览过
-					var isBrowse = false;
+					
 					if (!article) {
 						response.redirect('/');
 						return;
 					}
+					// 判断是否浏览过
 					article.browseUsers.forEach( function(element, index) {
 						if (element.user._id == request.session.user._id) {
-							isBrowse = false;
+							article.browseUsers.splice(index, 1)
 							return;
 						}
 					});
-					if (!isBrowse && user) {
-						article.browseUsers.unshift({
-							user : request.session.user._id,
-							time :  new Date().getTime()
-						});
-					}
+					article.browseUsers.unshift({
+						user : request.session.user._id,
+						time :  new Date().getTime()
+					});
 					// 判断是否收藏
 					var isCollection = false;
 					article.collectionUsers.forEach( function(element, index) {
-						if (element.user == request.session.user._id) {
+						if (element.user._id == request.session.user._id) {
 							isCollection = true;
 							return;
 						}
@@ -169,6 +168,7 @@ exports.article = function (request, response) {
 						.exec((error,author) => {
 						Article.findOne({_id: id})
 							.populate('browseUsers.user','name userImg sex')
+							.populate('collectionUsers.user','name userImg sex')
 							.exec((error,article) => {
 								response.render('article',{
 									article : article,
@@ -346,7 +346,6 @@ exports.delete = function (request, response) {
 					if (error) {
 						console.log(error);
 					} else {
-						console.log('文章本身删除成功');
 						response.json({
 							success : 1
 						});
@@ -372,14 +371,28 @@ exports.collection = function (request, response) {
 		if (isAdd) {
 			// 找到该文章收藏人数组里面添加user 、 在该user 的收藏文章数组里面添加该文章
 			Article.findOne({_id: articleId}, (error, article) => {
-				article.collectionUsers.unshift({ user: userId});
+				article.collectionUsers.unshift({ 
+					user: userId,
+					time: new Date().getTime()
+				});
 				article.save(()=>{
-					User.findOne({_id: userId}, (error, user) => {
+					User.findOne({_id: userId})
+					.populate('user','name userImg sex collectionArticles')
+					.exec((error, user) => {
 						user.collectionArticles.unshift({ article: articleId})
 						user.save(() => {
 							response.json({
 								code: 200,
-								collectionlength: article.collectionUsers.length,
+								data: {
+									collectionlength: article.collectionUsers.length,
+									user: {
+										_id: user._id,
+										userImg: user.userImg,
+										sex: user.sex,
+										name: user.name
+									},
+									time: new Date().getTime()
+								},
 								msg: '收藏文章成功！'
 							})
 						})
@@ -389,31 +402,45 @@ exports.collection = function (request, response) {
 		} else {
 			// 取消收藏
 			// 找到该文章收藏人数组刨除该user 、 在该user 的收藏文章数组里面刨除该文章
-			User.findOne({_id: userId}, (error, user) => {
-				user.collectionArticles.forEach( function(element, index) {
-					if (element.article == articleId) {
-						user.collectionArticles.splice(index, 1);
-						return;
-					}
-				});
-				user.save(() => {
-				});
-			})
-			Article.findOne({_id: articleId}, (error, article) => {
-				article.collectionUsers.forEach( function(element, index) {
-					if (element.user == userId) {
-						article.collectionUsers.splice(index, 1);
-						return;
-					}
-				});
-				article.save(() => {
-					response.json({
-						code: 200,
-						collectionlength: article.collectionUsers.length,
-						msg: '取消收藏文章成功!'
+			User.findOne({_id: userId})
+				.populate('user','name userImg sex collectionArticles')
+				.exec((error, user) => {
+
+					user.collectionArticles.forEach( function(element, index) {
+						if (element.article == articleId) {
+							user.collectionArticles.splice(index, 1);
+							return;
+						}
+					});
+
+					user.save(() => {
+					});
+
+					Article.findOne({_id: articleId}, (error, article) => {
+						article.collectionUsers.forEach( function(element, index) {
+							if (element.user == userId) {
+								article.collectionUsers.splice(index, 1);
+								return;
+							}
+						});
+						article.save(() => {
+							response.json({
+								code: 200,
+								data: {
+									collectionlength: article.collectionUsers.length,
+									user: {
+										_id: user._id,
+										userImg: user.userImg,
+										sex: user.sex,
+										name: user.name
+									}
+								},
+								msg: '取消收藏文章成功!'
+							})
+						});
 					})
+
 				});
-			})
 		}
 	} else {
 		response.json({
@@ -448,7 +475,6 @@ exports.getArticleMarkdown = (request, response) => {
 
 exports.getBUsers = (request,response) => {
 	var id = request.body.id ;
-	console.log(request.body.pageNow);
 	var pageNow = request.body.pageNow || 2;
 	const pageNum = 10;
 	var isBtn = true;
@@ -485,6 +511,50 @@ exports.getBUsers = (request,response) => {
 		response.json({
 			code: 400,
 			msg : '获取文章浏览者信息失败 文章id参数错误'
+		})
+	}
+}
+/**
+ * 同上
+ */
+exports.getCUsers = (request,response) => {
+	var id = request.body.id ;
+	var pageNow = request.body.pageNow || 2;
+	const pageNum = 10;
+	var isBtn = true;
+	if (id) {
+		Article.findOne({_id: id})
+		.populate('collectionUsers.user','name userImg sex')
+		.exec((error,article) => {
+			if (!article) {
+				response.json({
+					code: 400,
+					msg: '该文章不存在,请浏览其他文章'
+				})
+			} else {
+				const pageMax = Math.ceil(article.collectionUsers.length / pageNum);
+				if ( pageNow < 1) {
+					pageNow = 1;
+				} 
+				if (pageNow >= pageMax) {
+					pageNow = pageMax;
+					isBtn = false;
+				}
+				var collectionUsers = article.collectionUsers.splice((pageNow - 1) * pageNum, pageNum );
+				response.json({
+					code: 200,
+					data: {
+						collectionUsers: collectionUsers,
+						isBtn: isBtn
+					},
+					msg:'获得文章收藏者信息成功!'
+				})
+			}
+		})
+	} else {
+		response.json({
+			code: 400,
+			msg : '获得文章收藏者信息成功 文章id参数错误'
 		})
 	}
 }

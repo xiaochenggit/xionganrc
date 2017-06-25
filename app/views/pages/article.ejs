@@ -43,7 +43,7 @@
 						<span class='article-time'><%=moment(article.updateAt).format('YYYY.MM.DD HH:mm') %></span>
 						<span class='browseUsers'>阅读 <%= article.browseUsers.length %></span>
 						<span id="articlelength"></span>
-						<span id="lickNum">喜欢 <%= article.collectionUsers.length %></span>
+						<span class="lickLength">喜欢<span class="lickNum"><%= article.collectionUsers.length %></span></span>
 					</p>
 				</div>
 			</div>
@@ -57,12 +57,12 @@
 		<% if (!isCollection ) { %>
 		<div class="lick" article-id="<%= article._id %>">
 			<span class="ds"><i class='icon iconfont icon-hert'></i>喜欢</span>
-			<span class="length" id="length"><%= article.collectionUsers.length %></span>
+			<span class="length lickNum lickLength" id="length"  data-toggle="modal" data-target="#MoreCollectionUsers" ><%= article.collectionUsers.length %></span>
 		</div>
 		<% } else { %>
 		<div class="lick collectioned" article-id="<%= article._id %>">
 			<span class="ds"><i class='icon iconfont icon-hert'></i>喜欢</span>
-			<span class="length" id="length"><%= article.collectionUsers.length %></span>
+			<span class="length lickNum lickLength" id="length"  data-toggle="modal" data-target="#MoreCollectionUsers"><%= article.collectionUsers.length %></span>
 		</div>
 		<% } %>
 		<% } %>
@@ -130,10 +130,44 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="MoreCollectionUsers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">收藏用户(<span class="lickNum"><%= article.collectionUsers.length %></span>)</h4>
+      </div>
+      <div class="modal-body articleBrowseUsers" id="articleCollectionUsers" data-id="<%= article._id %>">
+       <ul>
+		<% if(article.collectionUsers && article.collectionUsers.length > 0) { %>
+		<% if(article.collectionUsers.length > 10) {article.collectionUsers.length = 10} %>
+			<% article.collectionUsers.forEach(function(item){ %>
+				<li>
+					<a href="/user/details?id=<%= item.user._id %>">
+						<img src="/userImg/<%= item.user.userImg %>">
+						<%= item.user.name %>
+						<span class='iconfont icon-<%= item.user.sex %>'>
+					  </span>
+					</a>
+					<span time="<%= item.time %>" class="pull-right timeSpan">
+						<%= moment(item.time).fromNow() %>
+		    	</span>
+				</li>
+			<% }) %>
+		<% } %>
+		</ul>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
 	$(function (){
 		$("#content").html($("#content").text()).show();
 		$("#articlelength").html('字数 ' + $("#content").text().trim().length);
+		$(".lickLength").click(function(event) {
+			$('#MoreCollectionUsers').modal('show')
+			event.stopPropagation();
+		});
 	})
 </script>
 <%- include('../comments/footer')%>
