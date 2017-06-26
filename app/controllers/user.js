@@ -307,16 +307,25 @@ exports.getUserMessage = function (request, response) {
 		})
 	} else {
 		var user = request.session.user;
-		response.json({
-			code: 200,
-			msg: '获取用户信息成功!',
-			data: {
-				_id: user._id,
-				name : user.name,
-				userImg: user.userImg,
-				sex: user.sex
-			}
-		})
+		if (user) {
+			response.json({
+				code: 200,
+				msg: '获取用户信息成功!',
+				data: {
+					_id: user._id,
+					name : user.name,
+					userImg: user.userImg,
+					sex: user.sex
+				}
+			})
+		} else {
+			response.json({
+				code: 200,
+				msg: '获取用户信息失败! (没有用户登录)',
+				data: {
+				}
+			})
+		}
 	}
 }
 

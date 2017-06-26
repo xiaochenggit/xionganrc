@@ -667,9 +667,9 @@ var craeteHTML = {
 					<p class="opinionUserName">
 						<a href="/user/details?id=${data.user._id}">
 							${data.user.name}
+							<span class='iconfont icon-${data.user.sex}'>
+					    	</span>
 						</a>
-						<span class='iconfont icon-${data.user.sex}'>
-					    </span>
 					</p>
 					<p class="opinionCreateTime">
 						${moment(data.createAt).format('YYYY.MM.DD HH:mm:ss')}
