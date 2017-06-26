@@ -44,6 +44,8 @@ let router = function (app) {
 	app.get('/user/wall' , User.wall);
 	app.post('/userComment', UserComment.comment);
 	app.post('/user/follows', User.isSignIn , User.follows);
+	app.post('/user/getfollows', User.getFollows);
+	app.post('/user/getBrowseUsers', User.getBrowseUsers);
 	app.get('/user/secrecy', User.secrecy);
 	app.post('/usermessage', User.getUserMessage);
 	app.delete('/admin/user/delete', User.delete);

@@ -16,7 +16,7 @@
               </div>
           <% } %>
           <div id="userfollow">
-            <span class='number' data-toggle="modal" data-target="#userFollowsModal"><%= seeUser.follows.length %></span>
+            <span class='number followNumber' data-toggle="modal" data-target="#userFollowsModal"><%= seeUser.follows.length %></span>
             <% if (user._id != seeUser._id) { %>
               <% if (seeUser.follows.join('').indexOf(user._id) > -1) { %>
                 <span class="glyphicon glyphicon-heart active" aria-hidden="true" data-id='<%= seeUser._id %>' id='follow'></span>
@@ -180,11 +180,16 @@
    </div>
   </div>
   <div class="panel panel-info">
-   <div class="panel-heading">最近浏览</div>
+   <div class="panel-heading">最近浏览
+      <% if (seeUser.browseUsers.length > 6 ) { %>
+        <a class="pull-right" data-toggle="modal" data-target="#userbrowseUsersModal" >更多</a>
+      <% }  %>
+   </div>
    <div class="panel-body userBrowse">
     <div class="row">
       <% if (seeUser.browseUsers && seeUser.browseUsers.length > 0) { %>
-         <% seeUser.browseUsers.forEach(function (item) { %>
+        <% if (seeUser.browseUsers.length > 6 ) { var arr = seeUser.browseUsers.splice(0,6 ) } else { var arr = seeUser.browseUsers } %>
+         <% arr.forEach(function (item) { %>
           <div class="col-md-2 col-xs-3 col-sm-2">
              <a href="/user/details?id=<%= item.user._id %>" style="border-radius:50%" title="<%= item.user.name %>">
               <img class="img-circle" src="/userImg/<%=item.user.userImg %>" alt="<%= item.user.name %> ">
@@ -234,26 +239,57 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">他的粉丝</h4>
+        <h4 class="modal-title">他的粉丝(<span class="followNumber"><%= seeUser.follows.length %></span>)</h4>
       </div>
-      <div class="modal-body userFollowsBody">
-        <div class="row">
-          <% if (seeUser.follows && seeUser.follows.length > 0) { %>
-             <% seeUser.follows.forEach(function (item) { %>
-              <div class="col-md-2 col-xs-3 col-sm-2">
-                 <a href="/user/details?id=<%= item.user._id %>" class="" style="border-radius:50%" title="<%= item.user.name %>">
-                  <img class="img-circle" src="/userImg/<%=item.user.userImg %>" alt="<%= item.user.name %> ">
-                 </a>
-                <!--  <p class="text-center"><%= moment(item.time, "YYYYMMDDHHmmss").fromNow()  %></p> -->
-              </div>
-             <% }) %>
-          <% } else { %>
-             <p>暂无粉丝,快成为他的第一个粉丝吧</p>
+      <div class="modal-body articleBrowseUsers" id="userFollows" data-id="<%=seeUser._id%>">
+        <ul>
+          <% if(seeUser.follows && seeUser.follows.length > 0) { %>
+          <% if(seeUser.follows.length > 10) { seeUser.follows.length = 10} %>
+            <% seeUser.follows.forEach(function(item){ %>
+              <li>
+                <a href="/user/details?id=<%= item.user._id %>">
+                  <img src="/userImg/<%= item.user.userImg %>">
+                  <%= item.user.name %>
+                  <span class='iconfont icon-<%= item.user.sex %>'>
+                  </span>
+                </a>
+                <span time="<%= item.time %>" class="pull-right timeSpan">
+                  <%= moment(item.time).fromNow() %>
+                </span>
+              </li>
+            <% }) %>
           <% } %>
-        </div>
+        </ul>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id='userbrowseUsersModal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">瀏覽者(<span class="browseUsersNumber"><%= seeUser.browseUsers.length %></span>)</h4>
+      </div>
+      <div class="modal-body articleBrowseUsers" id="userBrowseUsers" data-id="<%=seeUser._id%>">
+        <ul>
+          <% if(seeUser.browseUsers && seeUser.browseUsers.length > 0) { %>
+          <% if(seeUser.browseUsers.length > 10) { seeUser.browseUsers.length = 10} %>
+            <% seeUser.browseUsers.forEach(function(item){ %>
+              <li>
+                <a href="/user/details?id=<%= item.user._id %>">
+                  <img src="/userImg/<%= item.user.userImg %>">
+                  <%= item.user.name %>
+                  <span class='iconfont icon-<%= item.user.sex %>'>
+                  </span>
+                </a>
+                <span time="<%= item.time %>" class="pull-right timeSpan">
+                  <%= moment(item.time).fromNow() %>
+                </span>
+              </li>
+            <% }) %>
+          <% } %>
+        </ul>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

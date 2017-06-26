@@ -72,7 +72,7 @@ var UserSchema = new Schema({
       ref : 'User'
     },
     time : {
-      type : String,
+      type : Number,
       default : new Date().getTime()
     }
   }],
@@ -83,7 +83,7 @@ var UserSchema = new Schema({
       ref : 'User'
     },
     time : {
-      type : String,
+      type : Number,
       default : new Date().getTime()
     }
   }],

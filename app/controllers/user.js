@@ -115,13 +115,12 @@ exports.details = function (request, response) {
 			} else {
 				// 浏览过来添加 用户浏览统计 只有登录的时候才添加
 				if (request.session.user && request.session.user._id != user._id) {
-					for (var i = 0 ; i < user.browseUsers.length;) {
-						if (user.browseUsers[i].user == request.session.user._id) {
-							user.browseUsers.splice(i, 1);
-						} else {
-							i ++ ;
-						}
-					}
+					user.browseUsers.forEach( function(element, index) {
+						if (element.user == request.session.user._id) {
+							user.browseUsers.splice(index, 1);
+							return;
+						} 
+					});
 					user.browseUsers.unshift({
 						user : request.session.user._id,
 						time : new Date().getTime()
@@ -133,7 +132,7 @@ exports.details = function (request, response) {
 					});
 				}
 				User.findOne({_id: id})
-				.populate('browseUsers.user follows.user', 'name userImg')
+				.populate('browseUsers.user follows.user', 'name userImg sex')
 				.populate('articles.article','title updateAt')
 				.exec((error, user) => {
 					UserComment
@@ -217,7 +216,9 @@ exports.follows = function (request, response) {
 	var id = request.query.id;
 	var de = request.query.delete;
 	if (id) {
-		User.findOne({_id: id},(error, user) => {
+		User.findOne({_id: id})
+			.populate('user','name userImg sex')
+			.exec((error, user) => {
 			if (error) {
 				console.log(error);
 			} else {
@@ -237,13 +238,23 @@ exports.follows = function (request, response) {
 					});
 				}
 				user.save((error) => {
-					if (error) {
-						console.log(error);
-					} else {
+					User.findOne({_id: request.session.user._id})
+					.populate('user','name userImg sex')
+					.exec((error, user) => {
 						response.json({
-							success : 1
+							code : 200,
+							data: {
+								user: {
+									_id: user._id,
+									userImg: user.userImg,
+									sex: user.sex,
+									name: user.name
+								},
+								time: new Date().getTime()
+							},
+							msg: 'follow成功！'
 						});
-					}
+					 })
 				});
 			}
 		})
@@ -277,6 +288,94 @@ exports.secrecy = function(request, response) {
 	};
 	
 }
+
+
+exports.getFollows = (request,response) => {
+	var id = request.body.id ;
+	var pageNow = request.body.pageNow || 2;
+	const pageNum = 10;
+	var isBtn = true;
+	if (id) {
+		User.findOne({_id: id})
+		.populate('follows.user','name userImg sex')
+		.exec((error,user) => {
+			if (!user) {
+				response.json({
+					code: 400,
+					msg: '该用戶不存在,请浏览其他用戶'
+				})
+			} else {
+				const pageMax = Math.ceil(user.follows.length / pageNum);
+				if ( pageNow < 1) {
+					pageNow = 1;
+				} 
+				if (pageNow >= pageMax) {
+					pageNow = pageMax;
+					isBtn = false;
+				}
+				var follows = user.follows.splice((pageNow - 1) * pageNum, pageNum );
+				response.json({
+					code: 200,
+					data: {
+						follows: follows,
+						isBtn: isBtn
+					},
+					msg:'获得用戶追隨者成功!'
+				})
+			}
+		})
+	} else {
+		response.json({
+			code: 400,
+			msg : '获取文章追隨者信息失败 用戶id参数错误'
+		})
+	}
+}
+
+
+exports.getBrowseUsers = (request,response) => {
+	var id = request.body.id ;
+	var pageNow = request.body.pageNow || 2;
+	const pageNum = 10;
+	var isBtn = true;
+	if (id) {
+		User.findOne({_id: id})
+		.populate('browseUsers.user','name userImg sex')
+		.exec((error,user) => {
+			if (!user) {
+				response.json({
+					code: 400,
+					msg: '该用戶不存在,请浏览其他用戶'
+				})
+			} else {
+				const pageMax = Math.ceil(user.browseUsers.length / pageNum);
+				if ( pageNow < 1) {
+					pageNow = 1;
+				} 
+				if (pageNow >= pageMax) {
+					pageNow = pageMax;
+					isBtn = false;
+				}
+				var browseUsers = user.browseUsers.splice((pageNow - 1) * pageNum, pageNum );
+				response.json({
+					code: 200,
+					data: {
+						browseUsers: browseUsers,
+						isBtn: isBtn
+					},
+					msg:'获得用戶瀏覽者成功!'
+				})
+			}
+		})
+	} else {
+		response.json({
+			code: 400,
+			msg : '获取文章瀏覽者信息失败 用戶id参数错误'
+		})
+	}
+}
+
+
 /**
  * [getUserMessage 获取用户信息]
  * @param  {[type]} request  [description]

@@ -95,19 +95,29 @@ $(function (){
 			url = '/user/follows?id=' + id;
 		}
 		var $this = $(this);
-		var number = $this.siblings('.number');
+		var number = $('.followNumber');
 		$.ajax({
 			url: url,
 			type: 'post'
 		})
 		.done(function(result) {
-			if (result.success == 1) {
+			if (result.code == 200) {
 				if (isActive) {
 					$this.removeClass('active');
-					number.text(parseInt(number.text())-1);
+					number.each(function(index, el) {
+						$(el).text(parseInt($(el).text()) - 1)
+					});
+					$("#userFollows ul li a").each(function(index, el) {
+						if ($(el).attr('href').indexOf(result.data.user._id)) {
+							$(el).parent().remove();
+						}
+					});
 				} else {
 					$this.addClass('active');
-					number.text(parseInt(number.text())+1);
+					number.each(function(index, el) {
+						$(el).text(parseInt($(el).text()) + 1)
+					});
+					$("#userFollows ul").prepend(craeteHTML.addBUsers(result.data));
 				}
 			}
 		})
@@ -251,6 +261,10 @@ var craeteHTML = {
 	isGetBUsers: true,
 	getCUsersPage: 2,
 	isGetCUsers: true,
+	getUserFollowsPage: 2,
+	isGetUserFollow: true,
+	getUserBrowseUsersPage: 2,
+	isGetUserBrowseUsers: true,
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -766,8 +780,50 @@ var craeteHTML = {
 				})
 		    }
 		});
-		
 	},
+	// 同上
+	getUserFollows: function () {
+		const self = this;
+		$("#userFollows").scroll(function(event) {
+			var pageNow = self.getUserFollowsPage;
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			var nDivHight = $this.height();
+			var nScrollHight = $this[0].scrollHeight;
+		    var nScrollTop = $this[0].scrollTop;
+		    if(nScrollTop + nDivHight >= nScrollHight && self.isGetUserFollow) {
+		        public.ajax('/user/getfollows', 'POST', {id:id, pageNow: pageNow },function(data){
+					self.getUserFollowsPage += 1;
+					self.isGetUserFollow = data.isBtn;
+					data.follows.forEach( function(element, index) {
+						$("#userFollows ul").append(self.addBUsers(element));
+					});
+				})
+		    }
+		});
+	},
+	// 同上
+	getUserBrowseUsers: function () {
+		const self = this;
+		$("#userBrowseUsers").scroll(function(event) {
+			var pageNow = self.getUserBrowseUsersPage;
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			var nDivHight = $this.height();
+			var nScrollHight = $this[0].scrollHeight;
+		    var nScrollTop = $this[0].scrollTop;
+		    if(nScrollTop + nDivHight >= nScrollHight && self.isGetUserBrowseUsers) {
+		        public.ajax('/user/getBrowseUsers', 'POST', {id:id, pageNow: pageNow },function(data){
+					self.getUserBrowseUsersPage += 1;
+					self.isGetUserBrowseUsers = data.isBtn;
+					data.browseUsers.forEach( function(element, index) {
+						$("#userBrowseUsers ul").append(self.addBUsers(element));
+					});
+				})
+		    }
+		});
+	},
+
 	// 添加信息
 	addBUsers: function (item) {
 		var tpl =   `<li>
@@ -807,6 +863,8 @@ var craeteHTML = {
 		this.getOpinions();
 		this.getBUsers();
 		this.getCUsers();
+		this.getUserFollows();
+		this.getUserBrowseUsers();
 	}
 }
 var public = {
