@@ -307,7 +307,7 @@ var craeteHTML = {
 	              <span class="pull-right timeSpan" time="${userComment.createAt}">${time}</span>
 	            </p>
 	          </h4>
-	          <p>${context}</p>
+	          <p class='context'>${context}</p>
 	          <p><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
 	        </div>
 	    </div>`;
@@ -333,7 +333,7 @@ var craeteHTML = {
 	            </a>
 	            <p class="pull-right timeSpan" time="${userComment.createAt}">${time}</p>
 	          </h4>
-	          <p>${context}</p>
+	          <p class="context">${context}</p>
 	          <p><a class="deleteUserComment" data-id="${userComment._id}" re-id="${userComment._reid}">删除</a></p>
 	        </div>
         </div>`;
@@ -470,7 +470,7 @@ var craeteHTML = {
 			                  <span class="pull-right timeSpan" time="${comment.createAt }">${ moment(comment.createAt).fromNow()  }</span>
 			                </p>
 			              </h4>
-			              <p>${ comment.content }</p>`;
+			              <p class="context">${ comment.content }</p>`;
 				if (self.seeUserId == self.user._id || comment.from._id == self.user._id) { 
 	             	tpl += `<p><a class='deleteUserComment' data-id='${comment._id}'>删除</a></p>`;
 	            }
@@ -496,7 +496,7 @@ var craeteHTML = {
 			                          ${ moment(item.createAt).fromNow()  }
 			                        </p>
 			                      </h4>
-			               		  <p>${ item.content }</p>`;
+			               		  <p class="context">${ item.content }</p>`;
 		            if (self.seeUserId == self.user._id || item.from._id == self.user._id) {
                 		tpl += `<p><a class='deleteUserComment' data-id='${ comment._id }' re-id="${ item._id }">删除</a></p>`;
                		} 
@@ -839,6 +839,12 @@ var craeteHTML = {
 				    </li>`;
 		return tpl;
 	},
+	// 点击修改用户信息，添加返回链接
+	changUserMessClick: function(){
+		$("#changUserMess").click(function(){
+			$("#userReturnHref").val(window.location.href);
+		});
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -865,6 +871,7 @@ var craeteHTML = {
 		this.getCUsers();
 		this.getUserFollows();
 		this.getUserBrowseUsers();
+		this.changUserMessClick();
 	}
 }
 var public = {

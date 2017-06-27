@@ -282,8 +282,11 @@ body{
 	display: flex;
 }
 .media-left{
-	flex: 0 64px;
-	margin-right: 10px;
+	flex: 0 56px;
+}
+.media-left,
+.media>.pull-left {
+    padding-right: 6px;
 }
 .media-left img{
 	width: 100%;
@@ -292,6 +295,9 @@ body{
 }
 .media-body{
 	flex: 1;
+}
+.media-body p{
+	margin-bottom: 0px;
 }
 #userSignup .required label span {
 	color: red;
@@ -325,6 +331,30 @@ body{
 	width : 110px ; 
 	height : auto ; 
 	border-radius : 10px;
+}
+#userComment{
+	line-height: 24px;
+}
+#userComment h4{
+	margin-bottom: 0px;
+	font-weight: 200;
+}
+#userComment a{
+	color: #000;
+	-webkit-transition: color 0.5s ease-in-out;
+	-o-transition: color 0.5s ease-in-out;
+	transition: color 0.5s ease-in-out;
+}
+#userComment a:hover{
+	color: #f60;
+	text-decoration: none;
+	cursor: pointer;
+}
+#userComment .context {
+	padding: 5px 0px;
+}
+#userComment .timeSpan{
+	color: #000;
 }
 #userCommentForm .alert .close{
 	display: none;
@@ -511,6 +541,13 @@ footer .machine{
 	color: #000;
 	font-size: 16px;
 	margin-left: 4px;
+	-webkit-transition: color 0.5s ease-in-out;
+	-o-transition: color 0.5s ease-in-out;
+	transition: color 0.5s ease-in-out;
+}
+.author-right .author-name:hover{
+	color: #f60;
+	text-decoration: none;
 }
 .author-right .lickLength{
 	cursor: pointer;

@@ -172,6 +172,7 @@ exports.saveImg = function (request, response, next){
 }
 // 改变资料
 exports.change = function (request , response) {
+	const returnHref = request.body.href; 
 	var _user = request.body.user;
 	var _id = _user._id;
 	if (_id == request.session.user._id) {
@@ -189,9 +190,9 @@ exports.change = function (request , response) {
 			user.hobby = _user.hobby;
 			// 改变作者麾下所以文章作者的性别
 			user.articles.forEach( function(element, index) {
-				console.log(element.article);
 				Article.findOne({_id:element.article},(error,article) => {
 					article.author.sex = _user.sex;
+					article.author.userImg = user.userImg;
 					article.save(()=>{});
 				})
 			});
@@ -200,7 +201,7 @@ exports.change = function (request , response) {
 					console.log(error);
 				} else {
 					request.session.user = user;
-					response.redirect('/user/details?id=' + user._id);
+					response.redirect(returnHref);
 				}
 			})
 		})
