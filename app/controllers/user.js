@@ -438,13 +438,14 @@ exports.delete = function (request, response) {
 	 * 函数描述 首先判断当前用户是否有权限删除用户,删除成功返回数据
 	 */
 	var id = request.query.id;
-	if (id && request.session.user.role >= 50) {
+	if (id && request.session.user.role >= 10) {
 		User.remove({_id: id},(error) => {
 			if (error) {
 				console.log(error);
 			} else {
 				response.json({
-					success : 1
+					success : 1,
+					msg: '删除用户成功!'
 				})
 			}
 		})
@@ -457,11 +458,8 @@ exports.delete = function (request, response) {
  * @return {[type]}          [description]
  */
 exports.isSignIn = (request, response, next) => {
+
 	var href = request.route.path;
-	// var query = request.query;
-	// for (key in query) {
-	// 	href += '?' + key + "=" + query[key];
-	// }
 	let user = request.session.user;
 	if (user) {
 		next()
@@ -469,4 +467,17 @@ exports.isSignIn = (request, response, next) => {
 		response.redirect('/user/signin?href=' + href)
 	}
 	
+}
+
+/**
+ * 验证权限 role > 10
+ */
+exports.isRole = (request, response, next) => {
+	if (request.session.user.role >= 10) {
+		next();
+	} else {
+		response.render('404',{
+			title : '页面不存在！'
+		})
+	}
 }

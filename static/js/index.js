@@ -293,7 +293,7 @@ var craeteHTML = {
 				var tpl = 
 		`<div class="media userCommentOne">
 	        <div class="media-left">
-	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}">
+	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}" data-name="${user.name}">
 	            <img class="media-object" src="/userImg/${user.userImg}" data-holder-rendered="true"></a>
 	        </div>
 	        <div class="media-body">
@@ -308,7 +308,7 @@ var craeteHTML = {
 	            </p>
 	          </h4>
 	          <p class='context'>${context}</p>
-	          <p><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
+	          <p class="re"><a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}" data-name="${user.name}">回复</a><a class="deleteUserComment" data-id="${userComment._id}">删除</a></p>
 	        </div>
 	    </div>`;
 	       		$("#userComment").prepend(tpl);
@@ -317,7 +317,7 @@ var craeteHTML = {
 				var tpl = 
 		`<div class="media userCommentTwo">
 	        <div class="media-left">
-	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}">
+	          <a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}" data-name="${user.name}">
 	            <img class="media-object" src="/userImg/${user.userImg}" data-holder-rendered="true">
 	          </a>
 	        </div>
@@ -334,7 +334,9 @@ var craeteHTML = {
 	            <p class="pull-right timeSpan" time="${userComment.createAt}">${time}</p>
 	          </h4>
 	          <p class="context">${context}</p>
-	          <p><a class="deleteUserComment" data-id="${userComment._id}" re-id="${userComment._reid}">删除</a></p>
+	          <p class="re"><a href="#content" class="addComment" data-pid="${userComment._id}" data-tid="${user._id}" data-name="${user.name}">回复</a>
+	          <a class="deleteUserComment" data-id="${userComment._id}" re-id="${userComment._reid}">删除</a>
+	          </p>
 	        </div>
         </div>`;
 	       		$("#userComment .userCommentOne").eq(self.addCommentIndex).find('.media-body').eq(0).append(tpl);
@@ -396,7 +398,7 @@ var craeteHTML = {
 			var pid = $(this).attr('data-pid');
 			var index = $("#userComment").find('.userCommentOne').index($(this).parents('.userCommentOne').get(0));
 			self.addCommentIndex = index;
-			var name = $(this).parent().siblings('.media-body').find('a').eq(0).text();
+			var name = $(this).attr('data-name');
 			$("#userCommentForm .alert").find('label').html(`回复 ${name}`).parent().
 			find('.close').show();
 			if ($("#commentTo").length <= 0) {
@@ -456,7 +458,7 @@ var craeteHTML = {
         	comments.forEach(function (comment,index) {
           		tpl += `<div class="media userCommentOne">
 			            <div class="media-left">
-			              <a href="#content" class="addComment" data-pid='${ comment._id }' data-tid='${comment.from._id }'>
+			              <a href="#content" class="addComment" data-pid='${ comment._id }' data-tid='${comment.from._id }' data-name="${comment.from.name}">
 			                <img class="media-object" src="/userImg/${ comment.from.userImg }" data-holder-rendered="true"></a>
 			            </div>
 			            <div class="media-body">
@@ -470,15 +472,16 @@ var craeteHTML = {
 			                  <span class="pull-right timeSpan" time="${comment.createAt }">${ moment(comment.createAt).fromNow()  }</span>
 			                </p>
 			              </h4>
-			              <p class="context">${ comment.content }</p>`;
+			              <p class="context">${ comment.content }</p><p class="re"><a href="#content" class="addComment" data-pid='${ comment._id }' data-tid='${comment.from._id }' data-name="${ comment.from.name }">回复</a>`;
 				if (self.seeUserId == self.user._id || comment.from._id == self.user._id) { 
-	             	tpl += `<p><a class='deleteUserComment' data-id='${comment._id}'>删除</a></p>`;
+	             	tpl += `<a class='deleteUserComment' data-id='${comment._id}'>删除</a>`;
 	            }
+	            tpl += '</p>'
 	            if (comment.reply && comment.reply.length > 0) { 
                 	comment.reply.forEach( function (item,index) { 
 		            tpl += `<div class="media userCommentTwo">
 			                    <div class="media-left">
-			                      <a href="#content" class="addComment" data-pid='${comment._id }' data-tid='${item.from._id }'>
+			                      <a href="#content" class="addComment" data-pid='${comment._id }' data-tid='${item.from._id }' data-name="${item.from.name}">
 			                        <img class="media-object" src="/userImg/${ item.from.userImg }" data-holder-rendered="true" >
 			                      </a>
 			                    </div>
@@ -496,11 +499,11 @@ var craeteHTML = {
 			                          ${ moment(item.createAt).fromNow()  }
 			                        </p>
 			                      </h4>
-			               		  <p class="context">${ item.content }</p>`;
+			                      <p class="context">${ item.content }</p><p class="re"><a href="#content" class="addComment" data-pid='${comment._id }' data-tid='${item.from._id }' data-name="${item.from.name}">回复</a>`;
 		            if (self.seeUserId == self.user._id || item.from._id == self.user._id) {
-                		tpl += `<p><a class='deleteUserComment' data-id='${ comment._id }' re-id="${ item._id }">删除</a></p>`;
+                		tpl += `<a class='deleteUserComment' data-id='${ comment._id }' re-id="${ item._id }">删除</a>`;
                		} 
-		            tpl += "</div></div>";
+               		tpl += "</p></div></div>";
 	           		}) 
 	         	}
 	         	tpl += "</div></div>"; 

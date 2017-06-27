@@ -39,7 +39,7 @@ let router = function (app) {
 	app.get('/user/signin', User.getSignin);
 	app.get('/user/logout', User.logout);
 	app.post('/user/signin', User.postSignin);
-	app.get('/admin/user/list', User.isSignIn, User.userList);
+	app.get('/admin/user/list', User.isSignIn, User.isRole, User.userList);
 	app.get('/user/details' , User.details);
 	app.get('/user/wall' , User.wall);
 	app.post('/userComment', UserComment.comment);
@@ -67,7 +67,7 @@ let router = function (app) {
 	// 文章分类页面
 	app.get('/admin/articlecategory', ArticleCategory.admin);
 	app.post('/admin/articlecategory', ArticleCategory.save);
-	app.get('/admin/articlecategory/list', ArticleCategory.list)
+	app.get('/admin/articlecategory/list', User.isSignIn, User.isRole,  ArticleCategory.list)
 	app.get('/articlecategory', ArticleCategory.articlecategory)
 	app.delete('/admin/articlecategory/delete', ArticleCategory.delete);
 
