@@ -63,6 +63,7 @@ let router = function (app) {
 	app.delete('/admin/article/delete', Article.delete);
 	app.post('/article/getBUsers', Article.getBUsers) 
 	app.post('/article/getCUsers', Article.getCUsers) 
+	app.post('/article/search', Article.Search) 
 
 	// 文章分类页面
 	app.get('/admin/articlecategory', ArticleCategory.admin);

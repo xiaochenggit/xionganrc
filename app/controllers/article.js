@@ -288,6 +288,61 @@ exports.articleList = function (request, response) {
 		})
 	}
 }
+
+/**
+ * 文章搜索
+ */
+
+exports.Search = (request, response) => {
+	const search = request.body.search;
+	console.log(search);
+	const reg = new RegExp(search, 'g');
+	const pageArts = 2;
+	var  page = parseInt(request.query.index || 0);
+	Article.find({})
+	.populate('articles.article','title updateAt createAt author browseUsers desc')
+	.exec((error, articles) => {
+
+		articles = articles.filter((article) => {
+			return reg.test(article.title);
+		})
+		articles = articles.sort(compare);
+		var Maxpage = Math.ceil(articles.length / pageArts);
+		if (page < 1) {
+			page = 1
+		}
+		if (page > Maxpage) {
+			page = Maxpage
+		}
+		articles = articles.splice((page - 1)*pageArts,pageArts);
+		if (articles.length < 0) {
+			// response.json({
+			// 	code : 400,
+			// 	msg: '没有搜索到任何文章!'
+			// })
+		} else {
+			// response.json({
+			// 	code : 200,
+			// 	data: {
+			// 		articles: articles
+			// 	},
+			// 	msg: '搜索文章成功！'
+			// });
+			// response.redirect('/user/signin?href=' + href)
+			response.render('article-list',{
+				title : '文章列表',
+				articles : articles,
+				Maxpage : Maxpage,
+				page:page,
+				pageArts: pageArts,
+				userId : '',
+				artCate : '',
+				by : `search(${search})`
+			});
+		}
+	});
+}
+
 /**
  * [delete 找到该文章删除,并且找到作者在其文章列表中删除它,文章所属分类列表中也需要删除]
  * @param  {[type]} request  [description]

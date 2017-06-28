@@ -34,6 +34,7 @@ $(function (){
 		var username = $("#userName").val();
 		var password = $("#password").val();
 		var href = window.location.href;
+		// 如果要是在登录页面
 		if (href.indexOf('signin') > 0) {
 			href = public.getUrlParam(window.location,'href') || '/';
 		}
@@ -842,10 +843,24 @@ var craeteHTML = {
 				    </li>`;
 		return tpl;
 	},
-	// 点击修改用户信息，添加返回链接
+	// 点击修改用户信息，添加返回链接 到 from 表单中
 	changUserMessClick: function(){
 		$("#changUserMess").click(function(){
 			$("#userReturnHref").val(window.location.href);
+		});
+	},
+	/**
+	 * 文章标题搜索
+	 */
+	articleSearch: function(){
+		$("#articleSearch").submit(function(event) {
+			event.preventDefault();
+			var search = $("input[name='search']").val().trim();
+			if (!search) {
+				alert('请填写要搜索的文章名!')
+				return false;
+			}
+			public.ajax('/article/search','POST',{search: search});
 		});
 	},
 	/**
@@ -875,6 +890,7 @@ var craeteHTML = {
 		this.getUserFollows();
 		this.getUserBrowseUsers();
 		this.changUserMessClick();
+		// this.articleSearch();
 	}
 }
 var public = {
