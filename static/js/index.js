@@ -860,7 +860,11 @@ var craeteHTML = {
 				alert('请填写要搜索的文章名!')
 				return false;
 			}
-			public.ajax('/article/search','POST',{search: search});
+			// 发送搜索请求,没有搜索到文章直接弹出提示,搜索到之后 直接跳转到文章列表页面
+			// 在进行筛选。
+			public.ajax('/article/search','POST',{search: search},function(data){
+				window.location.href = '/admin/article/list?search=' + data.search;
+			});
 		});
 	},
 	/**
@@ -890,7 +894,7 @@ var craeteHTML = {
 		this.getUserFollows();
 		this.getUserBrowseUsers();
 		this.changUserMessClick();
-		// this.articleSearch();
+		this.articleSearch();
 	}
 }
 var public = {

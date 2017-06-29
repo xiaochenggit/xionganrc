@@ -196,6 +196,7 @@ var compare = function (x, y) {
 // 文章列表
 exports.articleList = function (request, response) {
 	const pageArts = 2;
+	const search = request.query.search || 0 ;
 	var  page = parseInt(request.query.index || 0);
 	const userId = request.query.id || "";
 	const artCate = request.query.artCate || "";
@@ -259,6 +260,36 @@ exports.articleList = function (request, response) {
 				by: artCate
 			});
 		})
+	} else if (search) {
+		// 进入文章搜索环节
+		const reg = new RegExp(search, 'g');
+		Article.find({})
+		.populate('articles.article','title updateAt createAt author browseUsers desc')
+		.exec((error, articles) => {
+			// 找到符合条件的文章数组
+			articles = articles.filter((article) => {
+				return reg.test(article.title);
+			})
+			articles = articles.sort(compare);
+			var Maxpage = Math.ceil(articles.length / pageArts);
+			if (page < 1) {
+				page = 1
+			}
+			if (page > Maxpage) {
+				page = Maxpage
+			}
+			articles = articles.splice((page - 1)*pageArts,pageArts);
+			response.render('article-list',{
+				title : '文章列表',
+				articles : articles,
+				Maxpage : Maxpage,
+				page:page,
+				pageArts: pageArts,
+				userId : '',
+				artCate : '',
+				by : `search(${search})`
+			});
+		})
 	} else {
 		Article.find({})
 		.exec((error,articles) => {
@@ -290,54 +321,28 @@ exports.articleList = function (request, response) {
 }
 
 /**
- * 文章搜索
+ * 文章搜索判断是否查找到了文章 返回成功之后跳转到了 文章列表页面文章列表页面在进行筛选
  */
-
 exports.Search = (request, response) => {
 	const search = request.body.search;
-	console.log(search);
 	const reg = new RegExp(search, 'g');
-	const pageArts = 2;
-	var  page = parseInt(request.query.index || 0);
 	Article.find({})
-	.populate('articles.article','title updateAt createAt author browseUsers desc')
 	.exec((error, articles) => {
-
 		articles = articles.filter((article) => {
 			return reg.test(article.title);
 		})
-		articles = articles.sort(compare);
-		var Maxpage = Math.ceil(articles.length / pageArts);
-		if (page < 1) {
-			page = 1
-		}
-		if (page > Maxpage) {
-			page = Maxpage
-		}
-		articles = articles.splice((page - 1)*pageArts,pageArts);
-		if (articles.length < 0) {
-			// response.json({
-			// 	code : 400,
-			// 	msg: '没有搜索到任何文章!'
-			// })
+		if (articles.length == 0) {
+			response.json({
+				code : 400,
+				msg: '没有搜索到任何文章!'
+			})
 		} else {
-			// response.json({
-			// 	code : 200,
-			// 	data: {
-			// 		articles: articles
-			// 	},
-			// 	msg: '搜索文章成功！'
-			// });
-			// response.redirect('/user/signin?href=' + href)
-			response.render('article-list',{
-				title : '文章列表',
-				articles : articles,
-				Maxpage : Maxpage,
-				page:page,
-				pageArts: pageArts,
-				userId : '',
-				artCate : '',
-				by : `search(${search})`
+			response.json({
+				code : 200,
+				data: {
+					search: search
+				},
+				msg: '搜索文章成功！'
 			});
 		}
 	});
