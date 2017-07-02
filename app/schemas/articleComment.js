@@ -2,10 +2,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
-var userCommentSchema = new Schema({
-	user : {
+const articleCommentSchema = new Schema({
+	article : {
 		type : ObjectId,
-		ref : 'User'
+		ref : 'Article'
 	},
 	from : {
 		type : ObjectId,
@@ -40,4 +40,4 @@ var userCommentSchema = new Schema({
       default : new Date().getTime()
     }
 });
-module.exports = userCommentSchema;
+module.exports = articleCommentSchema;

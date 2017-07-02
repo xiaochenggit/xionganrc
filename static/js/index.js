@@ -867,6 +867,16 @@ var craeteHTML = {
 			});
 		});
 	},
+	addArticleComment: function(){
+		var self = this;
+		$("#articleCommentForm").submit(function(event) {
+			event.preventDefault();
+			var data = $(this).serializeObject();
+			public.ajax('/article/addComment','POST',data,function(data){
+				
+			});
+		});
+	},
 	/**
 	 * [init 开始就会执行的函数]
 	 * @return {[type]} [description]
@@ -895,6 +905,7 @@ var craeteHTML = {
 		this.getUserBrowseUsers();
 		this.changUserMessClick();
 		this.articleSearch();
+		this.addArticleComment();
 	}
 }
 var public = {

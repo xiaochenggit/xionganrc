@@ -5,6 +5,7 @@ const UserComment = require('../controllers/userComment');
 const Article = require('../controllers/article');
 const ArticleCategory = require('../controllers/articleCategory');
 const Opinion = require('../controllers/opinion');
+const ArticleComment = require('../controllers/articleComment');
 const Note = require('../controllers/note');
 const Moment = require('moment');
 Moment.lang('zh-cn');
@@ -64,7 +65,7 @@ let router = function (app) {
 	app.post('/article/getBUsers', Article.getBUsers) 
 	app.post('/article/getCUsers', Article.getCUsers) 
 	app.post('/article/search', Article.Search) 
-
+	app.post('/article/addComment', User.isSignIn, ArticleComment.addComment)
 	// 文章分类页面
 	app.get('/admin/articlecategory', ArticleCategory.admin);
 	app.post('/admin/articlecategory', ArticleCategory.save);
