@@ -66,13 +66,13 @@ let router = function (app) {
 	app.post('/article/getCUsers', Article.getCUsers) 
 	app.post('/article/search', Article.Search) 
 	app.post('/article/addComment', User.isSignIn, ArticleComment.addComment)
+	app.post('/article/deletearticlecomment', User.isSignIn, ArticleComment.delete)
 	// 文章分类页面
 	app.get('/admin/articlecategory', ArticleCategory.admin);
 	app.post('/admin/articlecategory', ArticleCategory.save);
 	app.get('/admin/articlecategory/list', User.isSignIn, User.isRole,  ArticleCategory.list)
 	app.get('/articlecategory', ArticleCategory.articlecategory)
 	app.delete('/admin/articlecategory/delete', ArticleCategory.delete);
-
 	// note
 	app.get('/user/note/new', Note.new);
 	app.post('/editor/images', Note.images);

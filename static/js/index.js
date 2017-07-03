@@ -867,15 +867,102 @@ var craeteHTML = {
 			});
 		});
 	},
+	/**
+	 * [addArticleComment 添加文章评论]
+	 */
 	addArticleComment: function(){
 		var self = this;
 		$("#articleCommentForm").submit(function(event) {
 			event.preventDefault();
-			var data = $(this).serializeObject();
+			const data = $(this).serializeObject();
+			if (!data['articleComment[content]'].trim()) {
+				alert('评论不能为空!');
+				return false;
+			}
 			public.ajax('/article/addComment','POST',data,function(data){
-				
+				$("#articleCommentForm textarea").val('');
+				$("#articleComments").prepend(self.articleCommentTpl(data.articleComment));
+				self.articleCommentSort();
 			});
 		});
+	},
+	deleteArticleComment: function() {
+		const self = this;
+		$('#articleComments').on('click','.deleteArticleComment',function(){
+			const $this = $(this);
+			const id = $this.attr('data-id');
+			public.ajax('/article/deletearticlecomment','POST',{id: id}, function(){
+				$this.parents('.articleComment').remove();
+				self.articleCommentSort();
+			});
+		})
+	},
+	articleCommentTpl: function(item){
+		let tpl = '';
+		tpl += `<div class="articleComment">
+					<div class="articleCommentFrom">
+						<div class="left">
+							<a href="/user/details?id=${ item.from._id }" target="_blank">
+								<img src="/userImg/${item.from.userImg}" alt="${ item.from.name }">
+							</a>
+						</div>
+						<div class="right">
+							<p class="name">
+								<a href="/user/details?id=${ item.from._id }" target="_blank">
+									${ item.from.name }
+									<span class='iconfont icon-${  item.from.sex  }'>
+									</span>
+								</a>
+							</p>
+							<p class="des">
+								<span class='number'>1</span> · 楼
+								<span class='time'>
+									${  moment(item.createAt).format('YYYY.MM.DD HH:mm')  }
+								</span>
+							</p>
+						</div>
+					</div>
+					<div class="articleCommentContent">
+						${ item.content }
+						<div class="operation">
+							<span class='reply'>
+								<i class='iconfont icon-huifu'></i>回复
+							</span>
+							<span class="deleteArticleComment pull-right" data-id="${ item._id }">删除</span>
+						</div>
+					</div>
+				</div>`;
+		return tpl;
+	},
+	articleCommentSort: function() {
+		$('#articleComments .articleComment').each(function(index,el){
+			$(el).find('.number').text(index + 1);
+		})
+	},
+	/**
+	 * [addArticleCommentForm 添加回复的表单]
+	 */
+	addArticleCommentForm: function() {
+		let tpl = '';
+	},
+	addArticleCommentTwo: function() {
+
+		$("#articleComments").on('click','.addCommentReply',function(){
+			$(this).parent().submit(function(event){
+				event.preventDefault();
+				const data = $(this).serializeObject();
+				if (!data['articleComment[content]'].trim()) {
+					alert('评论不能为空!');
+					return false;
+				}
+				console.log(data);
+				public.ajax('/article/addComment','POST',data,function(data){
+					// $("#articleCommentForm textarea").val('');
+					// $("#articleComments").prepend(self.articleCommentTpl(data.articleComment));
+					// self.articleCommentSort();
+				});
+			})
+		})
 	},
 	/**
 	 * [init 开始就会执行的函数]
@@ -906,6 +993,9 @@ var craeteHTML = {
 		this.changUserMessClick();
 		this.articleSearch();
 		this.addArticleComment();
+		this.deleteArticleComment();
+		this.articleCommentSort();
+		this.addArticleCommentTwo();
 	}
 }
 var public = {

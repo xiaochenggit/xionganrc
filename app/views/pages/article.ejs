@@ -84,6 +84,93 @@
 					<button class="btn btn-info" data-target="#signinModal" data-toggle="modal">登陆</button>后可评论
 				</div>
 			<% } %>
+			<div class="articleComments" id="articleComments">
+				<% if (articleComments && articleComments.length > 0 ) { %>
+					 <% articleComments.forEach(function(item, index){ %>
+								<div class="articleComment">
+									<div class="articleCommentFrom">
+										<div class="left">
+											<a href="/user/details?id=<%=item.from._id%>" target="_blank">
+												<img src="/userImg/<%=item.from.userImg %>" alt="<%=item.from.name%>">
+											</a>
+										</div>
+										<div class="right">
+											<p class="name">
+												<a href="/user/details?id=<%=item.from._id%>" target="_blank">
+													<%=item.from.name%>
+													<span class='iconfont icon-<%= item.from.sex %>'>
+					  							</span>
+												</a>
+											</p>
+											<p class="des">
+												<span class='number'><%=index + 1 %></span> · 楼
+												<span class='time'>
+													<%= moment(item.createAt).format('YYYY.MM.DD HH:mm') %>
+												</span>
+											</p>
+										</div>
+									</div>
+									<div class="articleCommentContent">
+										<%=item.content%>
+										<div class="operation">
+											<span class='reply'>
+												<i class='iconfont icon-huifu'></i>回复
+					  					</span>
+											<% if (user._id == item.from._id || user.role >= 10 ){ %>
+											<span class="deleteArticleComment pull-right" data-id="<%=item._id%>">删除</span>
+											<% } %>
+										</div>
+									</div>
+									<div class="commentlist">
+										<% if (item.reply &&　item.reply.length > 0) { %>
+										<% item.reply.forEach(function(element){ %>
+											<div class="articleCommentTwo">
+												<div class="left">
+													<a href="/user/details?id=<%=element.from._id%>" target="_blank">
+														<img src="/userImg/<%=element.from.userImg %>" alt="<%=element.from.name%>">
+													</a>
+												</div>
+												<div class="right">
+													<p class="name">
+														<a href="/user/details?id=<%=element.from._id%>" target="_blank">
+															<%=element.from.name%>
+															<span class='iconfont icon-<%= element.from.sex %>'>
+							  							</span>
+														</a>
+													</p>
+													<p class="des">
+														<span class='time'>
+															<%= moment(element.createAt).format('YYYY.MM.DD HH:mm') %>
+														</span>
+													</p>
+												</div>
+											</div>
+											<div class="articleCommentContent">
+												<%=element.content%>
+												<div class="operation">
+													<span class='reply'>
+														<i class='iconfont icon-huifu'></i>回复
+							  					</span>
+													<% if (user._id == element.from._id || user.role >= 10 ){ %>
+													<span class="deleteArticleComment pull-right" data-id="<%=element._id%>">删除</span>
+													<% } %>
+												</div>
+											</div>
+										<% }) %>
+										<% } %>
+										<div>
+											<form>
+												<input type="hidden" name="articleComment[_id]" value="<%=item._id%>">
+												<input type="hidden" name="articleComment[toId]" value="<%=item.from._id%>">
+												<textarea placeholder="写下你的评论..." name="articleComment[content]"></textarea>
+												<button class="btn btn-info addCommentReply" type="submit">提交</button>
+											</form>
+										</div>
+									</div>
+								</div>
+					 <% }) %>
+				<% } %> 
+			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="articleBrowseUsers">

@@ -1,6 +1,7 @@
 const Article = require('../models/article');
 const User = require('../models/user');
 const ArtCate = require('../models/articleCategory');
+const ArticleComment = require('../models/articleComment');
 
 // 文章发布页面
 
@@ -131,11 +132,18 @@ exports.article = function (request, response) {
 				if (!request.session.user) {
 					User.findOne({_id: article.author._id })
 					.exec((error,author) => {
-						response.render('article',{
-							article : article,
-							author : author,
-							isCollection: false
-						})
+						ArticleComment.find({article:article._id})
+								.populate('from','name userImg sex')
+								.exec((error,articleComments) => {
+										articleComments = articleComments.reverse();
+										console.log(articleComments);
+										response.render('article',{
+											article : article,
+											author : author,
+											isCollection: false,
+											articleComments:articleComments
+										})
+								});
 					})
 				} else {
 					User.findOne({_id:request.session.user._id},(error,user) => {
@@ -170,11 +178,18 @@ exports.article = function (request, response) {
 							.populate('browseUsers.user','name userImg sex')
 							.populate('collectionUsers.user','name userImg sex')
 							.exec((error,article) => {
-								response.render('article',{
-									article : article,
-									author : author,
-									isCollection: isCollection
-								})
+								ArticleComment.find({article:article._id})
+								.populate('from','name userImg sex')
+								.populate('reply.from reply.to', 'name userImg')
+								.exec((error,articleComments) => {
+									articleComments = articleComments.reverse();
+									response.render('article',{
+										article : article,
+										author : author,
+										isCollection: isCollection,
+										articleComments: articleComments
+									});
+								});
 							});
 						})
 					});
