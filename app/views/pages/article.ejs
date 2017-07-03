@@ -122,6 +122,7 @@
 										</div>
 									</div>
 									<div class="commentlist">
+										<div class="div">
 										<% if (item.reply &&　item.reply.length > 0) { %>
 										<% item.reply.forEach(function(element){ %>
 											<div class="articleCommentTwo">
@@ -152,13 +153,14 @@
 														<i class='iconfont icon-huifu'></i>回复
 							  					</span>
 													<% if (user._id == element.from._id || user.role >= 10 ){ %>
-													<span class="deleteArticleComment pull-right" data-id="<%=element._id%>">删除</span>
+													<span class="deleteArticleComment pull-right two" data-id="<%=element._id%>">删除</span>
 													<% } %>
 												</div>
 											</div>
 										<% }) %>
 										<% } %>
-										<div>
+										</div>
+										<div class="articleCommentTwoFrom">
 											<form>
 												<input type="hidden" name="articleComment[_id]" value="<%=item._id%>">
 												<input type="hidden" name="articleComment[toId]" value="<%=item.from._id%>">

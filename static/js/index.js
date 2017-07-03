@@ -891,10 +891,16 @@ var craeteHTML = {
 		$('#articleComments').on('click','.deleteArticleComment',function(){
 			const $this = $(this);
 			const id = $this.attr('data-id');
-			public.ajax('/article/deletearticlecomment','POST',{id: id}, function(){
-				$this.parents('.articleComment').remove();
-				self.articleCommentSort();
-			});
+			if (!$this.hasClass('two')) {
+				public.ajax('/article/deletearticlecomment','POST',{id: id}, function(){
+					$this.parents('.articleComment').remove();
+					self.articleCommentSort();
+				});
+			} else {
+				public.ajax('/article/deletearticlecomment','POST',{id: id,two:true}, function(){
+					// $this.parents('.articleComment').remove();
+				});
+			}
 		})
 	},
 	articleCommentTpl: function(item){
@@ -931,6 +937,7 @@ var craeteHTML = {
 							<span class="deleteArticleComment pull-right" data-id="${ item._id }">删除</span>
 						</div>
 					</div>
+					<div class="commentlist"></div>
 				</div>`;
 		return tpl;
 	},
@@ -942,27 +949,61 @@ var craeteHTML = {
 	/**
 	 * [addArticleCommentForm 添加回复的表单]
 	 */
-	addArticleCommentForm: function() {
-		let tpl = '';
-	},
+	// addArticleCommentForm: function() {
+	// 	let tpl = '';
+	// },
 	addArticleCommentTwo: function() {
-
-		$("#articleComments").on('click','.addCommentReply',function(){
+		const self = this;
+		$("#articleComments").on('click','.addCommentReply',function(event){
 			$(this).parent().submit(function(event){
 				event.preventDefault();
-				const data = $(this).serializeObject();
+				const $this = $(this);
+				const data = $this.serializeObject();
 				if (!data['articleComment[content]'].trim()) {
 					alert('评论不能为空!');
 					return false;
 				}
-				console.log(data);
 				public.ajax('/article/addComment','POST',data,function(data){
-					// $("#articleCommentForm textarea").val('');
-					// $("#articleComments").prepend(self.articleCommentTpl(data.articleComment));
-					// self.articleCommentSort();
+					$this.parents('.articleCommentTwoFrom').siblings('.div').append(self.addArticleCommentTwoTpl(data.articleCommentTwo));
 				});
 			})
 		})
+	},
+	addArticleCommentTwoTpl: function(element) {
+		let tpl = "";
+		tpl += `<div class="articleCommentTwo">
+								<div class="left">
+									<a href="/user/details?id=${element.from._id}" target="_blank">
+										<img src="/userImg/${element.from.userImg }" alt="${element.from.name}">
+									</a>
+								</div>
+								<div class="right">
+									<p class="name">
+										<a href="/user/details?id=${element.from._id}" target="_blank">
+											${element.from.name}
+											<span class='iconfont icon-${ element.from.sex }'>
+			  							</span>
+										</a>
+									</p>
+									<p class="des">
+										<span class='time'>
+											${ moment(element.createAt).format('YYYY.MM.DD HH:mm') }
+										</span>
+									</p>
+								</div>
+							</div>
+							<div class="articleCommentContent">
+								${element.content}
+								<div class="operation">
+									<span class='reply'>
+										<i class='iconfont icon-huifu'></i>回复
+			  					</span>
+									<span class="deleteArticleComment pull-right two" data-id="${element._id}">删除</span>
+									<% } }
+								</div>
+							</div>
+						</div>`;
+		return tpl;
 	},
 	/**
 	 * [init 开始就会执行的函数]

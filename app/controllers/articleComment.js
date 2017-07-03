@@ -40,9 +40,16 @@ exports.addComment = (request, response) => {
 					updateAt : new Date().getTime()
 				});
 				newarticleComment.save((error,newarticleComment) => {
-					response.json({
-						code: 200,
-						msg:'二级评论成功!'
+					ArticleComment.findOne({_id: newarticleComment._id})
+					.populate('reply.from reply.to', 'name userImg')
+					.exec((error,newarticleComment) => {
+						response.json({
+							code: 200,
+							msg:'二级评论成功!',
+							data: {
+								articleCommentTwo: newarticleComment.reply[newarticleComment.reply.length -1]
+							}
+						})
 					})
 				})
 			}
@@ -54,26 +61,32 @@ exports.addComment = (request, response) => {
 exports.delete = (request, response) => {
 	let id = request.body.id;
 	const user = request.session.user;
-	ArticleComment.findOne({_id:id}, (error,articleComment) => {
-		if (articleComment) {
-			if (articleComment.from == user._id || user.role >= 10) {
-				ArticleComment.remove({_id:id},(error) => {
-					response.json({
-						code:200,
-						msg:'删除评论成功！'
+	const two = request.body.two;
+	if (!two) {
+		ArticleComment.findOne({_id:id}, (error,articleComment) => {
+			if (articleComment) {
+				if (articleComment.from == user._id || user.role >= 10) {
+					ArticleComment.remove({_id:id},(error) => {
+						response.json({
+							code:200,
+							msg:'删除评论成功！'
+						})
 					})
-				})
+				} else {
+					response.json({
+						code:400,
+						msg:'你没有权限删除该评论！'
+					})
+				}
 			} else {
 				response.json({
-					code:400,
-					msg:'你没有权限删除该评论！'
+					code:200,
+					msg:'没有该评论,直接删除'
 				})
 			}
-		} else {
-			response.json({
-				code:200,
-				msg:'没有该评论,直接删除'
-			})
-		}
-	})
+		})
+	} else {
+		
+	}
+	
 }
