@@ -880,25 +880,27 @@ var craeteHTML = {
 				return false;
 			}
 			public.ajax('/article/addComment','POST',data,function(data){
-				$("#articleCommentForm textarea").val('');
 				$("#articleComments").prepend(self.articleCommentTpl(data.articleComment));
 				self.articleCommentSort();
+				self.addArticleCommentTwo();
+				$("#articleCommentForm textarea").val('').focus();
 			});
 		});
 	},
 	deleteArticleComment: function() {
 		const self = this;
-		$('#articleComments').on('click','.deleteArticleComment',function(){
+		$('#articleComments').on('click','.deleteArticleComment,.deleteArticleCommentTwo',function(){
 			const $this = $(this);
 			const id = $this.attr('data-id');
+			const art = $this.attr('data-art');
 			if (!$this.hasClass('two')) {
 				public.ajax('/article/deletearticlecomment','POST',{id: id}, function(){
 					$this.parents('.articleComment').remove();
 					self.articleCommentSort();
 				});
 			} else {
-				public.ajax('/article/deletearticlecomment','POST',{id: id,two:true}, function(){
-					// $this.parents('.articleComment').remove();
+				public.ajax('/article/deletearticlecomment','POST',{id: id,two:true,art:art}, function(){
+					$this.parents('.articleCommentTwoGroup').remove();
 				});
 			}
 		})
@@ -931,13 +933,16 @@ var craeteHTML = {
 					<div class="articleCommentContent">
 						${ item.content }
 						<div class="operation">
-							<span class='reply'>
+							<span class='reply' artId="${item._id}" toId="${item.from._id}">
 								<i class='iconfont icon-huifu'></i>回复
 							</span>
 							<span class="deleteArticleComment pull-right" data-id="${ item._id }">删除</span>
 						</div>
 					</div>
-					<div class="commentlist"></div>
+					<div class="commentlist">
+						<div class="div">
+						</div>
+					</div>
 				</div>`;
 		return tpl;
 	},
@@ -954,56 +959,81 @@ var craeteHTML = {
 	// },
 	addArticleCommentTwo: function() {
 		const self = this;
-		$("#articleComments").on('click','.addCommentReply',function(event){
-			$(this).parent().submit(function(event){
-				event.preventDefault();
-				const $this = $(this);
-				const data = $this.serializeObject();
-				if (!data['articleComment[content]'].trim()) {
-					alert('评论不能为空!');
-					return false;
-				}
-				public.ajax('/article/addComment','POST',data,function(data){
-					$this.parents('.articleCommentTwoFrom').siblings('.div').append(self.addArticleCommentTwoTpl(data.articleCommentTwo));
-				});
-			})
+		$(".articleCommentTwoFrom form").submit(function(event){
+			event.preventDefault();
+			const $this = $(this);
+			const data = $this.serializeObject();
+			if (!data['articleComment[content]'].trim()) {
+				alert('评论不能为空!');
+				return false;
+			}
+			public.ajax('/article/addComment','POST',data,function(data){
+				$this.parents('.commentlist').find('.div').append(self.addArticleCommentTwoTpl(data.articleCommentTwo,data.parentArt));
+				$this.find('textarea').val('').focus();
+			});
 		})
 	},
-	addArticleCommentTwoTpl: function(element) {
+	addArticleCommentTwoTpl: function(element,parentArt) {
 		let tpl = "";
-		tpl += `<div class="articleCommentTwo">
-								<div class="left">
-									<a href="/user/details?id=${element.from._id}" target="_blank">
-										<img src="/userImg/${element.from.userImg }" alt="${element.from.name}">
-									</a>
-								</div>
-								<div class="right">
-									<p class="name">
-										<a href="/user/details?id=${element.from._id}" target="_blank">
-											${element.from.name}
-											<span class='iconfont icon-${ element.from.sex }'>
-			  							</span>
-										</a>
-									</p>
-									<p class="des">
-										<span class='time'>
-											${ moment(element.createAt).format('YYYY.MM.DD HH:mm') }
-										</span>
-									</p>
-								</div>
-							</div>
-							<div class="articleCommentContent">
-								${element.content}
-								<div class="operation">
-									<span class='reply'>
-										<i class='iconfont icon-huifu'></i>回复
-			  					</span>
-									<span class="deleteArticleComment pull-right two" data-id="${element._id}">删除</span>
-									<% } }
-								</div>
-							</div>
-						</div>`;
+		tpl += `<div class="articleCommentTwoGroup"><div class="articleCommentTwo">
+					<div class="left">
+						<a href="/user/details?id=${element.from._id}" target="_blank">
+							<img src="/userImg/${element.from.userImg }" alt="${element.from.name}">
+						</a>
+					</div>
+					<div class="right">
+						<p class="name">
+							<a href="/user/details?id=${element.from._id}" target="_blank">
+								${element.from.name}
+								<span class='iconfont icon-${ element.from.sex }'>
+  							</span>
+							</a>
+						</p>
+						<p class="des">
+							<span class='time'>
+								${ moment(element.createAt).format('YYYY.MM.DD HH:mm') }
+							</span>
+						</p>
+					</div>
+				</div>
+				<div class="articleCommentContent">
+					<a href="/user/details?id=${element.to._id }">@${element.to.name}</a>
+					 ${element.content}
+					<div class="operation">
+						<span class='reply' artid="${parentArt}" toid="${element.from._id}">
+							<i class='iconfont icon-huifu'></i>回复
+  					</span>
+						<span class="deleteArticleCommentTwo pull-right two" data-id="${element._id}" data-art="${parentArt}">删除</span>
+						<% } }
+					</div>
+				</div>
+			</div></div>`;
 		return tpl;
+	},
+	/**
+	 * [addArticleCommentTwoForm 添加二级回复表单]
+	 */
+	addArticleCommentTwoForm: function(artId,toId){
+		let tpl = `<div class="articleCommentTwoFrom">
+						<form>
+							<input type="hidden" name="articleComment[_id]" value="${artId}">
+							<input type="hidden" name="articleComment[toId]" value="${toId}">
+							<textarea placeholder="写下你的评论..." name="articleComment[content]"></textarea>
+							<button class="btn btn-info addCommentReply" type="submit">提交</button>
+						</form>
+					</div>`;
+		return tpl;
+	},
+	addArticleCommentReply: function(){
+		const self = this;
+		$("#articleComments").on('click','.reply',function(){
+			const $this = $(this);
+			const artId = $this.attr('artid');
+			const toId = $this.attr('toid');  
+			$('.articleCommentTwoFrom').remove();
+			$this.parents('.articleComment').find('.commentlist').append(self.addArticleCommentTwoForm(artId,toId));
+			self.addArticleCommentTwo();
+		})
 	},
 	/**
 	 * [init 开始就会执行的函数]
@@ -1037,6 +1067,7 @@ var craeteHTML = {
 		this.deleteArticleComment();
 		this.articleCommentSort();
 		this.addArticleCommentTwo();
+		this.addArticleCommentReply();
 	}
 }
 var public = {

@@ -47,7 +47,8 @@ exports.addComment = (request, response) => {
 							code: 200,
 							msg:'二级评论成功!',
 							data: {
-								articleCommentTwo: newarticleComment.reply[newarticleComment.reply.length -1]
+								articleCommentTwo: newarticleComment.reply[newarticleComment.reply.length -1],
+								parentArt: articleCommentId
 							}
 						})
 					})
@@ -86,7 +87,30 @@ exports.delete = (request, response) => {
 			}
 		})
 	} else {
-		
+		const art = request.body.art;
+		if (art) {
+			ArticleComment.findOne({_id:art},(error, articleComment) => {
+				if (articleComment) {
+					articleComment.reply.forEach( function(element, index) {
+						if ((element._id == id && user.role >= 10) || 
+							(element._id == id && user._id == element.from)) {
+                           articleComment.reply.splice(index,1)
+						}
+					});
+					articleComment.save(()=>{
+						response.json({
+							code: 200,
+							msg:'删除2级评论成功!'
+						})
+					})
+				} else {
+					response.json({
+						code: 400,
+						msg: '该评论已经删除,请刷新！'
+					})
+				}
+			});
+		}
 	}
 	
 }

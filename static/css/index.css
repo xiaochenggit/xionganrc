@@ -678,12 +678,14 @@ footer .machine{
 	border-radius: 50%;
 	float: left;
 }
-{
-	padding: 10px 0px;
-	font-size: 16px;
-}
 .articleComment .articleCommentContent .operation{
 	font-size: 0;
+}
+.articleComment .articleCommentTwoGroup{
+	padding: 10px 0px;
+}
+.articleComment .articleCommentTwoGroup + .articleCommentTwoGroup{
+	border-top: 1px dashed #ccc;
 }
 .articleComment .articleCommentContent .operation span{
 	font-size: 16px;
@@ -698,14 +700,15 @@ footer .machine{
 .articleComment .articleCommentContent .operation span:hover{
 	color: #000;
 }
-.articleComment .deleteArticleComment{
+.articleComment .deleteArticleComment,
+.articleCommentTwoGroup .operation .deleteArticleCommentTwo{
 	display: none;
 }
+.articleCommentTwoGroup:hover .operation .deleteArticleCommentTwo,
 .articleComment:hover .deleteArticleComment{
 	display: inline-block;
 }
 .articleComment .commentlist{
-	margin-top: 15px;
 	border-left: 2px solid #d9d9d9;
 	padding-left: 15px;
 }

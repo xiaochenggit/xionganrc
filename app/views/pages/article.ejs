@@ -113,7 +113,7 @@
 									<div class="articleCommentContent">
 										<%=item.content%>
 										<div class="operation">
-											<span class='reply'>
+											<span class='reply' artId="<%=item._id%>" toId="<%=item.from._id%>">
 												<i class='iconfont icon-huifu'></i>回复
 					  					</span>
 											<% if (user._id == item.from._id || user.role >= 10 ){ %>
@@ -125,49 +125,51 @@
 										<div class="div">
 										<% if (item.reply &&　item.reply.length > 0) { %>
 										<% item.reply.forEach(function(element){ %>
-											<div class="articleCommentTwo">
-												<div class="left">
-													<a href="/user/details?id=<%=element.from._id%>" target="_blank">
-														<img src="/userImg/<%=element.from.userImg %>" alt="<%=element.from.name%>">
-													</a>
-												</div>
-												<div class="right">
-													<p class="name">
+											<div class="articleCommentTwoGroup">
+												<div class="articleCommentTwo">
+													<div class="left">
 														<a href="/user/details?id=<%=element.from._id%>" target="_blank">
-															<%=element.from.name%>
-															<span class='iconfont icon-<%= element.from.sex %>'>
-							  							</span>
+															<img src="/userImg/<%=element.from.userImg %>" alt="<%=element.from.name%>">
 														</a>
-													</p>
-													<p class="des">
-														<span class='time'>
-															<%= moment(element.createAt).format('YYYY.MM.DD HH:mm') %>
-														</span>
-													</p>
+													</div>
+													<div class="right">
+														<p class="name">
+															<a href="/user/details?id=<%=element.from._id%>" target="_blank">
+																<%=element.from.name%>
+																<span class='iconfont icon-<%= element.from.sex %>'>
+								  							</span>
+															</a>
+														</p>
+														<p class="des">
+															<span class='time'>
+																<%= moment(element.createAt).format('YYYY.MM.DD HH:mm') %>
+															</span>
+														</p>
+													</div>
 												</div>
-											</div>
-											<div class="articleCommentContent">
-												<%=element.content%>
-												<div class="operation">
-													<span class='reply'>
-														<i class='iconfont icon-huifu'></i>回复
-							  					</span>
-													<% if (user._id == element.from._id || user.role >= 10 ){ %>
-													<span class="deleteArticleComment pull-right two" data-id="<%=element._id%>">删除</span>
-													<% } %>
+												<div class="articleCommentContent">
+													<a href="/user/details?id=<%=element.to._id%>">@<%=element.to.name%></a> <%=element.content%>
+													<div class="operation">
+														<span class='reply' artid="<%=item._id%>" toid="<%=element.from._id%>">
+															<i class='iconfont icon-huifu'></i>回复
+								  					</span>
+														<% if (user._id == element.from._id || user.role >= 10 ){ %>
+														<span class="deleteArticleCommentTwo pull-right two" data-id="<%=element._id%>" data-art='<%=item._id %>'>删除</span>
+														<% } %>
+													</div>
 												</div>
 											</div>
 										<% }) %>
 										<% } %>
 										</div>
-										<div class="articleCommentTwoFrom">
+										<!-- <div class="articleCommentTwoFrom">
 											<form>
 												<input type="hidden" name="articleComment[_id]" value="<%=item._id%>">
 												<input type="hidden" name="articleComment[toId]" value="<%=item.from._id%>">
 												<textarea placeholder="写下你的评论..." name="articleComment[content]"></textarea>
 												<button class="btn btn-info addCommentReply" type="submit">提交</button>
 											</form>
-										</div>
+										</div> -->
 									</div>
 								</div>
 					 <% }) %>

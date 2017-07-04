@@ -134,6 +134,7 @@ exports.article = function (request, response) {
 					.exec((error,author) => {
 						ArticleComment.find({article:article._id})
 								.populate('from','name userImg sex')
+								.populate('reply.from reply.to', 'name userImg')
 								.exec((error,articleComments) => {
 										articleComments = articleComments.reverse();
 										console.log(articleComments);
