@@ -1,5 +1,6 @@
 const ArticleComment = require('../models/articleComment');
 
+// 添加文章留言
 exports.addComment = (request, response) => {
 	let articleComment = request.body.articleComment;
 	articleComment.from = request.session.user._id;
@@ -41,7 +42,7 @@ exports.addComment = (request, response) => {
 				});
 				newarticleComment.save((error,newarticleComment) => {
 					ArticleComment.findOne({_id: newarticleComment._id})
-					.populate('reply.from reply.to', 'name userImg')
+					.populate('reply.from reply.to', 'name userImg sex')
 					.exec((error,newarticleComment) => {
 						response.json({
 							code: 200,
@@ -59,6 +60,7 @@ exports.addComment = (request, response) => {
 	
 }
 
+// 删除留言
 exports.delete = (request, response) => {
 	let id = request.body.id;
 	const user = request.session.user;
@@ -112,5 +114,4 @@ exports.delete = (request, response) => {
 			});
 		}
 	}
-	
 }

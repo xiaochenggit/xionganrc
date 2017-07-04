@@ -3,6 +3,8 @@ const User = require('../models/user');
 const ArtCate = require('../models/articleCategory');
 const ArticleComment = require('../models/articleComment');
 
+const articleCommentNum = 10;
+
 // 文章发布页面
 
 exports.admin = function (request, response) {
@@ -134,10 +136,10 @@ exports.article = function (request, response) {
 					.exec((error,author) => {
 						ArticleComment.find({article:article._id})
 								.populate('from','name userImg sex')
-								.populate('reply.from reply.to', 'name userImg')
+								.populate('reply.from reply.to', 'name userImg sex')
 								.exec((error,articleComments) => {
 										articleComments = articleComments.reverse();
-										console.log(articleComments);
+										articleComments = articleComments.splice(0, articleCommentNum);
 										response.render('article',{
 											article : article,
 											author : author,
@@ -181,9 +183,10 @@ exports.article = function (request, response) {
 							.exec((error,article) => {
 								ArticleComment.find({article:article._id})
 								.populate('from','name userImg sex')
-								.populate('reply.from reply.to', 'name userImg')
+								.populate('reply.from reply.to', 'name userImg sex')
 								.exec((error,articleComments) => {
 									articleComments = articleComments.reverse();
+									articleComments = articleComments.splice(0, articleCommentNum);
 									response.render('article',{
 										article : article,
 										author : author,
@@ -591,7 +594,7 @@ exports.getBUsers = (request,response) => {
 	}
 }
 /**
- * 同上
+ * 获得文章收藏者
  */
 exports.getCUsers = (request,response) => {
 	var id = request.body.id ;
@@ -632,5 +635,47 @@ exports.getCUsers = (request,response) => {
 			code: 400,
 			msg : '获得文章收藏者信息成功 文章id参数错误'
 		})
+	}
+}
+// 获得文章评论
+exports.getMoreComment = (request, response) => {
+	const id = request.body.id;
+	let pageNow = request.body.pageNow || 1; 
+	let isBtn = true;
+	if (id) {
+		ArticleComment.find({article:id})
+		.populate('from','name userImg sex')
+		.populate('reply.from reply.to', 'name userImg sex')
+		.exec((error,articleComments) => {
+			articleComments.reverse();
+			if (articleComments.length <= articleCommentNum) {
+				response.json({
+					code:200,
+					msg:'文章评论已经全部显示!',
+					data:{
+						articleComments:[],
+						isBtn:false
+					}
+				})
+			} else {
+				let pageMax = Math.ceil(articleComments.length / articleCommentNum);
+				if (pageNow < 1) {
+					pageNow = 1;
+				}
+				if (pageNow >= pageMax) {
+					pageNow = pageMax;
+					isBtn = false;
+				}
+				articleComments = articleComments.splice((pageNow - 1) * articleCommentNum, articleCommentNum);
+				response.json({
+					code:200,
+					msg: '加载文章评论成功！',
+					data: {
+						articleComments:articleComments,
+						isBtn:isBtn
+					}
+				})
+			}
+		});
 	}
 }

@@ -67,6 +67,7 @@ let router = function (app) {
 	app.post('/article/search', Article.Search) 
 	app.post('/article/addComment', User.isSignIn, ArticleComment.addComment)
 	app.post('/article/deletearticlecomment', User.isSignIn, ArticleComment.delete)
+	app.post('/article/getMoreComment', Article.getMoreComment);
 	// 文章分类页面
 	app.get('/admin/articlecategory', ArticleCategory.admin);
 	app.post('/admin/articlecategory', ArticleCategory.save);

@@ -725,7 +725,8 @@ footer .machine{
     vertical-align: top;
     outline-style: none;
 }
-.articleDwon .btn{
+.articleComments .btn,
+.articleCommentForm .btn{
 	margin-top: 10px;
 }
 /*article end*/

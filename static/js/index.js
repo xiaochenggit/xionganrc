@@ -266,6 +266,8 @@ var craeteHTML = {
 	isGetUserFollow: true,
 	getUserBrowseUsersPage: 2,
 	isGetUserBrowseUsers: true,
+	getArticleCommentPage: 2,
+	isArticleComment: true,
 	/**
 	 * [comment 创建评论]
 	 * @param  {[Object]} userComment [评论数据]
@@ -827,7 +829,117 @@ var craeteHTML = {
 		    }
 		});
 	},
-
+	/**
+	 * [getArticleComment 获得更多文章评论]
+	 */
+	getArticleComment: function () {
+		if ($('.articleComments').length <= 0) {
+			return false;
+		}
+		const self = this;
+		$(window).scroll(function(event) {
+			var pageNow = self.getArticleCommentPage;
+			const $this = $(this);
+			const id = public.getUrlParam(window.location, 'id');
+			// 判断是否到底部 且 允许获得信息
+			var nDivHight = $this.innerHeight();
+			var nScrollHight = document.body.scrollHeight;
+		    var nScrollTop = $this.scrollTop();
+		    if(nScrollTop + nDivHight >= nScrollHight && self.isArticleComment) {
+		    public.ajax('/article/getMoreComment', 'POST', {id:id, pageNow: pageNow },function(data){
+					self.getArticleCommentPage += 1;
+					self.isArticleComment = data.isBtn;
+					$("#articleComments").append(self.addMoreArticleComment(data.articleComments));
+					self.articleCommentSort();
+				})
+		    }
+		});
+	},
+	addMoreArticleComment:function(articleComments){
+		let tpl = '';
+		if (articleComments && articleComments.length > 0 ) { 
+			  articleComments.forEach(function(item, index){ 
+			tpl +=`<div class="articleComment">
+							<div class="articleCommentFrom">
+								<div class="left">
+									<a href="/user/details?id=${item.from._id}" target="_blank">
+										<img src="/userImg/${item.from.userImg }" alt="${item.from.name}">
+									</a>
+								</div>
+								<div class="right">
+									<p class="name">
+										<a href="/user/details?id=${item.from._id}" target="_blank">
+											${item.from.name}
+											<span class='iconfont icon-${ item.from.sex }'>
+			  							</span>
+										</a>
+									</p>
+									<p class="des">
+										<span class='number'>${index + 1 }</span> · 楼
+										<span class='time'>
+											${ moment(item.createAt).format('YYYY.MM.DD HH:mm') }
+										</span>
+									</p>
+								</div>
+							</div>
+							<div class="articleCommentContent">
+								${item.content}
+								<div class="operation">
+									<span class='reply' artId="${item._id}" toId="${item.from._id}">
+										<i class='iconfont icon-huifu'></i>回复
+			  					</span>`;
+									if (craeteHTML.user._id == item.from._id ){ 
+									tpl += `<span class="deleteArticleComment pull-right" data-id="${item._id}">删除</span>`;
+									} 
+						tpl +=`</div>
+							</div>
+							<div class="commentlist">
+								<div class="div">`;
+								if (item.reply &&　item.reply.length > 0) { 
+								item.reply.forEach(function(element){ 
+							tpl += `<div class="articleCommentTwoGroup">
+										<div class="articleCommentTwo">
+											<div class="left">
+												<a href="/user/details?id=${element.from._id}" target="_blank">
+													<img src="/userImg/${element.from.userImg }" alt="${element.from.name}">
+												</a>
+											</div>
+											<div class="right">
+												<p class="name">
+													<a href="/user/details?id=${element.from._id}" target="_blank">
+														${element.from.name}
+														<span class='iconfont icon-${ element.from.sex }'>
+						  							</span>
+													</a>
+												</p>
+												<p class="des">
+													<span class='time'>
+														${ moment(element.createAt).format('YYYY.MM.DD HH:mm') }
+													</span>
+												</p>
+											</div>
+										</div>
+										<div class="articleCommentContent">
+											<a href="/user/details?id=${element.to._id}">@${element.to.name}</a> ${element.content}
+											<div class="operation">
+												<span class='reply' artid="${item._id}" toid="${element.from._id}">
+													<i class='iconfont icon-huifu'></i>回复
+						  					</span>`;
+												 if (craeteHTML.user._id == element.from._id ){
+												tpl+= `<span class="deleteArticleCommentTwo pull-right two" data-id="${element._id}" data-art='${item._id }'>删除</span>`;
+												 } 
+											tpl+=`</div>
+										</div>
+									</div>`;
+								 }) 
+								} 
+							tpl+=`</div>
+							</div>
+						</div>`;
+			})
+		} 
+		return tpl;
+	},
 	// 添加信息
 	addBUsers: function (item) {
 		var tpl =   `<li>
@@ -887,6 +999,7 @@ var craeteHTML = {
 			});
 		});
 	},
+	// 删除文章评论 根据class 区分是否是一级评论
 	deleteArticleComment: function() {
 		const self = this;
 		$('#articleComments').on('click','.deleteArticleComment,.deleteArticleCommentTwo',function(){
@@ -905,6 +1018,7 @@ var craeteHTML = {
 			}
 		})
 	},
+	// 文章一级评论tpl
 	articleCommentTpl: function(item){
 		let tpl = '';
 		tpl += `<div class="articleComment">
@@ -946,17 +1060,13 @@ var craeteHTML = {
 				</div>`;
 		return tpl;
 	},
+	// 文章评论排序
 	articleCommentSort: function() {
 		$('#articleComments .articleComment').each(function(index,el){
 			$(el).find('.number').text(index + 1);
 		})
 	},
-	/**
-	 * [addArticleCommentForm 添加回复的表单]
-	 */
-	// addArticleCommentForm: function() {
-	// 	let tpl = '';
-	// },
+	// 二级回复请求
 	addArticleCommentTwo: function() {
 		const self = this;
 		$(".articleCommentTwoFrom form").submit(function(event){
@@ -973,6 +1083,7 @@ var craeteHTML = {
 			});
 		})
 	},
+	// 文章二级评论 tpl
 	addArticleCommentTwoTpl: function(element,parentArt) {
 		let tpl = "";
 		tpl += `<div class="articleCommentTwoGroup"><div class="articleCommentTwo">
@@ -1011,7 +1122,7 @@ var craeteHTML = {
 		return tpl;
 	},
 	/**
-	 * [addArticleCommentTwoForm 添加二级回复表单]
+	 * [addArticleCommentTwoForm 添加二级回复表单 tpl]
 	 */
 	addArticleCommentTwoForm: function(artId,toId){
 		let tpl = `<div class="articleCommentTwoFrom">
@@ -1024,9 +1135,14 @@ var craeteHTML = {
 					</div>`;
 		return tpl;
 	},
+	// 文章评论,添加回复表单
 	addArticleCommentReply: function(){
 		const self = this;
 		$("#articleComments").on('click','.reply',function(){
+			if(!craeteHTML.user.name) {
+				$('#signinModal').modal('show')
+				return false;
+			}
 			const $this = $(this);
 			const artId = $this.attr('artid');
 			const toId = $this.attr('toid');  
@@ -1068,6 +1184,7 @@ var craeteHTML = {
 		this.articleCommentSort();
 		this.addArticleCommentTwo();
 		this.addArticleCommentReply();
+		this.getArticleComment();
 	}
 }
 var public = {
